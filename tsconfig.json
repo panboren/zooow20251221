@@ -1,0 +1,26 @@
+{
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@components/*": ["./components/*"],
+      "@composables/*": ["./composables/*"],
+      "@assets/*": ["./assets/*"],
+      "@stores/*": ["./stores/*"],
+      "@utils/*": ["./utils/*"],
+      "@types/*": ["./types/*"]
+    },
+    "types": [
+      "@vueuse/nuxt",
+      "@nuxt/image"
+    ]
+  }
+}
