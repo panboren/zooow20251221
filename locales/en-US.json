@@ -1,0 +1,67 @@
+{
+  "common": {
+    "home": "Home",
+    "products": "Products",
+    "solutions": "Solutions",
+    "news": "News",
+    "about": "About",
+    "contact": "Contact",
+    "learnMore": "Learn More",
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "loading": "Loading...",
+    "error": "Error"
+  },
+  "home": {
+    "title": "Professional Enterprise Product Solutions",
+    "subtitle": "Providing comprehensive digital transformation services for enterprises, boosting business growth",
+    "features": {
+      "title": "Core Advantages",
+      "subtitle": "We provide the highest quality products and services"
+    },
+    "products": {
+      "title": "Featured Products",
+      "subtitle": "Explore our product line"
+    },
+    "stats": {
+      "clients": "Clients Served",
+      "projects": "Projects Completed",
+      "team": "Tech Team",
+      "years": "Years of Service"
+    },
+    "testimonials": {
+      "title": "Testimonials",
+      "subtitle": "What our clients say"
+    },
+    "cta": {
+      "title": "Ready to Get Started?",
+      "subtitle": "Contact us now for exclusive solutions",
+      "button": "Contact Us"
+    }
+  },
+  "products": {
+    "title": "Products",
+    "description": "Explore our full product line and find the solution that's right for you",
+    "categories": {
+      "all": "All",
+      "cloud": "Cloud Services",
+      "office": "Office Software",
+      "data": "Data Analytics",
+      "crm": "CRM",
+      "erp": "ERP",
+      "ai": "AI"
+    },
+    "empty": "No products available"
+  },
+  "footer": {
+    "description": "Dedicated to providing enterprises with quality products and solutions, driving digital transformation.",
+    "productService": "Products",
+    "support": "Support",
+    "terms": "Terms of Service",
+    "aboutUs": "About Us",
+    "companyInfo": "Company Info",
+    "careers": "Careers",
+    "partners": "Partners",
+    "contactUs": "Contact Us"
+  }
+}

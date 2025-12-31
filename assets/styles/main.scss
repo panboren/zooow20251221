@@ -1,0 +1,114 @@
+// ============================================
+// 主样式文件
+// ============================================
+
+// UnoCSS 已包含 Normalize.css，无需额外引入
+
+// 全局样式重置补充
+html,
+body {
+  @apply antialiased;
+}
+
+// 滚动条美化
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
+
+// 暗黑模式滚动条
+.dark ::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-gray-600;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
+// 过渡动画
+.page-enter-active,
+.page-leave-active {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.page-enter-from,
+.page-leave-to {
+  @apply opacity-0 translate-y-4;
+}
+
+.layout-enter-active,
+.layout-leave-active {
+  @apply transition-opacity duration-300;
+}
+
+.layout-enter-from,
+.layout-leave-to {
+  @apply opacity-0;
+}
+
+// ============================================
+// Element Plus 自定义样式
+// ============================================
+
+// 主题色覆盖
+.el-button--primary {
+  @apply bg-primary-500 border-primary-500;
+
+  &:hover {
+    @apply bg-primary-600 border-primary-600;
+  }
+}
+
+.el-input__wrapper {
+  @apply rounded-lg;
+}
+
+// ============================================
+// 自定义组件样式（使用 @apply）
+// ============================================
+
+// 渐变背景
+.bg-gradient-primary {
+  @apply bg-gradient-to-r from-primary-500 to-secondary-500;
+}
+
+// 文本渐变
+.text-gradient {
+  @apply bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent;
+}
+
+// 玻璃态效果
+.glass-effect {
+  @apply bg-white/10 backdrop-blur-lg border border-white/20;
+}
+
+// 悬浮卡片
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1;
+}
+
+// 加载动画
+@keyframes spin {
+  to {
+    @apply rotate-360;
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
