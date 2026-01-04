@@ -4,7 +4,6 @@
 
 import {
   defineConfig,
-  presetAttributify,
   presetIcons,
   presetUno,
   presetWind,

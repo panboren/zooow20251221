@@ -1,0 +1,101 @@
+export default {
+  common: {
+    home: 'Home',
+    products: 'Products',
+    solutions: 'Solutions',
+    news: 'News',
+    about: 'About',
+    contact: 'Contact',
+    learnMore: 'Learn More',
+    readMore: 'Read More',
+    viewAll: 'View All',
+    loading: 'Loading...',
+    error: 'Error',
+    submit: 'Submit',
+    reset: 'Reset',
+    selectLanguage: 'Select Language',
+    username: 'Username',
+    email: 'Email',
+    theme: 'Theme',
+    selectTheme: 'Select theme',
+    light: 'Light',
+    dark: 'Dark',
+    defaultButton: 'Default',
+    primaryButton: 'Primary',
+    successButton: 'Success',
+    warningButton: 'Warning',
+    dangerButton: 'Danger',
+    viewDocs: 'Documentation',
+    componentDemo: 'Component Demo',
+    formDemo: 'Form Demo',
+    buttonsDemo: 'Buttons Demo'
+  },
+  home: {
+    title: 'Professional Enterprise Product Solutions',
+    subtitle: 'Providing comprehensive digital transformation services for enterprises, boosting business growth',
+    features: {
+      title: 'Core Advantages',
+      subtitle: 'We provide the highest quality products and services'
+    },
+    techStack: {
+      title: 'Tech Stack',
+      subtitle: 'All the technologies needed for enterprise development',
+      unocss: {
+        title: 'UnoCSS',
+        description: 'Atomic CSS engine, lightning-fast development',
+        feature1: 'High Performance',
+        feature2: 'On-demand'
+      },
+      elementPlus: {
+        title: 'Element Plus',
+        description: 'Vue 3 component library with rich UI components',
+        feature1: 'Rich Components',
+        feature2: 'TS Support'
+      },
+      pinia: {
+        title: 'Pinia',
+        description: 'Vue 3 state management, simple and efficient',
+        feature1: 'Type Safe',
+        feature2: 'Modular'
+      },
+      scss: {
+        title: 'Sass/SCSS',
+        description: 'CSS preprocessor with powerful styling capabilities',
+        feature1: 'Variables',
+        feature2: 'Mixins'
+      },
+      eslint: {
+        title: 'ESLint',
+        description: 'Code linting to maintain code quality',
+        feature1: 'Auto Fix',
+        feature2: 'Consistent'
+      },
+      colorMode: {
+        title: 'Color Mode',
+        description: 'Dark mode support for better user experience',
+        feature1: 'Auto Switch',
+        feature2: 'Persistent'
+      }
+    },
+    demo: {
+      title: 'Component Demo',
+      subtitle: 'Element Plus + UnoCSS integration example',
+      formDemo: 'Form Demo',
+      buttonsDemo: 'Buttons Demo',
+      placeholderUsername: 'Please enter username',
+      placeholderEmail: 'Please enter email',
+      placeholderTheme: 'Select theme'
+    },
+    cta: {
+      title: 'Get Started',
+      subtitle: 'Experience enterprise frontend framework immediately',
+      docs: 'Documentation'
+    }
+  },
+  message: {
+    submitSuccess: 'Submitted successfully!',
+    formReset: 'Form has been reset',
+    languageChanged: 'Switched to English',
+    switchedToChinese: 'Switched to Simplified Chinese'
+  }
+}

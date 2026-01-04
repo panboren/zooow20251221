@@ -1,24 +1,36 @@
 <template>
-  <div class="home-page">
+  <div class="home-page" :class="{ 'dark': isDark }">
+    <!-- Dark Mode Toggle -->
+    <div class="fixed top-4 right-4 z-50">
+      <el-button
+        circle
+        size="small"
+        class="theme-btn"
+        @click="toggleColorMode"
+      >
+        {{ isDark ? '🌙' : '☀️' }}
+      </el-button>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero bg-gradient-primary text-white py-20">
       <div class="container mx-auto px-4">
         <div class="text-center max-w-3xl mx-auto">
           <h1 class="text-5xl font-bold mb-6">
-            企业级产品解决方案
+            企业产品官网
           </h1>
           <p class="text-xl mb-8 opacity-90">
-            基于 Nuxt 3 + UnoCSS + Element Plus 构建
+            专业的企业产品展示官网，使用最新技术构建
           </p>
           <div class="flex justify-center gap-4">
             <el-button
               type="primary"
               size="large"
             >
-              开始使用
+              了解更多
             </el-button>
             <el-button size="large">
-              了解更多
+              阅读更多
             </el-button>
           </div>
         </div>
@@ -30,10 +42,10 @@
       <div class="container mx-auto px-4">
         <div class="text-center mb-12">
           <h2 class="text-4xl font-bold mb-4">
-            技术栈展示
+            技术栈
           </h2>
           <p class="text-gray-600">
-            已整合企业级开发所需的所有技术
+            使用最新技术栈构建的现代化企业产品官网
           </p>
         </div>
 
@@ -47,10 +59,10 @@
               UnoCSS
             </h3>
             <p class="text-gray-600 mb-4">
-              原子化 CSS 引擎，极速开发体验
+              即时原子化CSS引擎，提供极高的性能和开发体验
             </p>
             <div class="flex gap-2">
-              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">性能优异</span>
+              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">高性能</span>
               <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">按需生成</span>
             </div>
           </div>
@@ -64,11 +76,11 @@
               Element Plus
             </h3>
             <p class="text-gray-600 mb-4">
-              Vue 3 组件库，丰富的 UI 组件
+              一套为开发者、设计师和产品经理准备的Vue 3组件库
             </p>
             <div class="flex gap-2">
-              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">组件丰富</span>
-              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">TS 支持</span>
+              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">丰富组件</span>
+              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">主题定制</span>
             </div>
           </div>
 
@@ -81,10 +93,10 @@
               Pinia
             </h3>
             <p class="text-gray-600 mb-4">
-              Vue 3 状态管理，简洁高效
+              Vue 3的官方状态管理库，提供完整的TypeScript支持
             </p>
             <div class="flex gap-2">
-              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">类型安全</span>
+              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">TypeScript</span>
               <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">模块化</span>
             </div>
           </div>
@@ -95,14 +107,14 @@
               🎭
             </div>
             <h3 class="text-xl font-bold mb-2">
-              Sass/SCSS
+              SCSS
             </h3>
             <p class="text-gray-600 mb-4">
-              CSS 预处理器，强大的样式能力
+              CSS预处理器，提供变量、嵌套、混合等强大功能
             </p>
             <div class="flex gap-2">
-              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">变量嵌套</span>
-              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">@apply</span>
+              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">变量</span>
+              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">嵌套</span>
             </div>
           </div>
 
@@ -115,11 +127,11 @@
               ESLint
             </h3>
             <p class="text-gray-600 mb-4">
-              代码规范检查，保持代码质量
+              代码质量检查工具，确保代码风格统一和高质量
             </p>
             <div class="flex gap-2">
+              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">代码规范</span>
               <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">自动修复</span>
-              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">规范统一</span>
             </div>
           </div>
 
@@ -132,11 +144,11 @@
               Color Mode
             </h3>
             <p class="text-gray-600 mb-4">
-              深色模式支持，用户友好体验
+              支持亮色/暗色模式切换，自动检测系统偏好
             </p>
             <div class="flex gap-2">
+              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">暗色模式</span>
               <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">自动切换</span>
-              <span class="px-2 py-1 bg-primary-100 text-primary-600 text-sm rounded">持久化</span>
             </div>
           </div>
         </div>
@@ -151,7 +163,7 @@
             组件演示
           </h2>
           <p class="text-gray-600">
-            Element Plus + UnoCSS 组合使用示例
+            展示Element Plus组件库的核心功能
           </p>
         </div>
 
@@ -179,14 +191,14 @@
               <el-form-item label="主题">
                 <el-select
                   v-model="form.theme"
-                  placeholder="选择主题"
+                  placeholder="请选择主题"
                 >
                   <el-option
-                    label="浅色"
+                    label="亮色"
                     value="light"
                   />
                   <el-option
-                    label="深色"
+                    label="暗色"
                     value="dark"
                   />
                 </el-select>
@@ -239,7 +251,7 @@
           开始使用
         </h2>
         <p class="text-xl mb-8 opacity-90">
-          立即体验企业级前端开发框架
+          立即构建您的企业产品官网
         </p>
         <div class="flex justify-center gap-4">
           <el-button
@@ -262,13 +274,7 @@
 </template>
 
 <script setup lang="ts">
-const { setSeoMeta } = useSeo()
-const appStore = useAppStore()
-
-setSeoMeta({
-  title: '首页',
-  description: '专业的企业级产品解决方案，助力企业数字化转型',
-})
+import { ElMessage } from 'element-plus'
 
 // 表单数据
 const form = ref({
@@ -281,10 +287,15 @@ const form = ref({
 const colorMode = useColorMode()
 const isDark = computed(() => colorMode.value === 'dark')
 
+// 切换主题
+const toggleColorMode = () => {
+  colorMode.value = isDark.value ? 'light' : 'dark'
+}
+
 // 处理提交
 const handleSubmit = () => {
   console.log('表单提交:', form.value)
-  ElMessage.success('提交成功！')
+  ElMessage.success('提交成功')
 }
 
 // 处理重置
@@ -313,5 +324,10 @@ const handleReset = () => {
   &:hover {
     @apply -translate-y-1;
   }
+}
+
+.theme-btn {
+  font-size: 16px;
+  padding: 8px;
 }
 </style>

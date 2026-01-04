@@ -116,7 +116,7 @@ export interface Breadcrumb {
 // ============================================
 // API 响应类型
 // ============================================
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   success: boolean
   data: T
   message?: string
@@ -141,4 +141,4 @@ export interface PaginatedResponse<T> {
 // ============================================
 export type Nullable<T> = T | null
 export type Optional<T> = T | undefined
-export type Dict<T = any> = Record<string, T>
+export type Dict<T = unknown> = Record<string, T>

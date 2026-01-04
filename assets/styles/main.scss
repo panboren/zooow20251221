@@ -2,12 +2,30 @@
 // 主样式文件
 // ============================================
 
-// UnoCSS 已包含 Normalize.css，无需额外引入
+// 引入 normalize.css
+@import 'normalize.css/normalize.css';
 
 // 全局样式重置补充
 html,
 body {
   @apply antialiased;
+}
+
+// 暗色模式
+.dark {
+  @apply bg-gray-900 text-white;
+
+  .bg-gray-50 {
+    @apply bg-gray-800;
+  }
+
+  .text-gray-600 {
+    @apply text-gray-300;
+  }
+
+  .card {
+    @apply bg-gray-800 border-gray-700;
+  }
 }
 
 // 滚动条美化

@@ -2,16 +2,16 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    node: true
+    node: true,
   },
   extends: [
     'eslint:recommended',
     'plugin:vue/vue3-recommended',
-    '@nuxt/eslint'
+    '@nuxt/eslint',
   ],
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module'
+    sourceType: 'module',
   },
   rules: {
     // Vue 规则
@@ -22,9 +22,9 @@ module.exports = {
         html: {
           void: 'always',
           normal: 'never',
-          component: 'always'
-        }
-      }
+          component: 'always',
+        },
+      },
     ],
 
     // 代码风格
@@ -34,8 +34,8 @@ module.exports = {
       'warn',
       {
         argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_'
-      }
+        varsIgnorePattern: '^_',
+      },
     ],
 
     // TypeScript 规则（如果使用 @typescript-eslint/parser）
@@ -44,8 +44,8 @@ module.exports = {
       'warn',
       {
         argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_'
-      }
-    ]
-  }
+        varsIgnorePattern: '^_',
+      },
+    ],
+  },
 }
