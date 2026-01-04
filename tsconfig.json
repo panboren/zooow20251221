@@ -19,8 +19,7 @@
       "@types/*": ["./types/*"]
     },
     "types": [
-      "@vueuse/nuxt",
-      "@nuxt/image"
+      "@vueuse/nuxt"
     ]
   }
 }

@@ -115,7 +115,7 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "@/assets/styles/variables.scss" as *;`,
+          // 移除全局变量注入，避免与 Element Plus CSS 样式冲突
         },
       },
     },
@@ -131,8 +131,8 @@ export default defineNuxtConfig({
   elementPlus: {
     // 是否自动导入组件
     autoImport: true,
-    // 是否导入样式
-    importStyle: 'scss',
+    // 是否导入样式 (使用 css 避免 SCSS 变量冲突)
+    importStyle: 'css',
     // 图标配置
     icons: ['ElementPlus'],
   },

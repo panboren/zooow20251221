@@ -275,6 +275,22 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
+import type { SeoMeta } from '~/types'
+
+// SEO 元数据
+const seoMeta: SeoMeta = {
+  title: '企业产品官网',
+  description: '专业的企业产品展示官网，使用最新技术构建',
+  keywords: '企业,产品,官网',
+  ogType: 'website',
+}
+
+useSeoMeta({
+  title: seoMeta.title,
+  description: seoMeta.description,
+  keywords: seoMeta.keywords,
+  ogType: seoMeta.ogType,
+})
 
 // 表单数据
 const form = ref({
