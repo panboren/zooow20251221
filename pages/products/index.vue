@@ -9,9 +9,8 @@ const { setSeoMeta } = useSeo()
 
 setSeoMeta({
   title: '产品中心',
-  description: '探索我们的全线产品，找到最适合您的解决方案'
+  description: '探索我们的全线产品，找到最适合您的解决方案',
 })
-
 </script>
 
 <style scoped lang="scss">

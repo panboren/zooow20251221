@@ -43,26 +43,8 @@ export default defineNuxtConfig({
   ],
 
   // ============================================
-  // UnoCSS 配置
+  // UnoCSS 配置 (详见 uno.config.ts)
   // ============================================
-  uno: {
-    // UnoCSS 选项
-    presets: [
-      {
-        name: '@unocss/preset-wind',
-        // 自定义配置
-      }
-    ],
-    // 自动导入
-    autoImport: true,
-    // 主题配置
-    theme: {
-      colors: {
-        primary: '#2563eb',
-        secondary: '#64748b'
-      }
-    }
-  },
 
   // ============================================
   // Element Plus 配置

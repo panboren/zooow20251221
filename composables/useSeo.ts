@@ -36,11 +36,11 @@ export const useSeo = () => {
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: fullTitle },
         { name: 'twitter:description', content: description },
-        ...(meta.image ? [{ name: 'twitter:image', content: meta.image }] : [])
+        ...(meta.image ? [{ name: 'twitter:image', content: meta.image }] : []),
       ],
       link: [
-        ...(meta.canonical ? [{ rel: 'canonical', href: meta.canonical }] : [])
-      ]
+        ...(meta.canonical ? [{ rel: 'canonical', href: meta.canonical }] : []),
+      ],
     })
   }
 
@@ -53,7 +53,7 @@ export const useSeo = () => {
     const pathSegments = routePath.split('/').filter(Boolean)
 
     const breadcrumbs: Breadcrumb[] = [
-      { title: '首页', to: '/' }
+      { title: '首页', to: '/' },
     ]
 
     let currentPath = ''
@@ -62,7 +62,7 @@ export const useSeo = () => {
       const isLast = index === pathSegments.length - 1
       breadcrumbs.push({
         title: segment.replace(/-/g, ' '),
-        to: isLast ? undefined : currentPath
+        to: isLast ? undefined : currentPath,
       })
     })
 
@@ -71,6 +71,6 @@ export const useSeo = () => {
 
   return {
     setSeoMeta,
-    getBreadcrumbs
+    getBreadcrumbs,
   }
 }

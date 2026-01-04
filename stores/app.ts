@@ -55,6 +55,6 @@ export const useAppStore = defineStore('app', () => {
     setError,
     clearError,
     toggleMenu,
-    closeMenu
+    closeMenu,
   }
 })
