@@ -1,0 +1,53 @@
+/**
+ * 场景漫游动画样式
+ */
+
+.cinematic-intro--scene-roaming {
+  .cinematic-intro__scene-roaming-effects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .cinematic-intro__viewfinder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 60%;
+    border: 2px solid rgba(100, 255, 100, 0.5);
+    opacity: 0;
+    animation: viewfinderEffect 7s ease-in-out forwards;
+  }
+
+  .cinematic-intro__path-indicator {
+    position: absolute;
+    top: 20%;
+    left: 20%;
+    width: 10px;
+    height: 10px;
+    background: rgba(100, 255, 100, 0.8);
+    border-radius: 50%;
+    opacity: 0;
+    animation: pathIndicatorEffect 7s ease-in-out forwards;
+  }
+
+  .cinematic-intro__scene-transition {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+                    135deg,
+                    transparent 0%,
+                    rgba(100, 255, 100, 0.1) 50%,
+                    transparent 100%
+    );
+    opacity: 0;
+    animation: sceneTransitionEffect 7s ease-in-out forwards;
+  }
+}

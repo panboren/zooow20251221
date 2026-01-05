@@ -1,0 +1,62 @@
+/**
+ * 轨道环绕动画样式
+ */
+
+.cinematic-intro--orbital-rotation {
+  .cinematic-intro__orbital-rotation-effects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .cinematic-intro__orbit-path {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    border: 3px solid transparent;
+    border-radius: 50%;
+    opacity: 0;
+    animation: orbitPathEffect 7s ease-in-out forwards;
+  }
+
+  .cinematic-intro__gravity-well {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(
+                    circle,
+                    rgba(200, 100, 255, 0.3) 0%,
+                    transparent 100%
+    );
+    opacity: 0;
+    animation: gravityWellEffect 7s ease-in-out forwards;
+  }
+
+  .cinematic-intro__ascending-spiral {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(
+                    from 0deg at 50% 50%,
+                    transparent 0deg,
+                    rgba(200, 100, 255, 0.1) 60deg,
+                    transparent 120deg,
+                    rgba(200, 100, 255, 0.1) 180deg,
+                    transparent 240deg,
+                    rgba(200, 100, 255, 0.1) 300deg,
+                    transparent 360deg
+    );
+    opacity: 0;
+    animation: ascendingSpiralEffect 7s ease-in-out forwards;
+  }
+}

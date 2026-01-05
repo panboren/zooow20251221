@@ -1,0 +1,30 @@
+/**
+ * 粒子爆炸动画样式
+ */
+
+.cinematic-intro--particle-explosion {
+  .cinematic-intro__title {
+    color: #f50;
+    text-shadow: 0 0 10px #f50;
+
+    &::before {
+      color: rgba(255, 50, 0, 0.5);
+      animation: explosionGlow 0.7s infinite alternate;
+    }
+  }
+
+  .cinematic-intro__subtitle {
+    color: #f50;
+  }
+}
+
+@keyframes explosionGlow {
+  0% {
+    filter: blur(8px);
+    opacity: 0.3;
+  }
+  100% {
+    filter: blur(15px);
+    opacity: 0.8;
+  }
+}

@@ -1,9 +1,44 @@
 <template>
+  <div class="home-page">
+    <Home></Home>
+  </div>
+</template>
+
+<script setup lang="ts">
+import Home from './home/home.vue'
+
+
+</script>
+
+<style scoped lang="scss">
+.home-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<template>
   <div class="home-page" :class="{ 'dark': isDark }">
-    <!-- Three.js Canvas -->
+    &lt;!&ndash; Three.js Canvas &ndash;&gt;
     <canvas ref="canvasRef" class="three-canvas" />
 
-    <!-- Dark Mode Toggle -->
+    &lt;!&ndash; Dark Mode Toggle &ndash;&gt;
     <div class="fixed top-4 right-4 z-50">
       <el-button
         circle
@@ -15,7 +50,7 @@
       </el-button>
     </div>
 
-    <!-- Content Overlay -->
+    &lt;!&ndash; Content Overlay &ndash;&gt;
     <div class="content-overlay">
       <h1 class="title">Three.js 3D 场景</h1>
       <p class="subtitle">使用 GSAP 动画的旋转方块</p>
@@ -29,6 +64,7 @@ import { onMounted, onUnmounted, ref, computed, shallowRef } from 'vue'
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import type { SeoMeta } from '~/types'
+
 
 // SEO 元数据
 const seoMeta: SeoMeta = {
@@ -242,3 +278,4 @@ onUnmounted(() => {
   color: #fff;
 }
 </style>
+-->

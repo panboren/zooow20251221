@@ -1,0 +1,641 @@
+/**
+ * 公共动画定义
+ * 包含所有动画共用的 @keyframes
+ */
+
+// 基础动画
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes titleCard {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+}
+
+@keyframes glowPulse {
+  0% {
+    filter: blur(8px);
+    opacity: 0.5;
+  }
+  100% {
+    filter: blur(12px);
+    opacity: 0.8;
+  }
+}
+
+@keyframes typing {
+  0% { max-width: 0; }
+  70% { max-width: 100%; }
+  100% { max-width: 100%; }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate(0, -20px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+// 史诗俯冲动画
+@keyframes speedLinesFlash {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.6; }
+  70% { opacity: 0.4; }
+  90% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes vignetteAppear {
+  0% { box-shadow: inset 0 0 0 rgba(0, 0, 0, 0); }
+  20% { box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.3); }
+  60% { box-shadow: inset 0 0 200px rgba(0, 0, 0, 0.5); }
+  100% { box-shadow: inset 0 0 0 rgba(0, 0, 0, 0); }
+}
+
+@keyframes motionBlurEffect {
+  0% { backdrop-filter: blur(0px); }
+  20% { backdrop-filter: blur(0px); }
+  50% { backdrop-filter: blur(2px); }
+  70% { backdrop-filter: blur(1px); }
+  100% { backdrop-filter: blur(0px); }
+}
+
+// 维度折叠动画
+@keyframes foldLinesFlash {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.8; }
+  60% { opacity: 0.4; }
+  80% { opacity: 0.2; }
+  100% { opacity: 0; }
+}
+
+@keyframes dimensionShiftEffect {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.7; }
+  60% { opacity: 0.3; }
+  80% { opacity: 0.1; }
+  100% { opacity: 0; }
+}
+
+@keyframes realityGlitchEffect {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.6; }
+  60% { opacity: 0.3; }
+  80% { opacity: 0.1; }
+  100% { opacity: 0; }
+}
+
+// 能量波动画
+@keyframes energyRingExpand {
+  0% {
+    transform: scale(0.1);
+    opacity: 1;
+  }
+  20% {
+    transform: scale(0.5);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(2);
+    opacity: 0.4;
+  }
+  80% {
+    transform: scale(5);
+    opacity: 0.1;
+  }
+  100% {
+    transform: scale(10);
+    opacity: 0;
+  }
+}
+
+@keyframes shockwaveExpand {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+  20% {
+    opacity: 0.8;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(2);
+  }
+  80% {
+    opacity: 0.1;
+    transform: scale(5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(10);
+  }
+}
+
+@keyframes energyParticlesAppear {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.8; }
+  60% { opacity: 0.4; }
+  80% { opacity: 0.2; }
+  100% { opacity: 0; }
+}
+
+@keyframes particleFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(0, -15px); }
+}
+
+@keyframes particleFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(0, -20px); }
+}
+
+// 眩晕相机动画
+@keyframes spinningOverlayEffect {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.5; }
+  60% { opacity: 0.7; }
+  80% { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+
+@keyframes colorShiftEffect {
+  0% { opacity: 0; }
+  20% { opacity: 0; }
+  40% { opacity: 0.6; }
+  60% { opacity: 0.8; }
+  80% { opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
+@keyframes motionTrailEffect {
+  0% { backdrop-filter: blur(0px); }
+  20% { backdrop-filter: blur(0px); }
+  50% { backdrop-filter: blur(3px); }
+  70% { backdrop-filter: blur(1.5px); }
+  100% { backdrop-filter: blur(0px); }
+}
+
+// 超空间跳跃动画
+@keyframes starStretchEffect {
+  0% { opacity: 0; }
+  20% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+  70% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+
+@keyframes tunnelVisionEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.5; }
+  60% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+@keyframes lightBurstEffect {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2);
+  }
+}
+
+// 时空裂缝动画
+@keyframes riftCracksAppear {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+@keyframes timeFragmentsEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.6; }
+  60% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+@keyframes fragmentFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10px, -10px); }
+}
+
+@keyframes fragmentFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-10px, 10px); }
+}
+
+@keyframes realityReassembleEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.3; }
+  60% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+// 星球爆炸动画
+@keyframes explosionCoreEffect {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3);
+  }
+}
+
+@keyframes debrisFieldEffect {
+  0% { opacity: 0; }
+  20% { opacity: 0.6; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+@keyframes debrisFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(15px, -20px); }
+}
+
+@keyframes debrisFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-15px, 20px); }
+}
+
+@keyframes shockwaveSphereEffect {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  30% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  60% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(5);
+  }
+}
+
+// 量子纠缠动画
+@keyframes parallelWorldsEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.5; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+@keyframes parallelFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10px, -12px); }
+}
+
+@keyframes parallelFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-12px, 10px); }
+}
+
+@keyframes quantumBridgeEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  60% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+@keyframes realityMergeEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+
+// 虚拟现实动画
+@keyframes pixelationEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  60% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+@keyframes digitalNoiseEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.5; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+@keyframes realityMaterializeEffect {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+// 场景漫游动画
+@keyframes viewfinderEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.5; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+@keyframes pathIndicatorEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.6; }
+  60% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+@keyframes sceneTransitionEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+
+// 轨道环绕动画
+@keyframes orbitPathEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  60% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+@keyframes gravityWellEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+
+@keyframes ascendingSpiralEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+
+// 维度传送门动画
+@keyframes portalRingEffect {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  30% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  60% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+@keyframes dimensionShiftEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  60% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+@keyframes portalParticlesEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.5; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+@keyframes portalParticleFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(8px, -10px); }
+}
+
+@keyframes portalParticleFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-10px, 8px); }
+}
+
+// 时空穿梭动画
+@keyframes timeRippleEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  60% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+@keyframes pastFutureShiftEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.5; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+@keyframes temporalDistortionEffect {
+  0% { backdrop-filter: blur(0px); }
+  30% { backdrop-filter: blur(2px); }
+  60% { backdrop-filter: blur(3px); }
+  100% { backdrop-filter: blur(0px); }
+}
+
+// 黑洞吞噬动画
+@keyframes eventHorizonEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+@keyframes accretionDiskEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.5; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+@keyframes gravitationalLensingEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+
+// 宇宙大爆炸动画
+@keyframes singularityEffect {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3);
+  }
+}
+
+@keyframes explosionWaveEffect {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  30% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  60% {
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(8);
+  }
+}
+
+@keyframes universeFormationEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.3; }
+  60% { opacity: 0.5; }
+  100% { opacity: 0; }
+}
+
+// 维度崩溃动画
+@keyframes realityFractureEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  60% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+@keyframes dimensionalShardsEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.5; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+@keyframes shardFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(12px, -15px); }
+}
+
+@keyframes shardFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-15px, 12px); }
+}
+
+@keyframes chaosVortexEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  60% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+// 时空逆流动画
+@keyframes reverseFlowEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.4; }
+  60% { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+@keyframes temporalFragmentsEffect {
+  0% { opacity: 0; }
+  30% { opacity: 0.5; }
+  60% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+
+@keyframes temporalFragmentFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(10px, -12px); }
+}
+
+@keyframes temporalFragmentFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-12px, 10px); }
+}
+
+@keyframes causalityLoopEffect {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  30% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  60% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+// flare 动画
+@keyframes flare {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}

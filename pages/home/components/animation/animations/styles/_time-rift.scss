@@ -1,0 +1,73 @@
+/**
+ * 时空裂缝动画样式
+ */
+
+.cinematic-intro--time-rift {
+  .cinematic-intro__time-rift-effects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .cinematic-intro__rift-cracks {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+                    45deg,
+                    transparent 0%,
+                    rgba(255, 0, 0, 0.05) 50%,
+                    transparent 100%
+    );
+    opacity: 0;
+    animation: riftCracksAppear 7s ease-in-out forwards;
+  }
+
+  .cinematic-intro__time-fragments {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation: timeFragmentsEffect 7s ease-in-out forwards;
+
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 100, 100, 0.8);
+      box-shadow: 0 0 15px rgba(255, 100, 100, 0.8);
+    }
+
+    &::before {
+      top: 25%;
+      left: 15%;
+      animation: fragmentFloat1 3s infinite ease-in-out;
+    }
+
+    &::after {
+      top: 65%;
+      right: 20%;
+      animation: fragmentFloat2 3.5s infinite ease-in-out;
+    }
+  }
+
+  .cinematic-intro__reality-reassemble {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+                    135deg,
+                    transparent 0%,
+                    rgba(100, 200, 255, 0.1) 50%,
+                    transparent 100%
+    );
+    opacity: 0;
+    animation: realityReassembleEffect 7s ease-in-out forwards;
+  }
+}

@@ -1,0 +1,55 @@
+/**
+ * 眩晕相机动画样式
+ */
+
+.cinematic-intro--dizzy-cam {
+  .cinematic-intro__dizzy-cam-effects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .cinematic-intro__spinning-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: conic-gradient(
+                    from 0deg at 50% 50%,
+                    transparent 0deg,
+                    rgba(255, 0, 0, 0.1) 90deg,
+                    transparent 180deg,
+                    rgba(0, 0, 255, 0.1) 270deg,
+                    transparent 360deg
+    );
+    opacity: 0;
+    animation: spinningOverlayEffect 5s ease-in-out forwards;
+  }
+
+  .cinematic-intro__color-shift {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+                    45deg,
+                    rgba(255, 0, 0, 0.1) 0%,
+                    rgba(0, 255, 0, 0.1) 25%,
+                    rgba(0, 0, 255, 0.1) 50%,
+                    rgba(255, 255, 0, 0.1) 75%,
+                    rgba(255, 0, 255, 0.1) 100%
+    );
+    opacity: 0;
+    animation: colorShiftEffect 5s ease-in-out forwards;
+  }
+
+  .cinematic-intro__motion-trail {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(0px);
+    animation: motionTrailEffect 5s ease-in-out forwards;
+  }
+}

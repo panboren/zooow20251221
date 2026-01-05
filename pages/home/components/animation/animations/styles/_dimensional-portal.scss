@@ -1,0 +1,71 @@
+/**
+ * 维度传送门动画样式
+ */
+
+.cinematic-intro--dimensional-portal {
+  .cinematic-intro__dimensional-portal-effects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .cinematic-intro__portal-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    border: 8px solid rgba(255, 100, 255, 0.5);
+    border-radius: 50%;
+    opacity: 0;
+    animation: portalRingEffect 7s ease-in-out forwards;
+  }
+
+  .cinematic-intro__dimension-shift {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+                    circle at center,
+                    rgba(255, 100, 255, 0.2) 0%,
+                    transparent 100%
+    );
+    opacity: 0;
+    animation: dimensionShiftEffect 7s ease-in-out forwards;
+  }
+
+  .cinematic-intro__portal-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation: portalParticlesEffect 7s ease-in-out forwards;
+
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255, 100, 255, 0.9);
+      box-shadow: 0 0 10px rgba(255, 100, 255, 0.9);
+    }
+
+    &::before {
+      top: 30%;
+      left: 25%;
+      animation: portalParticleFloat1 2s infinite ease-in-out;
+    }
+
+    &::after {
+      top: 65%;
+      right: 30%;
+      animation: portalParticleFloat2 2.5s infinite ease-in-out;
+    }
+  }
+}
