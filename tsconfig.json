@@ -20,7 +20,7 @@
     },
     "types": [
       "@vueuse/nuxt",
-      "three"
+      "@nuxt/image"
     ]
   }
 }

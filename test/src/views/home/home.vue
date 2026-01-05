@@ -49,7 +49,6 @@
     <ControlsHint />
   </div>
 </template>
-
 <script setup>
 /**
  * Home View Component - 带全景图切换功能
@@ -62,12 +61,13 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls'
 import { gsap } from 'gsap'
 
 // 导入组件
-import LoadingIndicator from './components/ui/LoadingIndicator.vue'
-import CinematicAnimations from './components/animation/CinematicAnimations.vue'
-import AnimationSelector from './components/animation/AnimationSelector.vue'
-import CameraControls from './components/animation/CameraControls.vue'
-import ControlsHint from './components/ui/ControlsHint.vue'
-import PanoramaSwitcher from './components/animation/panorama-switcher.vue'
+import LoadingIndicator from '@/components/ui/LoadingIndicator.vue'
+import CinematicAnimations from '@/components/animation/CinematicAnimations.vue'
+import AnimationSelector from '@/components/animation/AnimationSelector.vue'
+import CameraControls from '@/components/animation/CameraControls.vue'
+import ControlsHint from '@/components/ui/ControlsHint.vue'
+import PanoramaSwitcher from '@components/animation/panorama-switcher.vue'
+
 
 // 导入常量和配置
 import {
@@ -76,17 +76,28 @@ import {
   CONTROLS_CONFIG,
   VIEW_PRESETS,
   PERFORMANCE_CONFIG,
-  STYLE_CONFIG,
-} from './config/constants'
+  STYLE_CONFIG
+} from '@/config/constants'
 
 // 导入工具函数
-import { createLogger } from './utils/logger'
-import { debounce } from './utils/performance'
+import { createLogger } from '@/utils/logger'
+import { debounce } from '@/utils/performance'
 
 // 创建日志实例
 const logger = createLogger('HomeView')
 
 // ==================== 全景图配置 ====================
+
+
+
+
+
+
+
+
+
+
+
 
 // ==================== 响应式引用 ====================
 const containerRef = ref(null)
@@ -118,6 +129,7 @@ const loadingProgress = computed(() => '准备进入沉浸式体验')
 const currentPanorama = ref({})
 const isChangingPanorama = ref(false)
 
+
 // ==================== 性能监控工具 ====================
 const performanceMonitor = {
   frameCount: 0,
@@ -138,7 +150,7 @@ const performanceMonitor = {
         logger.debug(`当前 FPS: ${this.fps}`)
       }
     }
-  },
+  }
 }
 
 // ==================== Three.js 初始化函数 ====================
@@ -170,19 +182,19 @@ const createCamera = () => {
     CAMERA_CONFIG.FOV,
     aspectRatio,
     CAMERA_CONFIG.NEAR,
-    CAMERA_CONFIG.FAR,
+    CAMERA_CONFIG.FAR
   )
 
   // 设置相机初始位置和旋转
   newCamera.position.set(
     CAMERA_CONFIG.DEFAULT_POSITION.x,
     CAMERA_CONFIG.DEFAULT_POSITION.y,
-    CAMERA_CONFIG.DEFAULT_POSITION.z,
+    CAMERA_CONFIG.DEFAULT_POSITION.z
   )
   newCamera.rotation.set(
     CAMERA_CONFIG.DEFAULT_ROTATION.x,
     CAMERA_CONFIG.DEFAULT_ROTATION.y,
-    CAMERA_CONFIG.DEFAULT_ROTATION.z,
+    CAMERA_CONFIG.DEFAULT_ROTATION.z
   )
   newCamera.fov = CAMERA_CONFIG.FOV
   newCamera.updateProjectionMatrix()
@@ -217,7 +229,7 @@ const createRenderer = () => {
     // 保留深度缓冲
     depth: RENDER_CONFIG.DEPTH,
     // 🔧 性能优化：禁用对数深度
-    logarithmicDepthBuffer: false,
+    logarithmicDepthBuffer: false
   })
 
   // 🔧 性能优化：适度限制像素比
@@ -225,7 +237,7 @@ const createRenderer = () => {
   newRenderer.setSize(
     containerRef.value.clientWidth,
     containerRef.value.clientHeight,
-    true,
+    true
   )
   newRenderer.setPixelRatio(pixelRatio)
 
@@ -287,7 +299,7 @@ const createSphereGeometry = () => {
       side: THREE.DoubleSide,
       transparent: false,
       depthTest: true,
-      depthWrite: false,
+      depthWrite: false
     })
 
     // 创建网格
@@ -295,8 +307,7 @@ const createSphereGeometry = () => {
     scene.value.add(newMesh)
 
     return newMesh
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('创建球体几何体失败:', error)
     throw error
   }
@@ -328,8 +339,8 @@ const loadTexture = (imageUrl) => {
         loadedTexture.generateMipmaps = true
 
         // 🔧 性能优化：动态调整各向异性
-        const isLowEndDevice = window.devicePixelRatio < 2
-          || navigator.hardwareConcurrency < 4
+        const isLowEndDevice = window.devicePixelRatio < 2 ||
+            navigator.hardwareConcurrency < 4
         const maxAnisotropy = isLowEndDevice ? 2 : Math.min(4, renderer.value.capabilities.getMaxAnisotropy())
         loadedTexture.anisotropy = maxAnisotropy
 
@@ -354,8 +365,7 @@ const loadTexture = (imageUrl) => {
         }, 100)
 
         resolve(loadedTexture)
-      }
-      catch (error) {
+      } catch (error) {
         logger.error('纹理处理失败:', error)
         reject(error)
       }
@@ -374,8 +384,7 @@ const loadTexture = (imageUrl) => {
       try {
         const fallbackTexture = createFallbackTexture()
         resolve(fallbackTexture)
-      }
-      catch (fallbackError) {
+      } catch (fallbackError) {
         logger.error('创建备用纹理失败:', fallbackError)
         reject(fallbackError)
       }
@@ -426,18 +435,20 @@ const switchPanorama = async () => {
             controls.value.update()
           }
         }
-      },
+      }
     })
 
     isChangingPanorama.value = false
     logger.info(`全景图切换完成: ${currentPanorama.value.title}`)
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('切换全景图失败:', error)
     isChangingPanorama.value = false
     isLoading.value = false
   }
 }
+
+
+
 
 /**
  * 创建备用纹理
@@ -506,8 +517,7 @@ const setupOrbitControls = () => {
     }, 100)
 
     logger.info('轨道控制器设置完成')
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('设置轨道控制器失败:', error)
     throw error
   }
@@ -541,7 +551,7 @@ const applyControlsConfig = () => {
   controls.value.object.rotation.set(
     CAMERA_CONFIG.DEFAULT_ROTATION.x,
     CAMERA_CONFIG.DEFAULT_ROTATION.y,
-    CAMERA_CONFIG.DEFAULT_ROTATION.z,
+    CAMERA_CONFIG.DEFAULT_ROTATION.z
   )
   controls.value.update()
 
@@ -551,7 +561,7 @@ const applyControlsConfig = () => {
   controls.value.mouseButtons = {
     LEFT: THREE.MOUSE.ROTATE,
     MIDDLE: THREE.MOUSE.DOLLY,
-    RIGHT: THREE.MOUSE.ROTATE,
+    RIGHT: THREE.MOUSE.ROTATE
   }
 }
 
@@ -573,8 +583,7 @@ const setupInteractionOptimizations = () => {
   const handleMouseEvent = (event) => {
     if (event.type === 'mousedown') {
       domElement.style.cursor = 'grabbing'
-    }
-    else if (event.type === 'mouseup' || event.type === 'mouseleave') {
+    } else if (event.type === 'mouseup' || event.type === 'mouseleave') {
       domElement.style.cursor = 'grab'
     }
   }
@@ -629,7 +638,7 @@ const setupTouchOptimizations = () => {
   controls.value.enablePan = true
   controls.value.touches = {
     ONE: THREE.TOUCH.ROTATE,
-    TWO: THREE.TOUCH.DOLLY_PAN,
+    TWO: THREE.TOUCH.DOLLY_PAN
   }
 }
 
@@ -646,6 +655,8 @@ const setupEventListeners = () => {
 
   // 页面可见性变化监听
   document.addEventListener('visibilitychange', handleVisibilityChange)
+
+
 }
 
 /**
@@ -663,7 +674,7 @@ const handleResize = debounce(() => {
   // 更新渲染器尺寸
   renderer.value.setSize(
     containerRef.value.clientWidth,
-    containerRef.value.clientHeight,
+    containerRef.value.clientHeight
   )
 
   // 保留 1.5 像素比限制
@@ -683,8 +694,7 @@ const handleVisibilityChange = () => {
       animationId.value = null
     }
     logger.debug('页面隐藏，暂停渲染')
-  }
-  else {
+  } else {
     // 页面显示时恢复渲染
     if (!animationId.value) {
       animate()
@@ -712,9 +722,9 @@ const animate = () => {
     const deltaTime = now - lastTime
 
     // 判断是否需要高帧率渲染
-    const needsHighFPS = controls.value?.autoRotate
-      || controls.value?.isUserInteracting
-      || deltaTime < 2000
+    const needsHighFPS = controls.value?.autoRotate ||
+        controls.value?.isUserInteracting ||
+        deltaTime < 2000
 
     // 🔧 性能优化：非交互时降低到 30fps
     const targetFPS = needsHighFPS ? 60 : 30
@@ -730,8 +740,7 @@ const animate = () => {
         performanceMonitor.update()
       }
     }
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('渲染循环错误:', error)
   }
 }
@@ -748,8 +757,7 @@ const toggleAutoRotate = () => {
       controls.value.autoRotate = autoRotateEnabled.value
       logger.info(`自动旋转: ${autoRotateEnabled.value ? '开启' : '关闭'}`)
     }
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('切换自动旋转失败:', error)
   }
 }
@@ -765,8 +773,7 @@ const resetAnimation = () => {
         cinematicAnimationsRef.value.resetAnimation()
       }
     }, 100)
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('重置动画失败:', error)
   }
 }
@@ -798,7 +805,7 @@ const onAnimationComplete = () => {
     },
     onComplete: () => {
       logger.info(`已移动到目标位置: (${targetPosition.x}, ${targetPosition.y}, ${targetPosition.z})`)
-    },
+    }
   })
 
   // 恢复默认 FOV
@@ -810,9 +817,10 @@ const onAnimationComplete = () => {
       if (camera.value) {
         camera.value.updateProjectionMatrix()
       }
-    },
+    }
   })
 }
+
 
 /**
  * 预设视角函数
@@ -856,7 +864,7 @@ const setCameraView = (preset) => {
           // 限制极角在控制器范围内
           currentSpherical.phi = Math.max(
             controls.value.minPolarAngle,
-            Math.min(controls.value.maxPolarAngle, currentSpherical.phi),
+            Math.min(controls.value.maxPolarAngle, currentSpherical.phi)
           )
           currentSpherical.makeSafe()
 
@@ -864,17 +872,15 @@ const setCameraView = (preset) => {
           controls.value.object.position.setFromSpherical(currentSpherical)
           controls.value.object.lookAt(controls.value.target)
           controls.value.update()
-        }
-        catch (error) {
+        } catch (error) {
           logger.error('视角更新错误:', error)
         }
       },
       onComplete: () => {
         logger.info(`切换到预设视角: ${preset}`)
-      },
+      }
     })
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('设置预设视角失败:', error)
   }
 }
@@ -954,8 +960,7 @@ const cleanup = () => {
     }
 
     logger.info('Three.js资源清理完成')
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('Three.js资源清理失败:', error)
   }
 }
@@ -995,8 +1000,7 @@ const initThreeJS = async () => {
 
     isInitialized.value = true
     logger.info('Three.js初始化完成')
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('初始化Three.js失败:', error)
     isLoading.value = false
     throw error
@@ -1014,8 +1018,7 @@ onMounted(async () => {
     root.style.setProperty('--primary-color', STYLE_CONFIG.PRIMARY_COLOR)
 
     await initThreeJS()
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('组件挂载失败:', error)
   }
 })
@@ -1030,13 +1033,11 @@ watch(animationType, () => {
 onUnmounted(() => {
   try {
     cleanup()
-  }
-  catch (error) {
+  } catch (error) {
     logger.error('组件卸载清理失败:', error)
   }
 })
 </script>
-
 <style scoped lang="scss">
 .home-content {
   width: 100vw;
@@ -1067,4 +1068,5 @@ onUnmounted(() => {
   }
 
 }
+
 </style>
