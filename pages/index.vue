@@ -1,13 +1,11 @@
 <template>
   <div class="home-page">
-    <Home></Home>
+    <Home />
   </div>
 </template>
 
 <script setup lang="ts">
 import Home from './home/home.vue'
-
-
 </script>
 
 <style scoped lang="scss">
@@ -18,19 +16,6 @@ import Home from './home/home.vue'
   overflow: hidden;
 }
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 <!--
 <template>
@@ -64,7 +49,6 @@ import { onMounted, onUnmounted, ref, computed, shallowRef } from 'vue'
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import type { SeoMeta } from '~/types'
-
 
 // SEO 元数据
 const seoMeta: SeoMeta = {
