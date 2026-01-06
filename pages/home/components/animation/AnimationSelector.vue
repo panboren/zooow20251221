@@ -83,6 +83,10 @@ const animationOptions = ref([
   { value: 'cyber-grid-city', label: '🏙️ 赛博网格城市' },
   { value: 'dna-helix', label: '🧬 DNA双螺旋' },
   { value: 'ancient-ruins', label: '🏛️ 远古遗迹' },
+  { value: 'digital-rain', label: '💻 数字雨' },
+  { value: 'portal-gate', label: '🚪 传送门' },
+  { value: 'energy-sphere', label: '⚡ 能量球' },
+  { value: 'crystal-pyramid', label: '🔮 水晶金字塔' },
 ])
 
 const handleChange = (event) => {

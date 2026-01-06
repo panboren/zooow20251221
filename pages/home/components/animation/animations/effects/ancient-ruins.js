@@ -24,67 +24,14 @@ export function createAncientRuins(scene, options = {}) {
   for (let i = 0; i < pillarCount; i++) {
     const height = 20 + Math.random() * 30
     const geometry = new THREE.CylinderGeometry(2, 2.5, height, 8)
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uColor: { value: new THREE.Color(0x8B4513) },
-        uOpacity: { value: 0 },
-        uDamage: { value: Math.random() }
-      },
-      vertexShader: `
-        uniform float uTime;
-        uniform float uDamage;
-        varying vec2 vUv;
-        varying vec3 vNormal;
-        varying float vElevation;
 
-        void main() {
-          vUv = uv;
-          vNormal = normalize(normalMatrix * normal);
-          vec3 pos = position;
-
-          // 破损效果
-          pos.x += sin(pos.y * 0.3) * uDamage * 2.0;
-          pos.z += cos(pos.y * 0.3) * uDamage * 2.0;
-          pos.x += noise(pos) * uDamage;
-
-          vElevation = pos.y;
-
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-        }
-
-        float noise(vec3 p) {
-          return sin(p.x * 10.0) * sin(p.y * 10.0) * sin(p.z * 10.0) * 0.5;
-        }
-      `,
-      fragmentShader: `
-        uniform float uTime;
-        uniform vec3 uColor;
-        uniform float uOpacity;
-        uniform float uDamage;
-        varying vec2 vUv;
-        varying vec3 vNormal;
-        varying float vElevation;
-
-        void main() {
-          // 石头纹理
-          float texture = sin(vUv.x * 20.0) * sin(vUv.y * 20.0) * 0.5 + 0.5;
-          float cracks = step(0.97, fract(vUv.x * 50.0)) + step(0.97, fract(vUv.y * 30.0));
-
-          // 苔藓效果
-          float moss = step(0.7, vUv.y) * 0.3;
-
-          vec3 color = uColor * (0.6 + texture * 0.4);
-          color += vec3(0.2, 0.4, 0.2) * moss;
-          color *= (1.0 - uDamage * 0.3);
-
-          float edge = 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)));
-          float alpha = uOpacity * (0.7 + edge * 0.3);
-
-          gl_FragColor = vec4(color, alpha);
-        }
-      `,
-      transparent: true
+    const material = new THREE.MeshPhongMaterial({
+      color: 0x8B4513,
+      emissive: 0x221100,
+      emissiveIntensity: 0.1,
+      transparent: true,
+      opacity: 0,
+      flatShading: true
     })
 
     const pillar = new THREE.Mesh(geometry, material)
@@ -133,6 +80,7 @@ export function createAncientRuins(scene, options = {}) {
   const runeCount = 500
   const runePositions = new Float32Array(runeCount * 3)
   const runeColors = new Float32Array(runeCount * 3)
+  const runePhases = new Float32Array(runeCount)
 
   for (let i = 0; i < runeCount; i++) {
     const angle = Math.random() * Math.PI * 2
@@ -142,14 +90,18 @@ export function createAncientRuins(scene, options = {}) {
     runePositions[i * 3 + 1] = 5 + Math.random() * 30
     runePositions[i * 3 + 2] = Math.sin(angle) * radius
 
-    const color = new THREE.Color().setHSL(0.1 + Math.random() * 0.1, 0.6, 0.6)
+    const hue = 0.1 + Math.random() * 0.1
+    const color = new THREE.Color().setHSL(hue, 0.6, 0.6)
     runeColors[i * 3] = color.r
     runeColors[i * 3 + 1] = color.g
     runeColors[i * 3 + 2] = color.b
+
+    runePhases[i] = Math.random() * Math.PI * 2
   }
 
   runeGeometry.setAttribute('position', new THREE.BufferAttribute(runePositions, 3))
   runeGeometry.setAttribute('color', new THREE.BufferAttribute(runeColors, 3))
+  runeGeometry.setAttribute('phase', new THREE.BufferAttribute(runePhases, 1))
 
   const runeMaterial = new THREE.PointsMaterial({
     size: 1,
@@ -166,39 +118,10 @@ export function createAncientRuins(scene, options = {}) {
   const lightPillars = []
   for (let i = 0; i < 4; i++) {
     const geometry = new THREE.CylinderGeometry(0.5, 0.5, 50, 16)
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uColor: { value: new THREE.Color(0xFFD700) },
-        uOpacity: { value: 0 }
-      },
-      vertexShader: `
-        uniform float uTime;
-        varying vec2 vUv;
-
-        void main() {
-          vUv = uv;
-          vec3 pos = position;
-          float wave = sin(uTime * 2.0 + vUv.y * 10.0) * 0.5;
-          pos.x += wave;
-          pos.z += wave;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float uTime;
-        uniform vec3 uColor;
-        uniform float uOpacity;
-        varying vec2 vUv;
-
-        void main() {
-          float beam = sin(vUv.y * 20.0 - uTime * 5.0) * 0.5 + 0.5;
-          vec3 color = uColor * (0.3 + beam * 0.7);
-          float alpha = uOpacity * beam;
-          gl_FragColor = vec4(color, alpha);
-        }
-      `,
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xFFD700,
       transparent: true,
+      opacity: 0,
       blending: THREE.AdditiveBlending
     })
     const lightPillar = new THREE.Mesh(geometry, material)
@@ -217,6 +140,8 @@ export function createAncientRuins(scene, options = {}) {
   const altarGeometry = new THREE.CylinderGeometry(10, 12, 3, 8)
   const altarMaterial = new THREE.MeshPhongMaterial({
     color: 0x8B4513,
+    emissive: 0x331100,
+    emissiveIntensity: 0.2,
     transparent: true,
     opacity: 0
   })
@@ -238,6 +163,7 @@ export function createAncientRuins(scene, options = {}) {
     ruins,
     runes,
     runeGeometry,
+    runePhases,
     lightPillars,
     altar,
     sunLight,
@@ -247,15 +173,15 @@ export function createAncientRuins(scene, options = {}) {
       if (runeMaterial.opacity > 0) {
         const pos = runeGeometry.attributes.position.array
         for (let i = 0; i < runeCount; i++) {
-          pos[i * 3 + 1] += Math.sin(time * 2 + i) * deltaTime * 0.5
+          pos[i * 3 + 1] += Math.sin(time * 2 + runePhases[i]) * deltaTime * 0.5
         }
         runeGeometry.attributes.position.needsUpdate = true
       }
 
       // 更新光柱
-      lightPillars.forEach(pillar => {
+      lightPillars.forEach((pillar, i) => {
         if (pillar.visible) {
-          pillar.material.uniforms.uTime.value = time
+          pillar.material.opacity = 0.6 + Math.sin(time * 5 + i) * 0.3
         }
       })
 
@@ -299,8 +225,8 @@ export function createAncientRuins(scene, options = {}) {
             duration: 2,
             ease: 'power2.out'
           })
-          gsap.to(pillar.material.uniforms.uOpacity, {
-            value: 1,
+          gsap.to(pillar.material, {
+            opacity: 1,
             duration: 1,
             delay: 0.5
           })
@@ -333,8 +259,8 @@ export function createAncientRuins(scene, options = {}) {
       lightPillars.forEach((pillar, i) => {
         gsap.delayedCall(3 + i * 0.3, () => {
           pillar.visible = true
-          gsap.to(pillar.material.uniforms.uOpacity, {
-            value: 0.6,
+          gsap.to(pillar.material, {
+            opacity: 0.6,
             duration: 1
           })
         })

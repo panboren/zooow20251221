@@ -28,55 +28,17 @@ export function createCyberGridCity(scene, options = {}) {
   scene.add(gridHelper)
 
   // 垂直网格墙
+  const walls = []
   const wallGeometry = new THREE.PlaneGeometry(gridSize, 100, gridCells, 10)
-  const wallMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      uTime: { value: 0 },
-      uColor: { value: new THREE.Color(0x00ffff) },
-      uOpacity: { value: 0 }
-    },
-    vertexShader: `
-      uniform float uTime;
-      varying vec2 vUv;
-      varying vec3 vPos;
-
-      void main() {
-        vUv = uv;
-        vec3 pos = position;
-        pos.y += sin(pos.x * 0.1 + uTime * 2.0) * 5.0;
-        vPos = pos;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-      }
-    `,
-    fragmentShader: `
-      uniform float uTime;
-      uniform vec3 uColor;
-      uniform float uOpacity;
-      varying vec2 vUv;
-      varying vec3 vPos;
-
-      void main() {
-        // 网格线效果
-        float gridX = step(0.95, fract(vUv.x * float(20)));
-        float gridY = step(0.9, fract(vUv.y * float(10)));
-        float grid = max(gridX, gridY);
-
-        // 扫描线
-        float scan = sin(vPos.y * 0.2 - uTime * 5.0) * 0.5 + 0.5;
-
-        vec3 color = uColor * (0.3 + grid * 0.7);
-        color += vec3(0.0, 1.0, 1.0) * scan * 0.3;
-
-        float alpha = uOpacity * (0.1 + grid * 0.9);
-        gl_FragColor = vec4(color, alpha);
-      }
-    `,
+  const wallMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00ffff,
     transparent: true,
+    opacity: 0,
     side: THREE.DoubleSide,
-    blending: THREE.AdditiveBlending
+    blending: THREE.AdditiveBlending,
+    wireframe: true
   })
 
-  const walls = []
   for (let i = 0; i < 4; i++) {
     const wall = new THREE.Mesh(wallGeometry, wallMaterial.clone())
     wall.position.y = 30
@@ -97,47 +59,12 @@ export function createCyberGridCity(scene, options = {}) {
     const width = 2 + Math.random() * 4
 
     const geometry = new THREE.BoxGeometry(width, height, width)
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uColor: { value: new THREE.Color(neonColors[Math.floor(Math.random() * neonColors.length)]) },
-        uOpacity: { value: 0 }
-      },
-      vertexShader: `
-        uniform float uTime;
-        varying vec2 vUv;
-        varying vec3 vPos;
-        varying vec3 vNormal;
-
-        void main() {
-          vUv = uv;
-          vNormal = normalize(normalMatrix * normal);
-          vec3 pos = position;
-          vPos = pos;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float uTime;
-        uniform vec3 uColor;
-        uniform float uOpacity;
-        varying vec2 vUv;
-        varying vec3 vPos;
-        varying vec3 vNormal;
-
-        void main() {
-          float edge = 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)));
-          float scan = sin(vUv.y * 20.0 + uTime * 3.0) * 0.5 + 0.5;
-
-          vec3 color = uColor * (0.5 + scan * 0.5);
-          color *= edge;
-
-          float alpha = uOpacity * (0.3 + edge * 0.7);
-          gl_FragColor = vec4(color, alpha);
-        }
-      `,
+    const material = new THREE.MeshBasicMaterial({
+      color: neonColors[Math.floor(Math.random() * neonColors.length)],
       transparent: true,
-      blending: THREE.AdditiveBlending
+      opacity: 0,
+      blending: THREE.AdditiveBlending,
+      wireframe: true
     })
 
     const building = new THREE.Mesh(geometry, material)
@@ -158,27 +85,25 @@ export function createCyberGridCity(scene, options = {}) {
   const particleCount = 5000
   const positions = new Float32Array(particleCount * 3)
   const colors = new Float32Array(particleCount * 3)
-  const velocities = []
+  const phases = new Float32Array(particleCount)
 
   for (let i = 0; i < particleCount; i++) {
     positions[i * 3] = (Math.random() - 0.5) * gridSize
     positions[i * 3 + 1] = Math.random() * 80
     positions[i * 3 + 2] = (Math.random() - 0.5) * gridSize
 
-    const color = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 1, 0.5)
+    const hue = 0.5 + Math.random() * 0.2
+    const color = new THREE.Color().setHSL(hue, 1, 0.5)
     colors[i * 3] = color.r
     colors[i * 3 + 1] = color.g
     colors[i * 3 + 2] = color.b
 
-    velocities.push({
-      x: 0,
-      y: 10 + Math.random() * 20,
-      z: 0
-    })
+    phases[i] = Math.random() * Math.PI * 2
   }
 
   particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
   particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+  particleGeometry.setAttribute('phase', new THREE.BufferAttribute(phases, 1))
 
   const particleMaterial = new THREE.PointsMaterial({
     size: 0.5,
@@ -193,45 +118,10 @@ export function createCyberGridCity(scene, options = {}) {
 
   // 全息中心
   const hologramGeometry = new THREE.IcosahedronGeometry(15, 2)
-  const hologramMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      uTime: { value: 0 },
-      uColor: { value: new THREE.Color(0x00ffff) },
-      uOpacity: { value: 0 }
-    },
-    vertexShader: `
-      uniform float uTime;
-      varying vec3 vNormal;
-      varying vec3 vPos;
-
-      void main() {
-        vNormal = normalize(normalMatrix * normal);
-        vec3 pos = position;
-        float wave = sin(uTime * 5.0 + length(pos) * 0.5) * 2.0;
-        pos += normal * wave;
-        vPos = pos;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-      }
-    `,
-    fragmentShader: `
-      uniform float uTime;
-      uniform vec3 uColor;
-      uniform float uOpacity;
-      varying vec3 vNormal;
-      varying vec3 vPos;
-
-      void main() {
-        float edge = 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)));
-        float scan = sin(uTime * 10.0 + vPos.y * 0.3) * 0.5 + 0.5;
-
-        vec3 color = uColor * (0.5 + scan * 0.5);
-        color += vec3(0.0, 1.0, 1.0) * edge * scan;
-
-        float alpha = uOpacity * edge * 0.6;
-        gl_FragColor = vec4(color, alpha);
-      }
-    `,
+  const hologramMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00ffff,
     transparent: true,
+    opacity: 0,
     wireframe: true,
     blending: THREE.AdditiveBlending
   })
@@ -241,37 +131,48 @@ export function createCyberGridCity(scene, options = {}) {
   hologram.visible = false
   scene.add(hologram)
 
+  // 灯光
+  const light = new THREE.PointLight(0x00ffff, 0, 100)
+  light.position.set(0, 30, 0)
+  scene.add(light)
+
   return {
     gridHelper,
     walls,
     buildings,
     particles,
     particleGeometry,
+    phases,
     hologram,
+    light,
     update(deltaTime, time) {
       // 更新墙壁
-      walls.forEach(wall => {
-        wall.material.uniforms.uTime.value = time
+      walls.forEach((wall, i) => {
+        if (wall.visible) {
+          wall.material.opacity = 0.6 + Math.sin(time * 3 + i) * 0.2
+        }
       })
 
       // 更新建筑
-      buildings.forEach(building => {
-        building.material.uniforms.uTime.value = time
-        building.rotation.y += deltaTime * 0.2
+      buildings.forEach((building, i) => {
+        if (building.visible) {
+          building.rotation.y += deltaTime * 0.2
+          building.material.opacity = 0.8 + Math.sin(time * 2 + i) * 0.2
+        }
       })
 
       // 更新全息
       if (hologram.visible) {
-        hologram.material.uniforms.uTime.value = time
         hologram.rotation.x += deltaTime
         hologram.rotation.y += deltaTime * 0.7
+        hologram.material.opacity = 0.8 + Math.sin(time * 5) * 0.2
       }
 
       // 更新粒子
       if (particleMaterial.opacity > 0) {
         const pos = particleGeometry.attributes.position.array
         for (let i = 0; i < particleCount; i++) {
-          pos[i * 3 + 1] += velocities[i].y * deltaTime
+          pos[i * 3 + 1] += (10 + Math.random() * 20) * deltaTime
           if (pos[i * 3 + 1] > 80) {
             pos[i * 3 + 1] = -20
             pos[i * 3] = (Math.random() - 0.5) * gridSize
@@ -279,6 +180,11 @@ export function createCyberGridCity(scene, options = {}) {
           }
         }
         particleGeometry.attributes.position.needsUpdate = true
+      }
+
+      // 灯光脉动
+      if (light.intensity > 0) {
+        light.intensity = 1 + Math.sin(time * 5) * 0.5
       }
     },
     animate(duration, onComplete) {
@@ -294,8 +200,8 @@ export function createCyberGridCity(scene, options = {}) {
       walls.forEach((wall, i) => {
         gsap.delayedCall(0.5 + i * 0.2, () => {
           wall.visible = true
-          gsap.to(wall.material.uniforms.uOpacity, {
-            value: 0.6,
+          gsap.to(wall.material, {
+            opacity: 0.6,
             duration: 1,
             ease: 'power2.out'
           })
@@ -311,8 +217,8 @@ export function createCyberGridCity(scene, options = {}) {
             duration: 1.5,
             ease: 'elastic.out(1, 0.5)'
           })
-          gsap.to(building.material.uniforms.uOpacity, {
-            value: 0.8,
+          gsap.to(building.material, {
+            opacity: 0.8,
             duration: 1,
             delay: 0.5
           })
@@ -329,11 +235,18 @@ export function createCyberGridCity(scene, options = {}) {
       // 全息出现
       gsap.delayedCall(2.5, () => {
         hologram.visible = true
-        gsap.to(hologram.material.uniforms.uOpacity, {
-          value: 1,
+        gsap.to(hologram.material, {
+          opacity: 1,
           duration: 1,
           ease: 'power2.out'
         })
+      })
+
+      // 灯光出现
+      gsap.to(light, {
+        intensity: 1,
+        duration: 1,
+        delay: 2.5
       })
 
       // 旋转建筑
@@ -360,6 +273,7 @@ export function createCyberGridCity(scene, options = {}) {
       })
       scene.remove(particles)
       scene.remove(hologram)
+      scene.remove(light)
       wallGeometry.dispose()
       wallMaterial.dispose()
       particleGeometry.dispose()

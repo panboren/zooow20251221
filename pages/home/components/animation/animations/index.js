@@ -51,6 +51,10 @@ import animateCosmicParticleSymphony from './cosmic-particle-symphony'
 import animateCyberGridCity from './cyber-grid-city'
 import animateDNAHelix from './dna-helix'
 import animateAncientRuins from './ancient-ruins'
+import animateDigitalRain from './digital-rain'
+import animatePortalGate from './portal-gate'
+import animateEnergySphere from './energy-sphere'
+import animateCrystalPyramid from './crystal-pyramid'
 
 /**
  * 动画函数映射表
@@ -98,6 +102,10 @@ export const animations = {
   'cyber-grid-city': animateCyberGridCity,
   'dna-helix': animateDNAHelix,
   'ancient-ruins': animateAncientRuins,
+  'digital-rain': animateDigitalRain,
+  'portal-gate': animatePortalGate,
+  'energy-sphere': animateEnergySphere,
+  'crystal-pyramid': animateCrystalPyramid,
 }
 
 /**

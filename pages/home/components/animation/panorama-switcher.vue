@@ -158,7 +158,7 @@ onMounted(() => {
     const timer = setTimeout(() => {
       clearTimeout(timer)
       loading.value = true
-    }, 5000)
+    }, 9000)
   }
 })
 </script>
