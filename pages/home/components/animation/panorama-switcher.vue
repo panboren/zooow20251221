@@ -1,7 +1,7 @@
 <template>
   <!-- 全景图切换器 -->
   <div
-    v-if="!isLoading && homeOptions.length > 0"
+    v-if="homeOptions.length > 0"
     class="panorama-switcher"
   >
     <el-carousel
@@ -17,8 +17,10 @@
       >
         <img
           class="panorama-description-img"
+          :class="{ activated: currentPanorama.id === item.id }"
           :src="item.image"
           :alt="item.title"
+          @click="changePanorama(item)"
         >
       </el-carousel-item>
     </el-carousel>
@@ -38,19 +40,7 @@ import homeImage8 from '~/assets/image/home8.png'
 import homeImage9 from '~/assets/image/home9.png'
 import homeImage10 from '~/assets/image/home10.png'
 import homeImage11 from '~/assets/image/home11.png'
-
-const props = defineProps({
-  isChangingPanorama: {
-    type: Boolean,
-    default: false,
-  },
-  isLoading: {
-    type: Boolean,
-    default: false,
-  },
-})
 const emits = defineEmits(['prevPanorama', 'nextPanorama', 'change'])
-const currentPanoramaIndex = ref(0)
 const currentPanorama = defineModel()
 
 // 全景图选项数组 - 带 target 字段控制最终定格位置
@@ -139,40 +129,15 @@ const homeOptions = [
   },
 ]
 
-/**
- * 切换到下一个全景图
- */
-const nextPanorama = () => {
-  if (homeOptions.length === 0) return
-
-  const nextIndex = (currentPanoramaIndex.value + 1) % homeOptions.length
-  const cur = homeOptions[nextIndex] || {}
-
-  currentPanoramaIndex.value = nextIndex
-
-  currentPanorama.value = cur
-  emits('nextPanorama', cur, nextIndex)
-  emits('change', cur, nextIndex)
-}
-
-/**
- * 切换到上一个全景图
- */
-const prevPanorama = () => {
-  if (homeOptions.length === 0) return
-
-  const prevIndex = (currentPanoramaIndex.value - 1 + homeOptions.length) % homeOptions.length
-  const cur = homeOptions[prevIndex] || {}
-  currentPanoramaIndex.value = prevIndex
-  currentPanorama.value = cur
-  emits('prevPanorama', cur, prevIndex)
-  emits('change', cur, prevIndex)
+const changePanorama = (item) => {
+  currentPanorama.value = item
+  emits('change', item)
 }
 
 onMounted(() => {
   if (homeOptions.length > 0) {
-    currentPanoramaIndex.value = 0
-    currentPanorama.value = homeOptions[0]
+    const item = homeOptions[0] || {}
+    changePanorama(item)
   }
 })
 </script>
@@ -212,6 +177,10 @@ onMounted(() => {
     height: 100px;      // 调整图片高度
     object-fit: contain; // 显示完整图片，不裁剪
     border-radius: 8px;
+    &.activated {
+      border: 2px solid #f5d60a;
+      box-sizing: border-box;
+    }
   }
 }
 </style>

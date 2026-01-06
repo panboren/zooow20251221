@@ -41,7 +41,6 @@
     <!-- 全景图切换器 -->
     <PanoramaSwitcher
       v-model="currentPanorama"
-      :is-changing-panorama="isChangingPanorama"
       @change="switchPanorama"
     />
 
