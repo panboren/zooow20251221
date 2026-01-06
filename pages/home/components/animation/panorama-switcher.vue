@@ -15,13 +15,26 @@
         v-for="(item, index) in homeOptions"
         :key="item.id+ '_'+index"
       >
-        <img
+        <el-image
           class="panorama-description-img"
           :class="{ activated: currentPanorama.id === item.id }"
           :src="item.image"
           :alt="item.title"
+          lazy
+          fit="contain"
           @click="changePanorama(item)"
         >
+          <template #placeholder>
+            <div class="image-slot">
+              加载中...
+            </div>
+          </template>
+          <template #error>
+            <div class="image-slot">
+              加载失败
+            </div>
+          </template>
+        </el-image>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -145,7 +158,7 @@ onMounted(() => {
     const timer = setTimeout(() => {
       clearTimeout(timer)
       loading.value = true
-    }, 3000)
+    }, 5000)
   }
 })
 </script>
@@ -155,8 +168,8 @@ onMounted(() => {
   position: absolute;
   bottom: 20px;
   left: 50%;
-  width: 600px;        // 改为 600px
-  height: 100px;       // 改为 120px
+  width: 600px;
+  height: 100px;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
@@ -166,25 +179,39 @@ onMounted(() => {
   z-index: 100;
   transition: all 0.3s ease;
 
-  // 调整carousel容器高度
   :deep(.el-carousel__container) {
-    height: 100px !important;  // 留出20px给其他元素
+    height: 100px !important;
   }
 
   :deep(.el-carousel__item) {
-    img {
+    .panorama-description-img {
       width: 100%;
       height: 100%;
-      object-fit: contain;  // 改为 contain 以显示完整图片
       border-radius: 8px;
+
+      :deep(.el-image__inner) {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      :deep(.el-image__placeholder),
+      :deep(.el-image__error) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        color: #fff;
+        font-size: 12px;
+      }
     }
   }
 
   .panorama-description-img {
     width: 100%;
-    height: 100px;      // 调整图片高度
-    object-fit: contain; // 显示完整图片，不裁剪
-    border-radius: 8px;
+    height: 100px;
     &.activated {
       border: 2px solid #f5d60a;
       box-sizing: border-box;
