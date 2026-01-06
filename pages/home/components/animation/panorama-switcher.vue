@@ -1,7 +1,7 @@
 <template>
   <!-- 全景图切换器 -->
   <div
-    v-if="homeOptions.length > 0"
+    v-if="homeOptions.length > 0 && loading"
     class="panorama-switcher"
   >
     <el-carousel
@@ -40,8 +40,10 @@ import homeImage8 from '~/assets/image/home8.png'
 import homeImage9 from '~/assets/image/home9.png'
 import homeImage10 from '~/assets/image/home10.png'
 import homeImage11 from '~/assets/image/home11.png'
+
 const emits = defineEmits(['prevPanorama', 'nextPanorama', 'change'])
 const currentPanorama = defineModel()
+const loading = ref(false)
 
 // 全景图选项数组 - 带 target 字段控制最终定格位置
 const homeOptions = [
@@ -138,6 +140,12 @@ onMounted(() => {
   if (homeOptions.length > 0) {
     const item = homeOptions[0] || {}
     changePanorama(item)
+
+    loading.value = false
+    const timer = setTimeout(() => {
+      clearTimeout(timer)
+      loading.value = true
+    }, 3000)
   }
 })
 </script>
