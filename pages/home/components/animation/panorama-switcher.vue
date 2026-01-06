@@ -4,38 +4,24 @@
     v-if="!isLoading && homeOptions.length > 0"
     class="panorama-switcher"
   >
-    <button
-      class="switch-button prev-button"
-      :disabled="isChangingPanorama || homeOptions.length <= 1"
-      title="上一张 (←)"
-      @click="prevPanorama"
+    <el-carousel
+      :autoplay="false"
+      type="card"
+      height="auto"
+      indicator-position="none"
+      :pause-on-hover="false"
     >
-      <span class="arrow">‹</span>
-    </button>
-    <div class="panorama-info">
-      <div class="panorama-description">
-        <!--        {{ currentPanorama.description }} -->
+      <el-carousel-item
+        v-for="(item, index) in homeOptions"
+        :key="item.id+ '_'+index"
+      >
         <img
           class="panorama-description-img"
-          :src="currentPanorama.image"
-          :alt="currentPanorama.title"
+          :src="item.image"
+          :alt="item.title"
         >
-      </div>
-      <div class="panorama-title">
-        {{ currentPanorama.title }}
-      </div>
-      <div class="panorama-index">
-        {{ currentPanoramaIndex + 1 }} / {{ homeOptions.length }}
-      </div>
-    </div>
-    <button
-      class="switch-button next-button"
-      :disabled="isChangingPanorama || homeOptions.length <= 1"
-      title="下一张 (→)"
-      @click="nextPanorama"
-    >
-      <span class="arrow">›</span>
-    </button>
+      </el-carousel-item>
+    </el-carousel>
   </div>
 </template>
 
@@ -70,6 +56,7 @@ const currentPanorama = defineModel()
 // 全景图选项数组 - 带 target 字段控制最终定格位置
 const homeOptions = [
   {
+    id: 1,
     image: homeImage1,
     title: 'Home 1',
     description: 'This is the first home image',
@@ -80,12 +67,14 @@ const homeOptions = [
     }, // 最终定格位置
   },
   {
+    id: 2,
     image: homeImage2,
     title: 'Home 2',
     description: 'This is the second home image',
     target: { x: 18, y: -1.2, z: 1 },
   },
   {
+    id: 3,
     image: homeImage3,
     title: 'Home 3',
     description: 'This is the third home image',
@@ -93,48 +82,56 @@ const homeOptions = [
   },
 
   {
+    id: 4,
     image: homeImage4,
     title: 'Home 4',
     description: 'This is the fourth home image',
     target: { x: -0.77, y: -5.3, z: 23.22 },
   },
   {
+    id: 5,
     image: homeImage5,
     title: 'Home 5',
     description: 'This is the fifth home image',
     target: { x: 11.65, y: -2.3, z: 4.5 },
   },
   {
+    id: 6,
     image: homeImage6,
     title: 'Home 6',
     description: 'This is the sixth home image',
     target: { x: 18.5, y: -5.5, z: -6.33 },
   },
   {
+    id: 7,
     image: homeImage7,
     title: 'Home 7',
     description: 'This is the seventh home image',
     target: { x: 15, y: -3.1, z: 3.8 },
   },
   {
+    id: 8,
     image: homeImage8,
     title: 'Home 8',
     description: 'This is the eighth home image',
     target: { x: 19.7, y: 1.36, z: -0.52 },
   },
   {
+    id: 9,
     image: homeImage9,
     title: 'Home 9',
     description: 'This is the ninth home image',
     target: { x: 12.57, y: 0.04, z: 1.97 },
   },
   {
+    id: 10,
     image: homeImage10,
     title: 'Home 10',
     description: 'This is the tenth home image',
     target: { x: 21, y: -3.8, z: 14 },
   },
   {
+    id: 11,
     image: homeImage11,
     title: 'Home 11',
     description: 'This is the eleventh home image',
@@ -181,128 +178,40 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-// 全景图切换器样式
 .panorama-switcher {
   position: absolute;
   bottom: 20px;
   left: 50%;
+  width: 600px;        // 改为 600px
+  height: 100px;       // 改为 120px
   transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 20px;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
-  padding: 8px 15px;
-  border-radius: 50px;
+  padding: 10px;
+  border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 100;
   transition: all 0.3s ease;
 
-  &:hover {
-    background: rgba(0, 0, 0, 0.8);
-    border-color: rgba(255, 255, 255, 0.2);
+  // 调整carousel容器高度
+  :deep(.el-carousel__container) {
+    height: 100px !important;  // 留出20px给其他元素
   }
 
-  // 移动端优化
-  @media (max-width: 768px) {
-    bottom: 60px;
-    padding: 10px 16px;
-    gap: 12px;
-  }
-}
-
-.switch-button {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 28px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  outline: none;
-
-  &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.25);
-    transform: scale(1.1);
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.95);
-  }
-
-  &:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-
-  .arrow {
-    line-height: 1;
-    display: block;
-  }
-}
-
-.panorama-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  min-width: 200px;
-
-  .panorama-description {
-    position: relative;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 12px;
-    text-align: center;
-    max-width: 300px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    .panorama-description-img{
-      display: inline-block;
-      width: 150px;
-      height: 80px;
-      border-radius: 5px;
+  :deep(.el-carousel__item) {
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;  // 改为 contain 以显示完整图片
+      border-radius: 8px;
     }
   }
-  .panorama-title {
-    position: absolute;
-    top: 30%;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    text-align: center;
-  }
-  .panorama-index {
-    position: absolute;
-    bottom: 20px;
-    color: rgb(63, 194, 217);
-    font-size: 16px;
-  }
-}
-// 移动端优化
-@media (max-width: 768px) {
-  .switch-button {
-    width: 40px;
-    height: 40px;
-    font-size: 24px;
-  }
 
-  .panorama-info {
-    min-width: 120px;
-
-    .panorama-title {
-      font-size: 14px;
-    }
-
-    .panorama-description {
-      font-size: 10px;
-      max-width: 150px;
-    }
+  .panorama-description-img {
+    width: 100%;
+    height: 100px;      // 调整图片高度
+    object-fit: contain; // 显示完整图片，不裁剪
+    border-radius: 8px;
   }
 }
 </style>

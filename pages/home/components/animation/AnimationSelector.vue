@@ -73,13 +73,13 @@ const animationOptions = ref([
   { value: 'nebula-vortex', label: '🌌 星云漩涡' },
   { value: 'quantum-rainbow-tunnel', label: '🌈 量子彩虹隧道' },
   { value: 'energy-pulse-ring', label: '💥 能量脉冲环' },
-  { value: 'quantum-dimension-break', label: '量子维度分裂动画' },
-  { value: 'cosmic-supernova', label: '宇宙超级新星爆炸动画' },
-  { value: 'hyperspace-warp-drive', label: '超空间曲速驱动动画' },
+  { value: 'quantum-dimension-break', label: '💥 量子维度分裂' },
+  { value: 'cosmic-supernova', label: '💫 宇宙超级新星' },
+  { value: 'hyperspace-warp-drive', label: '🚀 超空间曲速驱动' },
   { value: 'animate-nebula-energy-burst', label: '星云能量爆发动画' },
   { value: 'quantum-rainbow-foam', label: '🌈 彩虹量子泡沫' },
   { value: 'time-shards', label: '⏰ 时光碎片' },
-  { value: 'cosmic-particle-symphony', label: '🌌 宇宙粒子交响曲' },
+  { value: 'cosmic-particle-symphony', label: '🎼 宇宙粒子交响曲' },
 ])
 
 const handleChange = (event) => {
