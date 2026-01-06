@@ -184,16 +184,20 @@ export function createNebulaVortex(scene, options = {}) {
     animate(duration, onComplete) {
       const tl = gsap.timeline({ onComplete })
 
-      gsap.to(nebulas, {
-        scale: 0.5,
-        duration: duration * 0.3,
-        ease: 'power2.in'
-      })
+      nebulas.forEach((nebula, i) => {
+        gsap.to(nebula.scale, {
+          x: 0.5, y: 0.5, z: 0.5,
+          duration: duration * 0.3,
+          ease: 'power2.in',
+          delay: i * 0.05
+        })
 
-      gsap.to(nebulas, {
-        scale: 1.5,
-        duration: duration * 0.7,
-        ease: 'elastic.out(1, 0.4)'
+        gsap.to(nebula.scale, {
+          x: 1.5, y: 1.5, z: 1.5,
+          duration: duration * 0.7,
+          ease: 'elastic.out(1, 0.4)',
+          delay: duration * 0.3 + i * 0.05
+        })
       })
 
       tl.to(stars.scale, {

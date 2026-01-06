@@ -198,7 +198,7 @@ export function createGalaxyVortex(scene, options = {}) {
       varying vec3 vNormal;
 
       void main() {
-        vNormal = normalize(vec3(normalMatrix * vec4(normal, 0.0)));
+        vNormal = normalize(normalMatrix * normal);
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
     `,

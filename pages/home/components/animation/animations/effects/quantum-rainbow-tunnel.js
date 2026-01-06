@@ -187,26 +187,25 @@ export function createQuantumRainbowTunnel(scene, options = {}) {
     animate(duration, onComplete) {
       const tl = gsap.timeline({ onComplete })
 
-      // 隧道加速
-      gsap.to(tunnels, {
-        scale: {
+      // 隧道加速 - 使用 forEach 分别处理每个 tunnel
+      tunnels.forEach((tunnel, i) => {
+        gsap.to(tunnel.scale, {
           x: 0.5,
           y: 0.5,
-          z: 0.5
-        },
-        duration: duration * 0.3,
-        ease: 'power2.in'
-      })
+          z: 0.5,
+          duration: duration * 0.3,
+          ease: 'power2.in',
+          delay: i * 0.05
+        })
 
-      // 隧道爆发
-      gsap.to(tunnels, {
-        scale: {
+        gsap.to(tunnel.scale, {
           x: 1.5,
           y: 1.5,
-          z: 1.5
-        },
-        duration: duration * 0.7,
-        ease: 'elastic.out(1, 0.3)'
+          z: 1.5,
+          duration: duration * 0.7,
+          ease: 'elastic.out(1, 0.3)',
+          delay: duration * 0.3 + i * 0.05
+        })
       })
 
       // 粒子爆发
