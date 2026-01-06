@@ -46,6 +46,7 @@
 
     <!-- 控制提示 -->
     <ControlsHint />
+    <Beian />
   </div>
 </template>
 
@@ -81,6 +82,7 @@ import {
 // 导入工具函数
 import { createLogger } from './utils/logger'
 import { debounce } from './utils/performance'
+import Beian from '@/pages/home/components/ui/beian.vue'
 
 // 创建日志实例
 const logger = createLogger('HomeView')

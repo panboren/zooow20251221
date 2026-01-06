@@ -80,6 +80,9 @@ const animationOptions = ref([
   { value: 'quantum-rainbow-foam', label: '🌈 彩虹量子泡沫' },
   { value: 'time-shards', label: '⏰ 时光碎片' },
   { value: 'cosmic-particle-symphony', label: '🎼 宇宙粒子交响曲' },
+  { value: 'cyber-grid-city', label: '🏙️ 赛博网格城市' },
+  { value: 'dna-helix', label: '🧬 DNA双螺旋' },
+  { value: 'ancient-ruins', label: '🏛️ 远古遗迹' },
 ])
 
 const handleChange = (event) => {

@@ -166,7 +166,7 @@ onMounted(() => {
 <style scoped lang="scss">
 .panorama-switcher {
   position: absolute;
-  bottom: 20px;
+  bottom: 10px;
   left: 50%;
   width: 600px;
   height: 100px;

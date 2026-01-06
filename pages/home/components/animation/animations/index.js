@@ -47,6 +47,11 @@ import animateTimeShards from './time-shards'
 
 import animateCosmicParticleSymphony from './cosmic-particle-symphony'
 
+// 新增特效动画
+import animateCyberGridCity from './cyber-grid-city'
+import animateDNAHelix from './dna-helix'
+import animateAncientRuins from './ancient-ruins'
+
 /**
  * 动画函数映射表
  * 将动画类型字符串映射到对应的动画函数
@@ -90,6 +95,9 @@ export const animations = {
   'quantum-rainbow-foam': animateQuantumRainbowFoam,
   'time-shards': animateTimeShards,
   'cosmic-particle-symphony': animateCosmicParticleSymphony,
+  'cyber-grid-city': animateCyberGridCity,
+  'dna-helix': animateDNAHelix,
+  'ancient-ruins': animateAncientRuins,
 }
 
 /**
