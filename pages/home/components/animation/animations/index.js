@@ -32,9 +32,7 @@ import animateCosmicSupernova from './cosmic-supernova'
 import animateQuantumDimensionBreak from './quantum-dimension-break'
 import animateHyperspaceWarpDrive from './hyperspace-warp-drive'
 
-
 import { ANIMATION_CONFIG } from './utils'
-
 
 import animateCherryBlossom from './cherry-blossom'
 import animateButterflySwarm from './butterfly-swarm'
@@ -47,19 +45,7 @@ import animateQuantumRainbowFoam from './quantum-rainbow-foam'
 
 import animateTimeShards from './time-shards'
 
-
 import animateCosmicParticleSymphony from './cosmic-particle-symphony'
-
-
-
-
-
-
-
-
-
-
-
 
 /**
  * 动画函数映射表
@@ -103,7 +89,7 @@ export const animations = {
   'animate-nebula-energy-burst': animateNebulaEnergyBurst,
   'quantum-rainbow-foam': animateQuantumRainbowFoam,
   'time-shards': animateTimeShards,
-  'cosmic-particle-symphony': animateCosmicParticleSymphony
+  'cosmic-particle-symphony': animateCosmicParticleSymphony,
 }
 
 /**
