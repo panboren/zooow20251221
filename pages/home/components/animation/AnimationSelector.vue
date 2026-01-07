@@ -89,6 +89,7 @@ const animationOptions = ref([
   { value: 'crystal-pyramid', label: '🔮 水晶金字塔' },
 
   { value: 'spectral-waves', label: '🔮 光谱音波动画' },
+  { value: 'quantum-matrix', label: '💻 量子矩阵' },
 
 ])
 

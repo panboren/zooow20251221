@@ -55,9 +55,8 @@ import animateDigitalRain from './digital-rain'
 import animatePortalGate from './portal-gate'
 import animateEnergySphere from './energy-sphere'
 import animateCrystalPyramid from './crystal-pyramid'
-
 import animateSpectralWaves from './spectral-waves.js'
-
+import animateQuantumMatrix from './quantum-matrix.js'
 
 /**
  * 动画函数映射表
@@ -110,6 +109,7 @@ export const animations = {
   'energy-sphere': animateEnergySphere,
   'crystal-pyramid': animateCrystalPyramid,
    'spectral-waves': animateSpectralWaves,
+   'quantum-matrix': animateQuantumMatrix,
 }
 
 /**
