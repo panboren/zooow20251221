@@ -32,6 +32,8 @@ export const ANIMATION_CONFIG = {
   DIMENSION_COLLAPSE: 'dimension-collapse',
   TIME_REWIND: 'time-rewind',
   QUANTUM_MATRIX: 'quantum-matrix',
+  TIME_WEAVER: 'time-weaver',
+  STELLAR_WHISPERER: 'stellar-whisperer',
 
   // ✅ 新增：全局速度倍率配置
   // 值越小，动画越快。建议范围：0.4-1.0

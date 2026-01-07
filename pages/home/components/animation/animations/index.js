@@ -57,6 +57,9 @@ import animateEnergySphere from './energy-sphere'
 import animateCrystalPyramid from './crystal-pyramid'
 import animateSpectralWaves from './spectral-waves.js'
 import animateQuantumMatrix from './quantum-matrix.js'
+import animateTimeWeaver from './time-weaver.js'
+import animateStellarWhisperer from './stellar-whisperer.js'
+import animateGalacticVortex from './galactic-vortex.js'
 
 /**
  * 动画函数映射表
@@ -110,6 +113,10 @@ export const animations = {
   'crystal-pyramid': animateCrystalPyramid,
    'spectral-waves': animateSpectralWaves,
    'quantum-matrix': animateQuantumMatrix,
+   'time-weaver': animateTimeWeaver,
+   'stellar-whisperer': animateStellarWhisperer,
+
+   'galactic-vortex': animateGalacticVortex,
 }
 
 /**

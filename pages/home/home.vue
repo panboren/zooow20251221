@@ -36,7 +36,7 @@
     />
 
     <!-- 视角控制组件 -->
-    <CameraControls @set-camera-view="setCameraView" />
+    <CameraControls   :camera="camera"  @set-camera-view="setCameraView" />
 
     <!-- 全景图切换器 -->
     <PanoramaSwitcher

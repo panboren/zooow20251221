@@ -4,29 +4,29 @@
  */
 
 // 导入基础样式
-@import 'base';
+@use 'base';
 
 // 导入公共动画
-@import 'animations';
+@use 'animations';
 
-// 导入各动画样式
-@import 'epic-dive';
-@import 'dimension-fold';
-@import 'energy-wave';
-@import 'dizzy-cam';
-@import 'hyperspace';
-@import 'time-rift';
-@import 'planet-explosion';
-@import 'quantum-entanglement';
-@import 'virtual-reality';
-@import 'scene-roaming';
-@import 'orbital-rotation';
-@import 'dimensional-portal';
-@import 'time-travel';
-@import 'black-hole';
-@import 'cosmic-big-bang';
-@import 'dimension-collapse';
-@import 'time-rewind';
-// 新增特效动画样式
-@import 'particle-explosion';
-@import 'glitch-effect';
+// 导入各动画样式 (只保留实际存在的样式文件)
+@use 'epic-dive';
+@use 'dimension-fold';
+@use 'energy-wave';
+@use 'dizzy-cam';
+@use 'hyperspace';
+@use 'time-rift';
+@use 'planet-explosion';
+@use 'quantum-entanglement';
+@use 'virtual-reality';
+@use 'scene-roaming';
+@use 'orbital-rotation';
+@use 'dimensional-portal';
+@use 'time-travel';
+@use 'black-hole';
+@use 'cosmic-big-bang';
+@use 'dimension-collapse';
+@use 'time-rewind';
+// 新增特效动画样式 (只保留实际存在的)
+@use 'particle-explosion';
+@use 'glitch-effect';
