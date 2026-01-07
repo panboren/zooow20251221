@@ -87,6 +87,9 @@ const animationOptions = ref([
   { value: 'portal-gate', label: '🚪 传送门' },
   { value: 'energy-sphere', label: '⚡ 能量球' },
   { value: 'crystal-pyramid', label: '🔮 水晶金字塔' },
+
+  { value: 'spectral-waves', label: '🔮 光谱音波动画' },
+
 ])
 
 const handleChange = (event) => {

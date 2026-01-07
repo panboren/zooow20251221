@@ -56,6 +56,9 @@ import animatePortalGate from './portal-gate'
 import animateEnergySphere from './energy-sphere'
 import animateCrystalPyramid from './crystal-pyramid'
 
+import animateSpectralWaves from './spectral-waves.js'
+
+
 /**
  * 动画函数映射表
  * 将动画类型字符串映射到对应的动画函数
@@ -106,6 +109,7 @@ export const animations = {
   'portal-gate': animatePortalGate,
   'energy-sphere': animateEnergySphere,
   'crystal-pyramid': animateCrystalPyramid,
+   'spectral-waves': animateSpectralWaves,
 }
 
 /**
