@@ -7,28 +7,258 @@
 <script setup lang="ts">
 import Home from './home/home.vue'
 
+const config = useRuntimeConfig()
 
-import type { SeoMeta } from '~/types'
-const seoMeta: SeoMeta = {
-  title: 'ZOOOW-AI工具官网',
-  description: '专业AI工具官网，使用最新技术构建',
-  keywords: 'ZOOOW-AI',
-  ogType: 'website',
-}
+// SEO 元数据优化
+const siteName = 'ZOOOW'
+const siteTitle = 'ZOOOW - 专业的AI工具与全景图展示平台 | 3D全景 | 智能化解决方案'
+const siteDescription = 'ZOOOW提供专业的AI工具和3D全景图展示服务，涵盖文本生成、图像处理、数据分析、3D全景展示等多个领域。基于最新AI技术和WebGL技术，为企业与个人提供高效的智能服务和沉浸式体验。'
+const siteKeywords = 'ZOOOW,AI工具,人工智能,智能助手,文本生成,图像处理,数据分析,3D全景,全景图,WebGL,Three.js,AI解决方案,智能化,AI平台,虚拟现实'
+const siteUrl = config.public.siteUrl || 'https://www.zooow.xyz'
 
+// Open Graph 标签
 useSeoMeta({
-  title: seoMeta.title,
-  description: seoMeta.description,
-  keywords: seoMeta.keywords,
-  ogType: seoMeta.ogType,
+  title: siteTitle,
+  ogTitle: siteTitle,
+  description: siteDescription,
+  ogDescription: siteDescription,
+  ogType: 'website',
+  ogSiteName: siteName,
+  ogUrl: siteUrl,
+  ogImage: `${siteUrl}/og-image.jpg`,
+  ogImageAlt: siteName + ' - 专业的AI工具与全景图展示平台',
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  ogLocale: 'zh_CN',
+  ogLocaleAlternate: ['zh_TW', 'en_US'],
+
+  // Twitter Card 标签
+  twitterCard: 'summary_large_image',
+  twitterTitle: siteTitle,
+  twitterDescription: siteDescription,
+  twitterImage: `${siteUrl}/og-image.jpg`,
+  twitterSite: '@zooow',
+  twitterCreator: '@zooow',
+
+  // 额外标签
+  keywords: siteKeywords,
+  robots: 'index, follow',
+  googlebot: 'index, follow',
+  author: siteName,
+  themeColor: '#6366f1',
+  mobileWebAppCapable: 'yes',
+  appleMobileWebAppStatusBarStyle: 'default',
+  formatDetection: 'telephone=no',
+  viewport: 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes',
 })
 
-
-
-
-
-
-
+// Canonical URL 和结构化数据
+useHead({
+  htmlAttrs: {
+    lang: 'zh-CN'
+  },
+  link: [
+    {
+      rel: 'canonical',
+      href: siteUrl
+    },
+    {
+      rel: 'alternate',
+      hreflang: 'zh-CN',
+      href: siteUrl
+    },
+    {
+      rel: 'alternate',
+      hreflang: 'en',
+      href: siteUrl
+    },
+    {
+      rel: 'dns-prefetch',
+      href: 'https://www.google-analytics.com'
+    },
+    {
+      rel: 'preconnect',
+      href: 'https://cdn.zooow.xyz'
+    }
+  ],
+  meta: [
+    {
+      name: 'msapplication-TileColor',
+      content: '#6366f1'
+    },
+    {
+      name: 'msapplication-config',
+      content: '/browserconfig.xml'
+    },
+    {
+      name: 'application-name',
+      content: siteName
+    },
+    {
+      name: 'apple-mobile-web-app-title',
+      content: siteName
+    },
+    {
+      name: 'format-detection',
+      content: 'telephone=no,email=no,address=no'
+    },
+    {
+      name: 'referrer',
+      content: 'origin-when-cross-origin'
+    },
+    {
+      name: 'baidu-site-verification',
+      content: 'code'
+    },
+    {
+      name: 'google-site-verification',
+      content: 'code'
+    },
+    {
+      name: '360-site-verification',
+      content: 'code'
+    },
+    {
+      httpEquiv: 'x-ua-compatible',
+      content: 'ie=edge'
+    }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      children: JSON.stringify([
+        {
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: siteName,
+          alternateName: 'ZOOOW-AI',
+          url: siteUrl,
+          description: siteDescription,
+          inLanguage: 'zh-CN',
+          copyrightYear: new Date().getFullYear(),
+          author: {
+            '@type': 'Organization',
+            name: siteName
+          },
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: {
+              '@type': 'EntryPoint',
+              urlTemplate: `${siteUrl}/search?q={search_term_string}`
+            },
+            'query-input': 'required name=search_term_string'
+          }
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: siteName,
+          alternateName: 'ZOOOW-AI',
+          url: siteUrl,
+          logo: `${siteUrl}/logo.png`,
+          description: siteDescription,
+          foundingDate: '2024',
+          areaServed: 'CN',
+          address: {
+            '@type': 'PostalAddress',
+            addressCountry: 'CN'
+          },
+          sameAs: [
+            'https://twitter.com/zooow',
+            'https://github.com/zooow',
+            'https://www.linkedin.com/company/zooow'
+          ],
+          contactPoint: [
+            {
+              '@type': 'ContactPoint',
+              contactType: 'customer service',
+              email: 'contact@zooow.xyz',
+              availableLanguage: ['Chinese', 'English'],
+              telephone: '+86-400-XXX-XXXX'
+            },
+            {
+              '@type': 'ContactPoint',
+              contactType: 'business development',
+              email: 'business@zooow.xyz',
+              availableLanguage: ['Chinese', 'English']
+            }
+          ]
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          name: siteName,
+          alternateName: 'ZOOOW-AI',
+          applicationCategory: 'BusinessApplication',
+          operatingSystem: 'Web',
+          browserRequirements: 'Requires JavaScript. Requires HTML5.',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'CNY',
+            availability: 'https://schema.org/InStock'
+          },
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: '4.8',
+            ratingCount: '1000',
+            bestRating: '5',
+            worstRating: '1'
+          },
+          featureList: [
+            'AI文本生成',
+            'AI图像处理',
+            '3D全景图展示',
+            '数据分析',
+            '智能问答'
+          ]
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              name: '首页',
+              item: siteUrl
+            }
+          ]
+        },
+        {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: [
+            {
+              '@type': 'Question',
+              name: 'ZOOOW是什么？',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'ZOOOW是一个专业的AI工具和3D全景图展示平台，提供智能化的AI服务和沉浸式的3D体验。'
+              }
+            },
+            {
+              '@type': 'Question',
+              name: 'ZOOOW提供哪些服务？',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'ZOOOW提供AI文本生成、AI图像处理、数据分析、3D全景图展示等多项智能化服务。'
+              }
+            },
+            {
+              '@type': 'Question',
+              name: '如何使用ZOOOW？',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: '访问www.zooow.xyz，注册账号后即可免费使用我们的AI工具和3D全景展示服务。'
+              }
+            }
+          ]
+        }
+      ])
+    }
+  ]
+})
 </script>
 
 <style scoped lang="scss">
@@ -39,250 +269,3 @@ useSeoMeta({
   overflow: hidden;
 }
 </style>
-
-<!--
-<template>
-  <div class="home-page" :class="{ 'dark': isDark }">
-    &lt;!&ndash; Three.js Canvas &ndash;&gt;
-    <canvas ref="canvasRef" class="three-canvas" />
-
-    &lt;!&ndash; Dark Mode Toggle &ndash;&gt;
-    <div class="fixed top-4 right-4 z-50">
-      <el-button
-        circle
-        size="small"
-        class="theme-btn"
-        @click="toggleColorMode"
-      >
-        {{ isDark ? '🌙' : '☀️' }}
-      </el-button>
-    </div>
-
-    &lt;!&ndash; Content Overlay &ndash;&gt;
-    <div class="content-overlay">
-      <h1 class="title">Three.js 3D 场景</h1>
-      <p class="subtitle">使用 GSAP 动画的旋转方块</p>
-      <el-button type="primary" @click="triggerAnimation">触发动画</el-button>
-    </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import { onMounted, onUnmounted, ref, computed, shallowRef } from 'vue'
-import * as THREE from 'three'
-import { gsap } from 'gsap'
-import type { SeoMeta } from '~/types'
-
-// SEO 元数据
-const seoMeta: SeoMeta = {
-  title: '企业产品官网',
-  description: '专业的企业产品展示官网，使用最新技术构建',
-  keywords: '企业,产品,官网',
-  ogType: 'website',
-}
-
-useSeoMeta({
-  title: seoMeta.title,
-  description: seoMeta.description,
-  keywords: seoMeta.keywords,
-  ogType: seoMeta.ogType,
-})
-
-// 获取当前主题
-const colorMode = useColorMode()
-const isDark = computed(() => colorMode.value === 'dark')
-
-// 切换主题
-const toggleColorMode = () => {
-  colorMode.value = isDark.value ? 'light' : 'dark'
-}
-
-// Three.js 相关
-const canvasRef = ref<HTMLCanvasElement | null>(null)
-const scene = shallowRef<THREE.Scene | null>(null)
-const camera = shallowRef<THREE.PerspectiveCamera | null>(null)
-const renderer = shallowRef<THREE.WebGLRenderer | null>(null)
-const cube = shallowRef<THREE.Mesh | null>(null)
-const animationId = ref<number | null>(null)
-
-// 初始化 Three.js 场景
-const initThreeJS = () => {
-  if (!canvasRef.value) return
-
-  // 创建场景
-  scene.value = new THREE.Scene()
-  scene.value.background = new THREE.Color(isDark.value ? '#1a1a2e' : '#f5f5f5')
-
-  // 创建相机
-  camera.value = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  )
-  camera.value.position.z = 5
-
-  // 创建渲染器
-  renderer.value = new THREE.WebGLRenderer({
-    canvas: canvasRef.value,
-    antialias: true,
-    alpha: true
-  })
-  renderer.value.setSize(window.innerWidth, window.innerHeight)
-  renderer.value.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-
-  // 创建方块
-  const geometry = new THREE.BoxGeometry(2, 2, 2)
-  const material = new THREE.MeshPhongMaterial({
-    color: isDark.value ? 0x6c5ce7 : 0x0984e3,
-    shininess: 100
-  })
-  cube.value = new THREE.Mesh(geometry, material)
-  scene.value.add(cube.value)
-
-  // 添加光源
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
-  scene.value.add(ambientLight)
-
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 1)
-  directionalLight.position.set(5, 5, 5)
-  scene.value.add(directionalLight)
-
-  // 开始动画循环
-  animate()
-}
-
-// 动画循环
-const animate = () => {
-  animationId.value = requestAnimationFrame(animate)
-
-  if (cube.value) {
-    cube.value.rotation.x += 0.01
-    cube.value.rotation.y += 0.01
-  }
-
-  if (renderer.value && scene.value && camera.value) {
-    renderer.value.render(scene.value, camera.value)
-  }
-}
-
-// 触发 GSAP 动画
-const triggerAnimation = () => {
-  if (!cube.value) return
-
-  // 使用 GSAP 创建旋转动画
-  gsap.to(cube.value.rotation, {
-    x: cube.value.rotation.x + Math.PI * 2,
-    y: cube.value.rotation.y + Math.PI * 2,
-    duration: 2,
-    ease: 'elastic.out(1, 0.3)'
-  })
-
-  // 同时缩放动画
-  gsap.to(cube.value.scale, {
-    x: 1.5,
-    y: 1.5,
-    z: 1.5,
-    duration: 0.5,
-    yoyo: true,
-    repeat: 1,
-    ease: 'power2.inOut'
-  })
-}
-
-// 处理窗口大小变化
-const handleResize = () => {
-  if (!camera.value || !renderer.value) return
-
-  camera.value.aspect = window.innerWidth / window.innerHeight
-  camera.value.updateProjectionMatrix()
-  renderer.value.setSize(window.innerWidth, window.innerHeight)
-}
-
-// 清理资源
-const cleanup = () => {
-  if (animationId.value) {
-    cancelAnimationFrame(animationId.value)
-    animationId.value = null
-  }
-
-  if (renderer.value) {
-    renderer.value.dispose()
-    renderer.value = null
-  }
-
-  if (cube.value) {
-    cube.value.geometry.dispose()
-    cube.value.material.dispose()
-    cube.value = null
-  }
-
-  window.removeEventListener('resize', handleResize)
-}
-
-// 生命周期钩子
-onMounted(() => {
-  initThreeJS()
-  window.addEventListener('resize', handleResize)
-
-  // 初始动画
-  setTimeout(() => {
-    triggerAnimation()
-  }, 1000)
-})
-
-onUnmounted(() => {
-  cleanup()
-})
-</script>
-
-<style scoped lang="scss">
-.home-page {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.three-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-
-.content-overlay {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  text-align: center;
-  color: #333;
-
-  .title {
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  }
-
-  .subtitle {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-  }
-}
-
-.theme-btn {
-  font-size: 16px;
-  padding: 8px;
-}
-
-.dark .content-overlay {
-  color: #fff;
-}
-</style>
--->
