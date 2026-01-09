@@ -45,21 +45,21 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 // 修改animationOptions数组，添加新的动画类型
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = ref([
-  { value: 'epic-dive', label: '史诗俯冲' },
-  { value: 'space-warp', label: '空间扭曲' },
-  { value: 'quantum-shift', label: '量子跃迁' },
-  { value: 'dimension-fold', label: '维度折叠' },
-  { value: 'energy-wave', label: '能量波动' },
-  { value: 'dizzy-cam', label: '眩晕相机' },
-  { value: 'hyperspace', label: '超空间跳跃' },
-  { value: 'time-rift', label: '时空裂缝' },
-  { value: 'planet-explosion', label: '星球爆炸' },
-  { value: 'virtual-reality', label: '虚拟现实' },
-  { value: 'scene-roaming', label: '场景漫游' },
-  { value: 'orbital-rotation', label: '轨道环绕' },
-  { value: 'dimensional-portal', label: '维度传送门' },
-  { value: 'time-travel', label: '时空穿梭' },
-  { value: 'time-rewind', label: '时空逆流' },
+  { value: 'epic-dive', label: '🎬 史诗俯冲' },
+  { value: 'space-warp', label: '🌀 空间扭曲' },
+  { value: 'quantum-shift', label: '⚛️ 量子跃迁' },
+  { value: 'dimension-fold', label: '🔄 维度折叠' },
+  { value: 'energy-wave', label: '🌊 能量波动' },
+  { value: 'dizzy-cam', label: '😵 眩晕相机' },
+  { value: 'hyperspace', label: '🚀 超空间跳跃' },
+  { value: 'time-rift', label: '⏱️ 时空裂缝' },
+  { value: 'planet-explosion', label: '💥 星球爆炸' },
+  { value: 'virtual-reality', label: '👓 虚拟现实' },
+  { value: 'scene-roaming', label: '🚶 场景漫游' },
+  { value: 'orbital-rotation', label: '🛰️ 轨道环绕' },
+  { value: 'dimensional-portal', label: '🚪 维度传送门' },
+  { value: 'time-travel', label: '⏰ 时空穿梭' },
+  { value: 'time-rewind', label: '⏪ 时空逆流' },
   // 特效动画
   { value: 'particle-explosion', label: '🧨 粒子爆炸' },
   { value: 'glitch-effect', label: '📺 故障效果' },
@@ -76,7 +76,7 @@ const animationOptions = ref([
   { value: 'quantum-dimension-break', label: '💥 量子维度分裂' },
   { value: 'cosmic-supernova', label: '💫 宇宙超级新星' },
   { value: 'hyperspace-warp-drive', label: '🚀 超空间曲速驱动' },
-  { value: 'animate-nebula-energy-burst', label: '星云能量爆发动画' },
+  { value: 'animate-nebula-energy-burst', label: '💥 星云能量爆发' },
   { value: 'quantum-rainbow-foam', label: '🌈 彩虹量子泡沫' },
   { value: 'time-shards', label: '⏰ 时光碎片' },
   { value: 'cosmic-particle-symphony', label: '🎼 宇宙粒子交响曲' },
@@ -93,9 +93,10 @@ const animationOptions = ref([
   { value: 'time-weaver', label: '⏳ 时空编织者' },
   { value: 'stellar-whisperer', label: '⭐ 星语者' },
   { value: 'galactic-vortex', label: '🌌 星际漩涡' },
-  { value: 'quantum-leap', label: '⚛️ 量子跃迁' },
+  { value: 'quantum-leap', label: '🚀 量子跃迁' },
 
 ])
+
 
 const handleChange = (event) => {
   emit('update:modelValue', event.target.value)
