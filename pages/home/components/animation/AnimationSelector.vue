@@ -1,3 +1,4 @@
+template
 <!-- src/components/AnimationSelector.vue -->
 <template>
   <div
@@ -6,20 +7,23 @@
     aria-label="动画控制"
   >
     <label for="animation-type">动画类型:</label>
-    <select
-      id="animation-type"
-      :value="modelValue"
-      aria-label="选择开场动画类型"
+
+
+    <el-select
+      style="width: 200px;"
+      :model-value="modelValue"
+      @update:model-value="handleModelUpdate"
       @change="handleChange"
+      filterable
+      placeholder="选择开场动画类型"
     >
-      <option
-        v-for="animation in animationOptions"
-        :key="animation.value"
-        :value="animation.value"
-      >
-        {{ animation.label }}
-      </option>
-    </select>
+      <el-option
+        v-for="item in animationOptions"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </el-option>
+    </el-select>
     <button
       aria-label="重新播放动画"
       @click="resetAnimation"
@@ -30,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
   modelValue: {
@@ -44,7 +48,7 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 // 动画选项数组 - 使用 v-for 渲染
 // 修改animationOptions数组，添加新的动画类型
 // 动画选项数组 - 只包含实际存在的动画
-const animationOptions = ref([
+const animationOptions = [
   { value: 'epic-dive', label: '🎬 史诗俯冲' },
   { value: 'space-warp', label: '🌀 空间扭曲' },
   { value: 'quantum-shift', label: '⚛️ 量子跃迁' },
@@ -93,14 +97,22 @@ const animationOptions = ref([
   { value: 'time-weaver', label: '⏳ 时空编织者' },
   { value: 'stellar-whisperer', label: '⭐ 星语者' },
   { value: 'galactic-vortex', label: '🌌 星际漩涡' },
-  { value: 'quantum-leap', label: '🚀 量子跃迁' },
+  { value: 'quantum-leap', label: '🚀 量子跃迁改进版' }, // 修改了重复标签
+]
 
-])
+const validValues = computed(() => new Set(animationOptions.map(item => item.value)))
 
+const handleModelUpdate = (value) => {
+  if (validValues.value.has(value)) {
+    emit('update:modelValue', value)
+  }
+}
 
-const handleChange = (event) => {
-  emit('update:modelValue', event.target.value)
-  emit('change', event.target.value)
+const handleChange = (value) => {
+  if (validValues.value.has(value)) {
+    emit('update:modelValue', value)
+    emit('change', value)
+  }
 }
 
 const resetAnimation = () => {
@@ -110,10 +122,16 @@ const resetAnimation = () => {
 
 <style scoped lang="scss">
 .animation-selector {
+  $bg-color: rgba(0, 0, 0, 0.8);
+  $select-bg: rgba(14, 54, 53, 0.5);
+  $select-hover-bg: rgba(9, 82, 89, 0.5);
+  $border-color: rgba(255, 255, 255, 0.2);
+  $focus-outline: rgba(100, 200, 255, 0.5);
+
   position: absolute;
   top: 20px;
   left: 20px;
-  background: rgba(0, 0, 0, 0.8);
+  background: $bg-color;
   color: white;
   padding: 10px 15px;
   border-radius: 8px;
@@ -129,20 +147,20 @@ const resetAnimation = () => {
   }
 
   select, button {
-    background: rgba(14, 54, 53, 0.5);
+    background: $select-bg;
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid $border-color;
     border-radius: 4px;
     padding: 5px 10px;
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(9, 82, 89, 0.5);
+      background: $select-hover-bg;
     }
 
     &:focus {
-      outline: 2px solid rgba(100, 200, 255, 0.5);
+      outline: 2px solid $focus-outline;
       outline-offset: 1px;
     }
   }
