@@ -92,7 +92,8 @@ const animationOptions = ref([
   { value: 'quantum-matrix', label: '💻 量子矩阵' },
   { value: 'time-weaver', label: '⏳ 时空编织者' },
   { value: 'stellar-whisperer', label: '⭐ 星语者' },
-  { value: 'galactic-vortex', label: '🔗 星际漩涡特效' },
+  { value: 'galactic-vortex', label: '🌌 星际漩涡' },
+  { value: 'quantum-leap', label: '⚛️ 量子跃迁' },
 
 ])
 

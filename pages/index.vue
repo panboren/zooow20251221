@@ -6,6 +6,29 @@
 
 <script setup lang="ts">
 import Home from './home/home.vue'
+
+
+import type { SeoMeta } from '~/types'
+const seoMeta: SeoMeta = {
+  title: 'ZOOOW-AI工具官网',
+  description: '专业AI工具官网，使用最新技术构建',
+  keywords: 'ZOOOW-AI',
+  ogType: 'website',
+}
+
+useSeoMeta({
+  title: seoMeta.title,
+  description: seoMeta.description,
+  keywords: seoMeta.keywords,
+  ogType: seoMeta.ogType,
+})
+
+
+
+
+
+
+
 </script>
 
 <style scoped lang="scss">

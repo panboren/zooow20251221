@@ -60,6 +60,7 @@ import animateQuantumMatrix from './quantum-matrix.js'
 import animateTimeWeaver from './time-weaver.js'
 import animateStellarWhisperer from './stellar-whisperer.js'
 import animateGalacticVortex from './galactic-vortex.js'
+import animateQuantumLeap from './quantum-leap.js'
 
 /**
  * 动画函数映射表
@@ -117,6 +118,7 @@ export const animations = {
    'stellar-whisperer': animateStellarWhisperer,
 
    'galactic-vortex': animateGalacticVortex,
+   'quantum-leap': animateQuantumLeap,
 }
 
 /**
