@@ -98,6 +98,8 @@ const animationOptions = [
   { value: 'crystal-pyramid', label: '🔮 水晶金字塔' },
 ]
 
+
+
 const validValues = computed(() => new Set(animationOptions.map(item => item.value)))
 
 const sanitizedValue = computed(() => {
@@ -120,6 +122,17 @@ const handleChange = (value) => {
 const resetAnimation = () => {
   emit('reset')
 }
+
+onMounted(async ()=>{
+  const getRandomIndex = () => Math.floor(Math.random() * 5);
+  const list = ['cyber-grid-city','energy-sphere','time-weaver','digital-rain','quantum-leap'];
+
+  handleChange(list[getRandomIndex()]);
+  await nextTick()
+  handleChange(list[getRandomIndex()]);
+})
+
+
 </script>
 
 

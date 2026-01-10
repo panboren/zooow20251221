@@ -101,7 +101,10 @@ const changePanorama = (item) => {
 
 onMounted(() => {
   if (homeOptions.length > 0) {
-    const item = homeOptions[0] || {}
+
+    const randomNumber = Math.floor(Math.random() * 37) + 1;
+
+    const item = homeOptions[randomNumber] || {}
     changePanorama(item)
 
     loading.value = false
@@ -128,6 +131,11 @@ onMounted(() => {
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 100;
   transition: all 0.3s ease;
+  .image-slot{
+    padding-top: 10px;
+    color: rgba(250, 247, 247, 0.28);
+    font-size: 12px;
+  }
 
   :deep(.el-carousel__container) {
     height: 100px !important;
