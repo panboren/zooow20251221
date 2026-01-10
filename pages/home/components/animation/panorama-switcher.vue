@@ -41,45 +41,34 @@
 </template>
 
 <script setup>
-// 导入全景图资源
-import homeImage1 from '~/assets/image/home1.png'
-import homeImage2 from '~/assets/image/home2.png'
-import homeImage3 from '~/assets/image/home3.png'
-import homeImage4 from '~/assets/image/home4.png'
-import homeImage5 from '~/assets/image/home5.png'
-import homeImage6 from '~/assets/image/home6.png'
-import homeImage7 from '~/assets/image/home7.png'
-import homeImage8 from '~/assets/image/home8.png'
-import homeImage9 from '~/assets/image/home9.png'
-import homeImage10 from '~/assets/image/home10.png'
-import homeImage11 from '~/assets/image/home11.png'
-
-
-
-import homeImage1a from '~/assets/image/home1-a.png'
-import homeImage2a from '~/assets/image/home2-a.png'
-import homeImage3a from '~/assets/image/home3-a.png'
-import homeImage4a from '~/assets/image/home4-a.png'
-import homeImage5a from '~/assets/image/home5-a.png'
-import homeImage6a from '~/assets/image/home6-a.png'
-import homeImage7a from '~/assets/image/home7-a.png'
-import homeImage8a from '~/assets/image/home8-a.png'
-import homeImage9a from '~/assets/image/home9-a.png'
-import homeImage10a from '~/assets/image/home10-a.png'
-import homeImage11a from '~/assets/image/home11-a.png'
-
-
+// 使用外部图片路径（不打包）
+const getImageUrl = (name) => `/images/${name}`
 
 const emits = defineEmits(['prevPanorama', 'nextPanorama', 'change'])
 const currentPanorama = defineModel()
 const loading = ref(false)
+let list=[
+  { x: 7.9, y: -2.6, z: 4 },
+  { x: 18, y: -1.2, z: 1 },
+  { x: 12, y: -2.9, z: -7.55 },
+  { x: -0.77, y: -5.3, z: 23.22 },
+  { x: 11.65, y: -2.3, z: 4.5 },
+  { x: 18.5, y: -5.5, z: -6.33 },
+  { x: 15, y: -3.1, z: 3.8 },
+  { x: 19.7, y: 1.36, z: -0.52 },
+  { x: 12.57, y: 0.04, z: 1.97 },
+  { x: 21, y: -3.8, z: 14 },
+  { x: 1.25, y: -1.52, z: -9.7 }
+]
+
+
 
 // 全景图选项数组 - 带 target 字段控制最终定格位置
 const homeOptions = [
-  {
+ /* {
     id: 1,
-    image: homeImage1,
-    icon: homeImage1a,
+    image: getImageUrl('home1.png'),
+    icon: getImageUrl('home1-a.png'),
     title: 'Home 1',
     description: 'This is the first home image',
     target: {
@@ -87,89 +76,23 @@ const homeOptions = [
       y: -2.6,
       z: 4.0,
     }, // 最终定格位置
-  },
-  {
-    id: 2,
-    image: homeImage2,
-    icon: homeImage2a,
-    title: 'Home 2',
-    description: 'This is the second home image',
-    target: { x: 18, y: -1.2, z: 1 },
-  },
-  {
-    id: 3,
-    image: homeImage3,
-    icon: homeImage3a,
-    title: 'Home 3',
-    description: 'This is the third home image',
-    target: { x: 12, y: -2.9, z: -7.55 },
-  },
-
-  {
-    id: 4,
-    image: homeImage4,
-    icon: homeImage4a,
-    title: 'Home 4',
-    description: 'This is the fourth home image',
-    target: { x: -0.77, y: -5.3, z: 23.22 },
-  },
-  {
-    id: 5,
-    image: homeImage5,
-    icon: homeImage5a,
-    title: 'Home 5',
-    description: 'This is the fifth home image',
-    target: { x: 11.65, y: -2.3, z: 4.5 },
-  },
-  {
-    id: 6,
-    image: homeImage6,
-    icon: homeImage6a,
-    title: 'Home 6',
-    description: 'This is the sixth home image',
-    target: { x: 18.5, y: -5.5, z: -6.33 },
-  },
-  {
-    id: 7,
-    image: homeImage7,
-    icon: homeImage7a,
-    title: 'Home 7',
-    description: 'This is the seventh home image',
-    target: { x: 15, y: -3.1, z: 3.8 },
-  },
-  {
-    id: 8,
-    image: homeImage8,
-    icon: homeImage8a,
-    title: 'Home 8',
-    description: 'This is the eighth home image',
-    target: { x: 19.7, y: 1.36, z: -0.52 },
-  },
-  {
-    id: 9,
-    image: homeImage9,
-    icon: homeImage9a,
-    title: 'Home 9',
-    description: 'This is the ninth home image',
-    target: { x: 12.57, y: 0.04, z: 1.97 },
-  },
-  {
-    id: 10,
-    image: homeImage10,
-    icon: homeImage10a,
-    title: 'Home 10',
-    description: 'This is the tenth home image',
-    target: { x: 21, y: -3.8, z: 14 },
-  },
-  {
-    id: 11,
-    image: homeImage11,
-    icon: homeImage11a,
-    title: 'Home 11',
-    description: 'This is the eleventh home image',
-    target: { x: 1.25, y: -1.52, z: -9.7 },
-  },
+  },*/
 ]
+
+for (let i = 1; i <= 37; i++) {
+  homeOptions.push( {
+    id: i,
+    image: getImageUrl(`h-${i}.png`),
+    icon: getImageUrl(`h-${i}-a.png`),
+    title: 'Home'+i,
+    description: 'home'+i,
+    target: list[i-1] || {
+      x: 7.9,
+      y: -2.6,
+      z: 4.0,
+    }, // 最终定格位置
+  })
+}
 
 const changePanorama = (item) => {
   currentPanorama.value = item

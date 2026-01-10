@@ -10,9 +10,9 @@ import Home from './home/home.vue'
 
 const config = useRuntimeConfig()
 // SEO 元数据优化
-const siteName = 'ZOOOW'
-const siteTitle = 'ZOOOW - 专业的AI工具与全景图展示平台 | 3D全景 | 智能化解决方案'
-const siteDescription = 'ZOOOW提供专业的AI工具和3D全景图展示服务，涵盖文本生成、图像处理、数据分析、3D全景展示等多个领域。基于最新AI技术和WebGL技术，为企业与个人提供高效的智能服务和沉浸式体验。'
+const siteName = 'ZOOOW-AI'
+const siteTitle = 'ZOOOW-AI - 专业的AI工具与全景图展示平台 | 3D全景 | 特效工具 | 智能化解决方案'
+const siteDescription = 'ZOOOW-AI提供专业的AI工具和3D全景图展示服务，涵盖文本生成、图像处理、数据分析、特效工具、3D全景展示等多个领域。基于最新AI技术和WebGL技术，为企业与个人提供高效的智能服务和沉浸式体验。'
 const siteKeywords = 'ZOOOW,AI工具,人工智能,智能助手,文本生成,图像处理,数据分析,3D全景,全景图,WebGL,Three.js,AI解决方案,智能化,AI平台,虚拟现实'
 const siteUrl = config.public.siteUrl || 'http://www.zooow.xyz/'
 
@@ -22,16 +22,31 @@ function safeUrlJoin(baseUrl: string, path: string): string {
     const url = new URL(path, baseUrl)
     return url.toString()
   } catch (e) {
-    console.warn('Invalid URL constructed:', baseUrl, path)
-    return baseUrl
+    console.warn('Invalid URL constructed:', baseUrl, path, e)
+    // 返回基础URL加上路径作为备选方案
+    if (!baseUrl.endsWith('/') && !path.startsWith('/')) {
+      return baseUrl + '/' + path
+    }
+    return baseUrl + path
   }
 }
 
-// 结构化数据生成函数
-function generateStructuredData(): any[] {
+// 定义结构化数据类型
+interface StructuredDataItem {
+  [key: string]: any
+}
+
+// 缓存结构化数据以避免重复计算
+let cachedStructuredData: StructuredDataItem[] | null = null
+
+function generateStructuredData(): StructuredDataItem[] {
+  if (cachedStructuredData !== null) {
+    return cachedStructuredData
+  }
+
   const currentYear = new Date().getFullYear()
 
-  return [
+  const structuredData: StructuredDataItem[] = [
     {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
@@ -60,7 +75,7 @@ function generateStructuredData(): any[] {
       name: siteName,
       alternateName: 'ZOOOW-AI',
       url: siteUrl,
-      logo: safeUrlJoin(siteUrl, '/logo.png'),
+      logo: safeUrlJoin(siteUrl, '/images/logo.png'),
       description: siteDescription,
       foundingDate: '2024',
       areaServed: 'CN',
@@ -69,22 +84,22 @@ function generateStructuredData(): any[] {
         addressCountry: 'CN'
       },
       sameAs: [
-        'https://twitter.com/zooow',
-        'https://github.com/zooow',
-        'https://www.linkedin.com/company/zooow'
+        config.public.twitterUrl || 'https://twitter.com/zooow',
+        config.public.githubUrl || 'https://github.com/zooow',
+        config.public.linkedinUrl || 'https://www.linkedin.com/company/zooow'
       ],
       contactPoint: [
         {
           '@type': 'ContactPoint',
           contactType: 'customer service',
-          email: 'contact@zooow.xyz',
+          email: config.public.customerServiceEmail || 'contact@zooow.xyz',
           availableLanguage: ['Chinese', 'English'],
-          telephone: '+86-400-XXX-XXXX'
+          telephone: config.public.customerServicePhone || '+86-400-XXX-XXXX'
         },
         {
           '@type': 'ContactPoint',
           contactType: 'business development',
-          email: 'business@zooow.xyz',
+          email: config.public.businessEmail || 'business@zooow.xyz',
           availableLanguage: ['Chinese', 'English']
         }
       ]
@@ -161,6 +176,9 @@ function generateStructuredData(): any[] {
       ]
     }
   ]
+
+  cachedStructuredData = structuredData
+  return structuredData
 }
 
 // Open Graph 标签
@@ -172,7 +190,7 @@ useSeoMeta({
   ogType: 'website',
   ogSiteName: siteName,
   ogUrl: siteUrl,
-  ogImage: safeUrlJoin(siteUrl, '/og-image.jpg'),
+  ogImage: safeUrlJoin(siteUrl, '/images/og-image.png'),
   ogImageAlt: siteName + ' - 专业的AI工具与全景图展示平台',
   ogImageWidth: 1200,
   ogImageHeight: 630,
@@ -183,7 +201,7 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   twitterTitle: siteTitle,
   twitterDescription: siteDescription,
-  twitterImage: safeUrlJoin(siteUrl, '/og-image.jpg'),
+  twitterImage: safeUrlJoin(siteUrl, '/images/og-image.png'),
   twitterSite: '@zooow',
   twitterCreator: '@zooow',
 
@@ -255,15 +273,15 @@ useHead({
     },
     {
       name: 'baidu-site-verification',
-      content: 'YOUR_BAIDU_VERIFICATION_CODE' // 实际部署时需替换
+      content: config.public.baiduVerificationCode || 'YOUR_BAIDU_VERIFICATION_CODE' // 实际部署时需替换
     },
     {
       name: 'google-site-verification',
-      content: 'YOUR_GOOGLE_VERIFICATION_CODE' // 实际部署时需替换
+      content: config.public.googleVerificationCode || 'YOUR_GOOGLE_VERIFICATION_CODE' // 实际部署时需替换
     },
     {
       name: '360-site-verification',
-      content: 'YOUR_360_VERIFICATION_CODE' // 实际部署时需替换
+      content: config.public.threeSixtyVerificationCode || 'YOUR_360_VERIFICATION_CODE' // 实际部署时需替换
     },
     {
       httpEquiv: 'x-ua-compatible',
