@@ -1,3 +1,4 @@
+template
 <template>
   <div class="home-page">
     <Home />
@@ -8,13 +9,159 @@
 import Home from './home/home.vue'
 
 const config = useRuntimeConfig()
-
 // SEO 元数据优化
 const siteName = 'ZOOOW'
 const siteTitle = 'ZOOOW - 专业的AI工具与全景图展示平台 | 3D全景 | 智能化解决方案'
 const siteDescription = 'ZOOOW提供专业的AI工具和3D全景图展示服务，涵盖文本生成、图像处理、数据分析、3D全景展示等多个领域。基于最新AI技术和WebGL技术，为企业与个人提供高效的智能服务和沉浸式体验。'
 const siteKeywords = 'ZOOOW,AI工具,人工智能,智能助手,文本生成,图像处理,数据分析,3D全景,全景图,WebGL,Three.js,AI解决方案,智能化,AI平台,虚拟现实'
-const siteUrl = config.public.siteUrl || 'https://www.zooow.xyz'
+const siteUrl = config.public.siteUrl || 'http://www.zooow.xyz/'
+
+// 安全的URL拼接函数
+function safeUrlJoin(baseUrl: string, path: string): string {
+  try {
+    const url = new URL(path, baseUrl)
+    return url.toString()
+  } catch (e) {
+    console.warn('Invalid URL constructed:', baseUrl, path)
+    return baseUrl
+  }
+}
+
+// 结构化数据生成函数
+function generateStructuredData(): any[] {
+  const currentYear = new Date().getFullYear()
+
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: siteName,
+      alternateName: 'ZOOOW-AI',
+      url: siteUrl,
+      description: siteDescription,
+      inLanguage: 'zh-CN',
+      copyrightYear: currentYear,
+      author: {
+        '@type': 'Organization',
+        name: siteName
+      },
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: `${siteUrl}/search?q={search_term_string}`
+        },
+        'query-input': 'required name=search_term_string'
+      }
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: siteName,
+      alternateName: 'ZOOOW-AI',
+      url: siteUrl,
+      logo: safeUrlJoin(siteUrl, '/logo.png'),
+      description: siteDescription,
+      foundingDate: '2024',
+      areaServed: 'CN',
+      address: {
+        '@type': 'PostalAddress',
+        addressCountry: 'CN'
+      },
+      sameAs: [
+        'https://twitter.com/zooow',
+        'https://github.com/zooow',
+        'https://www.linkedin.com/company/zooow'
+      ],
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          contactType: 'customer service',
+          email: 'contact@zooow.xyz',
+          availableLanguage: ['Chinese', 'English'],
+          telephone: '+86-400-XXX-XXXX'
+        },
+        {
+          '@type': 'ContactPoint',
+          contactType: 'business development',
+          email: 'business@zooow.xyz',
+          availableLanguage: ['Chinese', 'English']
+        }
+      ]
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: siteName,
+      alternateName: 'ZOOOW-AI',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      browserRequirements: 'Requires JavaScript. Requires HTML5.',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'CNY',
+        availability: 'https://schema.org/InStock'
+      },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.8',
+        ratingCount: '1000',
+        bestRating: '5',
+        worstRating: '1'
+      },
+      featureList: [
+        'AI文本生成',
+        'AI图像处理',
+        '3D全景图展示',
+        '数据分析',
+        '智能问答'
+      ]
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: '首页',
+          item: siteUrl
+        }
+      ]
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'ZOOOW是什么？',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'ZOOOW是一个专业的AI工具和3D全景图展示平台，提供智能化的AI服务和沉浸式的3D体验。'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'ZOOOW提供哪些服务？',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'ZOOOW提供AI文本生成、AI图像处理、数据分析、3D全景图展示等多项智能化服务。'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: '如何使用ZOOOW？',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: '访问www.zooow.xyz，注册账号后即可免费使用我们的AI工具和3D全景展示服务。'
+          }
+        }
+      ]
+    }
+  ]
+}
 
 // Open Graph 标签
 useSeoMeta({
@@ -25,7 +172,7 @@ useSeoMeta({
   ogType: 'website',
   ogSiteName: siteName,
   ogUrl: siteUrl,
-  ogImage: `${siteUrl}/og-image.jpg`,
+  ogImage: safeUrlJoin(siteUrl, '/og-image.jpg'),
   ogImageAlt: siteName + ' - 专业的AI工具与全景图展示平台',
   ogImageWidth: 1200,
   ogImageHeight: 630,
@@ -36,7 +183,7 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   twitterTitle: siteTitle,
   twitterDescription: siteDescription,
-  twitterImage: `${siteUrl}/og-image.jpg`,
+  twitterImage: safeUrlJoin(siteUrl, '/og-image.jpg'),
   twitterSite: '@zooow',
   twitterCreator: '@zooow',
 
@@ -108,15 +255,15 @@ useHead({
     },
     {
       name: 'baidu-site-verification',
-      content: 'code'
+      content: 'YOUR_BAIDU_VERIFICATION_CODE' // 实际部署时需替换
     },
     {
       name: 'google-site-verification',
-      content: 'code'
+      content: 'YOUR_GOOGLE_VERIFICATION_CODE' // 实际部署时需替换
     },
     {
       name: '360-site-verification',
-      content: 'code'
+      content: 'YOUR_360_VERIFICATION_CODE' // 实际部署时需替换
     },
     {
       httpEquiv: 'x-ua-compatible',
@@ -126,136 +273,7 @@ useHead({
   script: [
     {
       type: 'application/ld+json',
-      children: JSON.stringify([
-        {
-          '@context': 'https://schema.org',
-          '@type': 'WebSite',
-          name: siteName,
-          alternateName: 'ZOOOW-AI',
-          url: siteUrl,
-          description: siteDescription,
-          inLanguage: 'zh-CN',
-          copyrightYear: new Date().getFullYear(),
-          author: {
-            '@type': 'Organization',
-            name: siteName
-          },
-          potentialAction: {
-            '@type': 'SearchAction',
-            target: {
-              '@type': 'EntryPoint',
-              urlTemplate: `${siteUrl}/search?q={search_term_string}`
-            },
-            'query-input': 'required name=search_term_string'
-          }
-        },
-        {
-          '@context': 'https://schema.org',
-          '@type': 'Organization',
-          name: siteName,
-          alternateName: 'ZOOOW-AI',
-          url: siteUrl,
-          logo: `${siteUrl}/logo.png`,
-          description: siteDescription,
-          foundingDate: '2024',
-          areaServed: 'CN',
-          address: {
-            '@type': 'PostalAddress',
-            addressCountry: 'CN'
-          },
-          sameAs: [
-            'https://twitter.com/zooow',
-            'https://github.com/zooow',
-            'https://www.linkedin.com/company/zooow'
-          ],
-          contactPoint: [
-            {
-              '@type': 'ContactPoint',
-              contactType: 'customer service',
-              email: 'contact@zooow.xyz',
-              availableLanguage: ['Chinese', 'English'],
-              telephone: '+86-400-XXX-XXXX'
-            },
-            {
-              '@type': 'ContactPoint',
-              contactType: 'business development',
-              email: 'business@zooow.xyz',
-              availableLanguage: ['Chinese', 'English']
-            }
-          ]
-        },
-        {
-          '@context': 'https://schema.org',
-          '@type': 'SoftwareApplication',
-          name: siteName,
-          alternateName: 'ZOOOW-AI',
-          applicationCategory: 'BusinessApplication',
-          operatingSystem: 'Web',
-          browserRequirements: 'Requires JavaScript. Requires HTML5.',
-          offers: {
-            '@type': 'Offer',
-            price: '0',
-            priceCurrency: 'CNY',
-            availability: 'https://schema.org/InStock'
-          },
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.8',
-            ratingCount: '1000',
-            bestRating: '5',
-            worstRating: '1'
-          },
-          featureList: [
-            'AI文本生成',
-            'AI图像处理',
-            '3D全景图展示',
-            '数据分析',
-            '智能问答'
-          ]
-        },
-        {
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            {
-              '@type': 'ListItem',
-              position: 1,
-              name: '首页',
-              item: siteUrl
-            }
-          ]
-        },
-        {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: [
-            {
-              '@type': 'Question',
-              name: 'ZOOOW是什么？',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'ZOOOW是一个专业的AI工具和3D全景图展示平台，提供智能化的AI服务和沉浸式的3D体验。'
-              }
-            },
-            {
-              '@type': 'Question',
-              name: 'ZOOOW提供哪些服务？',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: 'ZOOOW提供AI文本生成、AI图像处理、数据分析、3D全景图展示等多项智能化服务。'
-              }
-            },
-            {
-              '@type': 'Question',
-              name: '如何使用ZOOOW？',
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: '访问www.zooow.xyz，注册账号后即可免费使用我们的AI工具和3D全景展示服务。'
-              }
-            }
-          ]
-        }
-      ])
+      children: JSON.stringify(generateStructuredData())
     }
   ]
 })

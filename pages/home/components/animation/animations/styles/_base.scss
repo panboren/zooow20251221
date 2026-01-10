@@ -47,7 +47,7 @@
     position: relative;
 
     &::before {
-      content: "ZOOOW";
+      content: "ZOOOW-AI";
       position: absolute;
       left: 0;
       top: 0;
@@ -56,16 +56,18 @@
       filter: blur(8px);
       transform: scale(1.05);
       animation: glowPulse 2s infinite alternate;
+      white-space: nowrap;
     }
 
     &::after {
-      content: "ZOOOW";
+      content: "ZOOOW-AI";
       position: absolute;
       left: 2px;
       top: 2px;
       z-index: -2;
       color: rgba(0, 100, 255, 0.3);
       transform: translateZ(-5px);
+      white-space: nowrap;
     }
 
     text-stroke: 1px rgba(100, 200, 255, 0.3);

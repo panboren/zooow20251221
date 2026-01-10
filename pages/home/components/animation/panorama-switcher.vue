@@ -54,6 +54,22 @@ import homeImage9 from '~/assets/image/home9.png'
 import homeImage10 from '~/assets/image/home10.png'
 import homeImage11 from '~/assets/image/home11.png'
 
+
+
+import homeImage1a from '~/assets/image/home1-a.png'
+import homeImage2a from '~/assets/image/home2-a.png'
+import homeImage3a from '~/assets/image/home3-a.png'
+import homeImage4a from '~/assets/image/home4-a.png'
+import homeImage5a from '~/assets/image/home5-a.png'
+import homeImage6a from '~/assets/image/home6-a.png'
+import homeImage7a from '~/assets/image/home7-a.png'
+import homeImage8a from '~/assets/image/home8-a.png'
+import homeImage9a from '~/assets/image/home9-a.png'
+import homeImage10a from '~/assets/image/home10-a.png'
+import homeImage11a from '~/assets/image/home11-a.png'
+
+
+
 const emits = defineEmits(['prevPanorama', 'nextPanorama', 'change'])
 const currentPanorama = defineModel()
 const loading = ref(false)
@@ -63,6 +79,7 @@ const homeOptions = [
   {
     id: 1,
     image: homeImage1,
+    icon: homeImage1a,
     title: 'Home 1',
     description: 'This is the first home image',
     target: {
@@ -74,6 +91,7 @@ const homeOptions = [
   {
     id: 2,
     image: homeImage2,
+    icon: homeImage2a,
     title: 'Home 2',
     description: 'This is the second home image',
     target: { x: 18, y: -1.2, z: 1 },
@@ -81,6 +99,7 @@ const homeOptions = [
   {
     id: 3,
     image: homeImage3,
+    icon: homeImage3a,
     title: 'Home 3',
     description: 'This is the third home image',
     target: { x: 12, y: -2.9, z: -7.55 },
@@ -89,6 +108,7 @@ const homeOptions = [
   {
     id: 4,
     image: homeImage4,
+    icon: homeImage4a,
     title: 'Home 4',
     description: 'This is the fourth home image',
     target: { x: -0.77, y: -5.3, z: 23.22 },
@@ -96,6 +116,7 @@ const homeOptions = [
   {
     id: 5,
     image: homeImage5,
+    icon: homeImage5a,
     title: 'Home 5',
     description: 'This is the fifth home image',
     target: { x: 11.65, y: -2.3, z: 4.5 },
@@ -103,6 +124,7 @@ const homeOptions = [
   {
     id: 6,
     image: homeImage6,
+    icon: homeImage6a,
     title: 'Home 6',
     description: 'This is the sixth home image',
     target: { x: 18.5, y: -5.5, z: -6.33 },
@@ -110,6 +132,7 @@ const homeOptions = [
   {
     id: 7,
     image: homeImage7,
+    icon: homeImage7a,
     title: 'Home 7',
     description: 'This is the seventh home image',
     target: { x: 15, y: -3.1, z: 3.8 },
@@ -117,6 +140,7 @@ const homeOptions = [
   {
     id: 8,
     image: homeImage8,
+    icon: homeImage8a,
     title: 'Home 8',
     description: 'This is the eighth home image',
     target: { x: 19.7, y: 1.36, z: -0.52 },
@@ -124,6 +148,7 @@ const homeOptions = [
   {
     id: 9,
     image: homeImage9,
+    icon: homeImage9a,
     title: 'Home 9',
     description: 'This is the ninth home image',
     target: { x: 12.57, y: 0.04, z: 1.97 },
@@ -131,6 +156,7 @@ const homeOptions = [
   {
     id: 10,
     image: homeImage10,
+    icon: homeImage10a,
     title: 'Home 10',
     description: 'This is the tenth home image',
     target: { x: 21, y: -3.8, z: 14 },
@@ -138,6 +164,7 @@ const homeOptions = [
   {
     id: 11,
     image: homeImage11,
+    icon: homeImage11a,
     title: 'Home 11',
     description: 'This is the eleventh home image',
     target: { x: 1.25, y: -1.52, z: -9.7 },

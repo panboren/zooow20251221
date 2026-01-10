@@ -20,7 +20,7 @@
         />
       </div>
       <h1 class="cinematic-intro__title">
-        ZOOOW
+        ZOOOW-AI
       </h1>
       <p class="cinematic-intro__subtitle">
         IMMERSIVE EXPERIENCE
@@ -523,7 +523,7 @@ defineExpose({
     position: relative;
 
     &::before {
-      content: "ZOOOW";
+      content: "ZOOOW-AI";
       position: absolute;
       left: 0;
       top: 0;
@@ -535,7 +535,7 @@ defineExpose({
     }
 
     &::after {
-      content: "ZOOOW";
+      content: "ZOOOW-AI";
       position: absolute;
       left: 2px;
       top: 2px;

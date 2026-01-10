@@ -1,5 +1,4 @@
 template
-<!-- src/components/AnimationSelector.vue -->
 <template>
   <div
     class="animation-selector"
@@ -8,18 +7,18 @@ template
   >
     <label for="animation-type">动画类型:</label>
 
-
     <el-select
       style="width: 200px;"
-      :model-value="modelValue"
+      :model-value="sanitizedValue"
       @update:model-value="handleModelUpdate"
       @change="handleChange"
       filterable
       placeholder="选择开场动画类型"
+      popper-class="custom-animation-select-dropdown"
     >
       <el-option
-        v-for="item in animationOptions"
-        :key="item.value"
+        v-for="(item,index) in animationOptions"
+        :key="`${item.value}-${index}`"
         :label="item.label"
         :value="item.value">
       </el-option>
@@ -49,6 +48,12 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 // 修改animationOptions数组，添加新的动画类型
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
+  { value: 'spectral-waves', label: '🔮 光谱音波动画' },
+  { value: 'quantum-matrix', label: '💻 量子矩阵' },
+  { value: 'time-weaver', label: '⏳ 时空编织者' },
+  { value: 'stellar-whisperer', label: '⭐ 星语者' },
+  { value: 'galactic-vortex', label: '🌌 星际漩涡' },
+  { value: 'quantum-leap', label: '🚀 量子跃迁改进版' }, // 修改了重复标签
   { value: 'epic-dive', label: '🎬 史诗俯冲' },
   { value: 'space-warp', label: '🌀 空间扭曲' },
   { value: 'quantum-shift', label: '⚛️ 量子跃迁' },
@@ -91,16 +96,13 @@ const animationOptions = [
   { value: 'portal-gate', label: '🚪 传送门' },
   { value: 'energy-sphere', label: '⚡ 能量球' },
   { value: 'crystal-pyramid', label: '🔮 水晶金字塔' },
-
-  { value: 'spectral-waves', label: '🔮 光谱音波动画' },
-  { value: 'quantum-matrix', label: '💻 量子矩阵' },
-  { value: 'time-weaver', label: '⏳ 时空编织者' },
-  { value: 'stellar-whisperer', label: '⭐ 星语者' },
-  { value: 'galactic-vortex', label: '🌌 星际漩涡' },
-  { value: 'quantum-leap', label: '🚀 量子跃迁改进版' }, // 修改了重复标签
 ]
 
 const validValues = computed(() => new Set(animationOptions.map(item => item.value)))
+
+const sanitizedValue = computed(() => {
+  return validValues.value.has(props.modelValue) ? props.modelValue : animationOptions[0]?.value || ''
+})
 
 const handleModelUpdate = (value) => {
   if (validValues.value.has(value)) {
@@ -119,6 +121,7 @@ const resetAnimation = () => {
   emit('reset')
 }
 </script>
+
 
 <style scoped lang="scss">
 .animation-selector {
@@ -146,12 +149,47 @@ const resetAnimation = () => {
     white-space: nowrap;
   }
 
-  select, button {
+  :deep(.custom-animation-select-dropdown) {
+    background: $select-bg !important;
+    border: 1px solid $border-color !important;
+    border-radius: 4px !important;
+  }
+
+  :deep(.el-select__wrapper) {
+    background: $select-bg !important;
+    border: 1px solid $border-color !important;
+    border-radius: 4px !important;
+
+    &:hover {
+      box-shadow: 0 0 0 1px $select-hover-bg inset !important;
+    }
+  }
+
+  :deep(.el-input__wrapper) {
+    background: $select-bg !important;
+    border: none !important;
+    box-shadow: 0 0 0 1px $border-color inset !important;
+
+    &:hover {
+      box-shadow: 0 0 0 1px $select-hover-bg inset !important;
+    }
+  }
+
+  :deep(.el-input__inner) {
+    color: white !important;
+    background: transparent !important;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+  }
+
+  button {
     background: $select-bg;
     color: white;
     border: 1px solid $border-color;
     border-radius: 4px;
-    padding: 5px 10px;
+    padding: 7px 12px;
     cursor: pointer;
     transition: all 0.2s ease;
 
@@ -164,9 +202,47 @@ const resetAnimation = () => {
       outline-offset: 1px;
     }
   }
+}
+</style>
 
-  select {
-    min-width: 120px;
+<!-- 全局样式，专门用于覆盖下拉菜单样式 -->
+<style lang="scss">
+.custom-animation-select-dropdown {
+  background: rgba(14, 54, 53, 0.5) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 4px !important;
+
+  .el-select-dropdown__list {
+    padding: 4px 0 !important;
+  }
+
+  .el-select-dropdown__item {
+    color: white !important;  /* 确保未选中项为白色 */
+    background: transparent !important;
+    margin: 2px 4px !important;
+    border-radius: 3px !important;
+
+    &:not(.selected):not([aria-selected="true"]):hover,
+    &:not(.selected):not([aria-selected="true"]).hover {
+      background: rgba(9, 82, 89, 0.5) !important;
+      color: white !important;  /* 确保悬停时文字仍为白色 */
+    }
+
+    &.selected,
+    &.selected.hover,
+    &[aria-selected="true"] {
+      background: rgba(9, 82, 89, 0.8) !important;
+      color: #f5d60a !important;  /* 选中项为亮黄色 */
+      font-weight: bold;
+    }
+
+    &.is-disabled {
+      color: rgba(255, 255, 255, 0.4) !important;
+      background: transparent !important;
+    }
   }
 }
+
+
 </style>

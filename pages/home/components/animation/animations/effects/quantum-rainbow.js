@@ -1,4 +1,4 @@
-// animations/quantum-rainbow.js
+/*
 import { createQuantumRainbowTunnel } from './effects/quantum-rainbow-tunnel'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
 
@@ -55,3 +55,4 @@ export default function animateQuantumRainbow(props, callbacks) {
     return null
   }
 }
+*/

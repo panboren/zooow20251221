@@ -11,7 +11,7 @@
  * 控制提示组件，显示用户交互提示
  *
  * @component ControlsHint
- * @author ZOOOW Team
+ * @author ZOOOW-AI Team
  * @version 1.0.0
  * @license MIT
  */
