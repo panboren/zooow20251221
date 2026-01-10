@@ -16,7 +16,7 @@
 
     <!-- 电影级动画组件 -->
     <CinematicAnimations
-      v-if="scene && !isLoading"
+      v-if="scene && textureLoaded"
       ref="cinematicAnimationsRef"
       :is-loading="isLoading"
       :scene="scene"
@@ -29,7 +29,8 @@
 
     <!-- 动画选择器组件 -->
     <AnimationSelector
-      v-if="!isLoading"
+      v-if="textureLoaded"
+      ref="animationSelectorRef"
       v-model="animationType"
       @change="resetAnimation"
       @reset="resetAnimation"
@@ -93,6 +94,7 @@ const logger = createLogger('HomeView')
 const containerRef = ref(null)
 const canvasRef = ref(null)
 const cinematicAnimationsRef = ref(null)
+const animationSelectorRef = ref(null)
 
 // Three.js 相关变量（使用 shallowRef 避免深度响应式）
 const scene = shallowRef(null)
@@ -111,6 +113,7 @@ const animationComplete = ref(false)
 const animationType = ref('epic-dive')
 const isInitialized = ref(false)
 const isAnimationPlaying = ref(false) // 动画播放状态
+const textureLoaded = ref(false) // 纹理是否已加载
 
 // ==================== 计算属性 ====================
 const loadingText = computed(() => '正在加载ZOOOW-AI智慧工具...')
@@ -319,6 +322,7 @@ const loadTexture = (imageUrl) => {
       try {
         logger.info('纹理加载成功')
         isLoading.value = false
+        textureLoaded.value = true // 标记纹理已加载
 
         // 优化纹理参数
         loadedTexture.wrapS = THREE.ClampToEdgeWrapping
@@ -348,10 +352,16 @@ const loadTexture = (imageUrl) => {
         // 保存纹理引用
         texture.value = loadedTexture
 
-        // 动画进入默认视角
+        // 纹理加载完成后，启动特效动画
         setTimeout(() => {
-          if (cinematicAnimationsRef.value) {
+          if (cinematicAnimationsRef.value && textureLoaded.value) {
+            // 随机选择动画类型
+            if (animationSelectorRef.value && animationSelectorRef.value.selectRandomAnimation) {
+              animationSelectorRef.value.selectRandomAnimation()
+            }
+            // 启动动画
             cinematicAnimationsRef.value.animateToDefaultView()
+            logger.info('纹理加载完成，已启动特效动画')
           }
         }, 100)
 
@@ -400,6 +410,7 @@ const switchPanorama = async () => {
     logger.info(`切换全景图: ${currentPanorama.value.title}`)
     isChangingPanorama.value = true
     isLoading.value = true
+    textureLoaded.value = false // 切换时标记纹理未加载
 
     // 切换全景图时关闭自动旋转
     if (controls.value) {
@@ -775,6 +786,11 @@ const toggleAutoRotate = () => {
  */
 const resetAnimation = () => {
   try {
+    if (!textureLoaded.value) {
+      logger.warn('纹理未加载完成，无法重置动画')
+      return
+    }
+
     animationComplete.value = false
     isAnimationPlaying.value = true
 
@@ -786,7 +802,7 @@ const resetAnimation = () => {
     }
 
     setTimeout(() => {
-      if (cinematicAnimationsRef.value) {
+      if (cinematicAnimationsRef.value && textureLoaded.value) {
         cinematicAnimationsRef.value.resetAnimation()
       }
     }, 100)

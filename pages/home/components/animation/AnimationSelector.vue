@@ -123,15 +123,23 @@ const resetAnimation = () => {
   emit('reset')
 }
 
-onMounted(async ()=>{
-  const getRandomIndex = () => Math.floor(Math.random() * 5);
-  const list = ['cyber-grid-city','energy-sphere','time-weaver','digital-rain','quantum-leap'];
+// 移除 onMounted 中的随机动画切换
+// 动画应该由父组件在纹理加载完成后控制启动
+// 避免在纹理未加载时触发动画导致性能问题
 
-  handleChange(list[getRandomIndex()]);
-  await nextTick()
-  handleChange(list[getRandomIndex()]);
+// 如果需要随机选择动画类型，可以在父组件中调用此函数
+const selectRandomAnimation = () => {
+  const getRandomIndex = () => Math.floor(Math.random() * 5)
+  const list = ['cyber-grid-city', 'energy-sphere', 'time-weaver', 'digital-rain', 'quantum-leap']
+  const randomIndex = getRandomIndex()
+  handleChange(list[randomIndex])
+  return list[randomIndex]
+}
+
+// 暴露给父组件调用
+defineExpose({
+  selectRandomAnimation,
 })
-// ecosystem.config.js
 
 </script>
 
