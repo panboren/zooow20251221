@@ -131,7 +131,7 @@ onMounted(async ()=>{
   await nextTick()
   handleChange(list[getRandomIndex()]);
 })
-
+// ecosystem.config.js
 
 </script>
 
