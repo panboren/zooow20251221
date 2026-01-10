@@ -110,6 +110,7 @@ const autoRotateEnabled = ref(false)
 const animationComplete = ref(false)
 const animationType = ref('epic-dive')
 const isInitialized = ref(false)
+const isAnimationPlaying = ref(false) // 动画播放状态
 
 // ==================== 计算属性 ====================
 const loadingText = computed(() => '正在加载ZOOOW-AI智慧工具...')
@@ -400,6 +401,13 @@ const switchPanorama = async () => {
     isChangingPanorama.value = true
     isLoading.value = true
 
+    // 切换全景图时关闭自动旋转
+    if (controls.value) {
+      controls.value.autoRotate = false
+      autoRotateEnabled.value = false
+      logger.debug('切换全景图，已关闭自动旋转')
+    }
+
     // 释放旧纹理
     if (texture.value) {
       texture.value.dispose()
@@ -428,10 +436,17 @@ const switchPanorama = async () => {
           }
         }
       },
+      onComplete: () => {
+        // 切换完成后重新开启自动旋转
+        if (controls.value) {
+          controls.value.autoRotate = true
+          autoRotateEnabled.value = true
+          logger.info(`全景图切换完成，已开启自动旋转: ${currentPanorama.value.title}`)
+        }
+      },
     })
 
     isChangingPanorama.value = false
-    logger.info(`全景图切换完成: ${currentPanorama.value.title}`)
   }
   catch (error) {
     logger.error('切换全景图失败:', error)
@@ -761,6 +776,15 @@ const toggleAutoRotate = () => {
 const resetAnimation = () => {
   try {
     animationComplete.value = false
+    isAnimationPlaying.value = true
+
+    // 重置动画时关闭自动旋转
+    if (controls.value) {
+      controls.value.autoRotate = false
+      autoRotateEnabled.value = false
+      logger.debug('重置动画，已关闭自动旋转')
+    }
+
     setTimeout(() => {
       if (cinematicAnimationsRef.value) {
         cinematicAnimationsRef.value.resetAnimation()
@@ -777,6 +801,7 @@ const resetAnimation = () => {
  */
 const onAnimationComplete = () => {
   animationComplete.value = true
+  isAnimationPlaying.value = false
   logger.debug('动画完成，移动到目标位置')
 
   // 获取当前全景图的目标位置
@@ -799,6 +824,13 @@ const onAnimationComplete = () => {
     },
     onComplete: () => {
       logger.info(`已移动到目标位置: (${targetPosition.x}, ${targetPosition.y}, ${targetPosition.z})`)
+
+      // 动画完成后开启自动旋转
+      if (controls.value) {
+        controls.value.autoRotate = true
+        autoRotateEnabled.value = true
+        logger.info('动画完成，已开启自动旋转')
+      }
     },
   })
 
@@ -982,8 +1014,12 @@ const initThreeJS = async () => {
     // 创建球体几何体
     mesh.value = createSphereGeometry()
 
-    // 设置轨道控制器
+    // 设置轨道控制器 - 初始关闭自动旋转
     setupOrbitControls()
+    if (controls.value) {
+      controls.value.autoRotate = false // 渲染前关闭自动旋转
+      logger.debug('渲染前关闭自动旋转')
+    }
 
     // 设置事件监听器
     setupEventListeners()
