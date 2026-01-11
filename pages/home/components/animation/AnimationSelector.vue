@@ -51,6 +51,11 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 // 修改animationOptions数组，添加新的动画类型
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
+  // 组合动画 (新增创新特效组合)
+  { value: 'cosmic-rainfall', label: '🌌 宇宙雨落' },
+  { value: 'hyperspace-portal', label: '🚪 超空间传送门' },
+  { value: 'cyber-energy-explosion', label: '💥 赛博能量爆炸' },
+  { value: 'galaxy-time-portal', label: '⏰ 银河时光传送门' },
   // 基础动画
   { value: 'spectral-waves', label: '🔮 光谱音波动画' },
   { value: 'quantum-matrix', label: '💻 量子矩阵' },
