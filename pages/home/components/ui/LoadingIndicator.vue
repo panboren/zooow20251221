@@ -126,6 +126,109 @@ defineProps({
   }
 }
 
+// 平板适配
+@media (max-width: 768px) {
+  .loading-indicator {
+    padding: 50px 40px;
+    border-radius: 16px;
+    gap: 16px;
+
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+
+      &::before {
+        border-top-width: 3px;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+      }
+
+      &::after {
+        top: 12.5%;
+        left: 12.5%;
+        border-bottom-width: 2.5px;
+      }
+    }
+
+    p {
+      font-size: 22px;
+      letter-spacing: 3px;
+    }
+
+    .loading-progress {
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+// 手机大屏适配
+@media (max-width: 480px) {
+  .loading-indicator {
+    padding: 40px 30px;
+    border-radius: 12px;
+    gap: 14px;
+    width: 85%;
+    max-width: 320px;
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+
+      &::before {
+        border-top-width: 3px;
+      }
+
+      &::after {
+        top: 10%;
+        left: 10%;
+        border-bottom-width: 2px;
+      }
+    }
+
+    p {
+      font-size: 18px;
+      letter-spacing: 2px;
+    }
+
+    .loading-progress {
+      font-size: 13px;
+      letter-spacing: 0.8px;
+    }
+  }
+}
+
+// 手机小屏适配
+@media (max-width: 375px) {
+  .loading-indicator {
+    padding: 30px 24px;
+    gap: 12px;
+    width: 90%;
+    max-width: 280px;
+
+    .loading-spinner {
+      width: 45px;
+      height: 45px;
+
+      &::before {
+        border-top-width: 2.5px;
+      }
+
+      &::after {
+        border-bottom-width: 2px;
+      }
+    }
+
+    p {
+      font-size: 16px;
+      letter-spacing: 1.5px;
+    }
+
+    .loading-progress {
+      font-size: 12px;
+    }
+  }
+}
+
 // 3D文字发光动画
 @keyframes textGlow {
   0% {

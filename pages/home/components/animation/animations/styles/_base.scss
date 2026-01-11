@@ -45,6 +45,7 @@
     transform: translateZ(20px);
     font-family: 'Orbitron', 'Arial', sans-serif;
     position: relative;
+    display: inline-block;
 
     &::before {
       content: "ZOOOW-AI";
@@ -72,6 +73,102 @@
 
     text-stroke: 1px rgba(100, 200, 255, 0.3);
     -webkit-text-stroke: 1px rgba(100, 200, 255, 0.3);
+  }
+
+  // 平板适配
+  @media (max-width: 768px) {
+    &__title-card {
+      width: 95%;
+      max-width: 600px;
+    }
+
+    &__title {
+      font-size: 2.2rem;
+      letter-spacing: 3px;
+      display: inline-block;
+
+      &::before,
+      &::after {
+        font-size: 2.2rem;
+        letter-spacing: 3px;
+        left: 0;
+        top: 0;
+      }
+    }
+
+    &__subtitle {
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+    }
+  }
+
+  // 手机大屏适配
+  @media (max-width: 480px) {
+    &__title-card {
+      width: 92%;
+      max-width: 400px;
+    }
+
+    &__title {
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      display: inline-block;
+
+      &::before,
+      &::after {
+        font-size: 1.6rem;
+        letter-spacing: 2px;
+        left: 0;
+        top: 0;
+      }
+
+      &::before {
+        filter: blur(6px);
+        transform: scale(1.03);
+      }
+    }
+
+    &__subtitle {
+      font-size: 0.7rem;
+      letter-spacing: 1.5px;
+    }
+  }
+
+  // 手机小屏适配
+  @media (max-width: 375px) {
+    &__title-card {
+      width: 90%;
+      max-width: 320px;
+    }
+
+    &__title {
+      font-size: 1.4rem;
+      letter-spacing: 1.5px;
+      display: inline-block;
+
+      &::before,
+      &::after {
+        font-size: 1.4rem;
+        letter-spacing: 1.5px;
+        left: 0;
+        top: 0;
+      }
+
+      &::before {
+        filter: blur(4px);
+        transform: scale(1.02);
+      }
+
+      &::after {
+        left: 1px;
+        top: 1px;
+      }
+    }
+
+    &__subtitle {
+      font-size: 0.65rem;
+      letter-spacing: 1px;
+    }
   }
 
   &__subtitle {

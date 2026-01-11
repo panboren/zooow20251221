@@ -97,12 +97,12 @@ export default defineNuxtConfig({
   nitro: {
     // 路由规则
     routeRules: {
-      // 首页：ISR 60秒
-      '/': { isr: 60 },
-      // 产品页面：ISR 1小时
-      '/products/**': { isr: 3600 },
-      // 新闻页面：ISR 5分钟
-      '/news/**': { isr: 300 },
+      // 首页：禁用 ISR，避免 Pinia hydration 问题
+      '/': { isr: false },
+      // 产品页面：禁用 ISR
+      '/products/**': { isr: false },
+      // 新闻页面：禁用 ISR
+      '/news/**': { isr: false },
       // API：SWR（每次重新验证）
       '/api/**': { cache: { maxAge: 0 } },
     },

@@ -62,6 +62,12 @@ import animateStellarWhisperer from './stellar-whisperer.js'
 import animateGalacticVortex from './galactic-vortex.js'
 import animateQuantumLeap from './quantum-leap.js'
 
+// 组合动画 - 使用动态导入避免 SSR 问题
+import animateCosmicRainfall from './cosmic-rainfall.js'
+import animateHyperspacePortal from './hyperspace-portal.js'
+import animateCyberEnergyExplosion from './cyber-energy-explosion.js'
+import animateGalaxyTimePortal from './galaxy-time-portal.js'
+
 /**
  * 动画函数映射表
  * 将动画类型字符串映射到对应的动画函数
@@ -119,6 +125,12 @@ export const animations = {
 
    'galactic-vortex': animateGalacticVortex,
    'quantum-leap': animateQuantumLeap,
+
+   // 组合动画
+   'cosmic-rainfall': animateCosmicRainfall,
+   'hyperspace-portal': animateHyperspacePortal,
+   'cyber-energy-explosion': animateCyberEnergyExplosion,
+   'galaxy-time-portal': animateGalaxyTimePortal,
 }
 
 /**
