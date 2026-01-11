@@ -7,6 +7,11 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 
+// 添加 Three.js 模块兼容处理
+if (typeof THREE !== 'undefined' && !THREE.Vector3) {
+  console.warn('THREE module not properly loaded in butterfly-swarm.js')
+}
+
 /**
  * 创建蝴蝶飞舞
  * @param {Scene} scene - Three.js场景
@@ -89,17 +94,25 @@ export function createButterflySwarm(scene, options = {}) {
       (Math.random() - 0.5) * flyRadius * 2
     )
 
-    // 运动参数
+    // 运动参数 - 使用纯对象避免 THREE.Vector3 在动态导入时的问题
+    const velocity = {
+      x: (Math.random() - 0.5) * 2,
+      y: (Math.random() - 0.5) * 0.5,
+      z: (Math.random() - 0.5) * 2
+    }
+
+    const target = {
+      x: (Math.random() - 0.5) * flyRadius * 2,
+      y: Math.random() * 40 - 20,
+      z: (Math.random() - 0.5) * flyRadius * 2
+    }
+
     butterflyGroup.userData = {
       leftWing,
       rightWing,
-      velocity: new THREE.Vector3(
-        (Math.random() - 0.5) * 2,
-        (Math.random() - 0.5) * 0.5,
-        (Math.random() - 0.5) * 2
-      ),
+      velocity,
       wingSpeed: 5 + Math.random() * 10,
-      target: new THREE.Vector3()
+      target
     }
 
     scene.add(butterflyGroup)
@@ -116,7 +129,17 @@ export function createButterflySwarm(scene, options = {}) {
     spotlight,
     update(deltaTime, time) {
       butterflies.forEach((butterfly, i) => {
+        // 更全面的安全检查
+        if (!butterfly || !butterfly.position) {
+          return
+        }
+
         const data = butterfly.userData
+
+        // 安全检查
+        if (!data || !data.leftWing || !data.rightWing || !data.velocity || !data.target) {
+          return
+        }
 
         // 翅膀扇动
         const wingAngle = Math.sin(time * data.wingSpeed) * 0.5
@@ -125,26 +148,54 @@ export function createButterflySwarm(scene, options = {}) {
 
         // 随机飞行目标
         if (Math.random() < 0.02) {
-          data.target.set(
-            (Math.random() - 0.5) * flyRadius * 2,
-            Math.random() * 40 - 20,
-            (Math.random() - 0.5) * flyRadius * 2
-          )
+          data.target.x = (Math.random() - 0.5) * flyRadius * 2
+          data.target.y = Math.random() * 40 - 20
+          data.target.z = (Math.random() - 0.5) * flyRadius * 2
         }
 
-        // 向目标移动
-        const direction = data.target.clone().sub(butterfly.position).normalize()
-        data.velocity.lerp(direction.multiplyScalar(3), 0.02)
-        butterfly.position.add(data.velocity.clone().multiplyScalar(deltaTime))
+        // 向目标移动 - 使用纯 JavaScript 对象
+        const dx = data.target.x - butterfly.position.x
+        const dy = data.target.y - butterfly.position.y
+        const dz = data.target.z - butterfly.position.z
+
+        // 更新速度
+        data.velocity.x += dx * 0.02
+        data.velocity.y += dy * 0.02
+        data.velocity.z += dz * 0.02
+
+        // 限制速度
+        const maxSpeed = 3
+        const speed = Math.sqrt(
+          data.velocity.x * data.velocity.x +
+          data.velocity.y * data.velocity.y +
+          data.velocity.z * data.velocity.z
+        )
+        if (speed > maxSpeed) {
+          data.velocity.x = (data.velocity.x / speed) * maxSpeed
+          data.velocity.y = (data.velocity.y / speed) * maxSpeed
+          data.velocity.z = (data.velocity.z / speed) * maxSpeed
+        }
+
+        // 应用速度
+        butterfly.position.x += data.velocity.x * deltaTime
+        butterfly.position.y += data.velocity.y * deltaTime
+        butterfly.position.z += data.velocity.z * deltaTime
 
         // 飞行姿态
         butterfly.rotation.z = data.velocity.x * 0.2
         butterfly.rotation.x = data.velocity.y * 0.2
 
-        // 光追踪
-        if (i === 0) {
-          spotlight.target.copy(butterfly.position)
-          spotlight.position.y = butterfly.position.y + 20
+        // 光追踪 - 使用纯对象避免 Vector3 方法调用问题
+        if (i === 0 && spotlight && spotlight.target && spotlight.target.position) {
+          try {
+            spotlight.target.position.x = butterfly.position.x
+            spotlight.target.position.y = butterfly.position.y
+            spotlight.target.position.z = butterfly.position.z
+            spotlight.position.y = butterfly.position.y + 20
+          } catch (e) {
+            // 静默处理光追踪错误，不影响蝴蝶运动
+            console.warn('Spotlight update error:', e)
+          }
         }
       })
     },
@@ -177,12 +228,17 @@ export function createButterflySwarm(scene, options = {}) {
       return tl
     },
     destroy() {
+      // 标记为已销毁
+      this.isDestroyed = true
+
       butterflies.forEach(butterfly => {
         scene.remove(butterfly)
-        butterfly.traverse(child => {
-          if (child.geometry) child.geometry.dispose()
-          if (child.material) child.material.dispose()
-        })
+        if (butterfly && typeof butterfly.traverse === 'function') {
+          butterfly.traverse(child => {
+            if (child.geometry) child.geometry.dispose()
+            if (child.material) child.material.dispose()
+          })
+        }
       })
       scene.remove(spotlight)
     }

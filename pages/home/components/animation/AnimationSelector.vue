@@ -47,15 +47,19 @@ const props = defineProps({
 let isPcEnvironment = ref(isPc())
 const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 
-// 动画选项数组 - 使用 v-for 渲染
-// 修改animationOptions数组，添加新的动画类型
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
-  // 组合动画 (新增创新特效组合)
+  // 组合动画 (创新特效组合)
   { value: 'cosmic-rainfall', label: '🌌 宇宙雨落' },
   { value: 'hyperspace-portal', label: '🚪 超空间传送门' },
   { value: 'cyber-energy-explosion', label: '💥 赛博能量爆炸' },
   { value: 'galaxy-time-portal', label: '⏰ 银河时光传送门' },
+  // 新增组合动画
+  { value: 'crystal-aurora-dream', label: '🔮 极光水晶梦境' },
+  { value: 'quantum-fire-storm', label: '🔥 量子火焰风暴' },
+  { value: 'butterfly-nebula-dance', label: '🦋 蝴蝶星云之舞' },
+  { value: 'ancient-lightning-awakening', label: '⚡ 远古雷电觉醒' },
+  { value: 'dna-quantum-evolution', label: '🧬 DNA量子进化' },
   // 基础动画
   { value: 'spectral-waves', label: '🔮 光谱音波动画' },
   { value: 'quantum-matrix', label: '💻 量子矩阵' },
@@ -63,11 +67,6 @@ const animationOptions = [
   { value: 'stellar-whisperer', label: '⭐ 星语者' },
   { value: 'galactic-vortex', label: '🌌 星际漩涡' },
   { value: 'quantum-leap', label: '🚀 量子跃迁' },
-  // 组合动画 (新增创新特效组合)
-  { value: 'cosmic-rainfall', label: '🌌 宇宙雨落' },
-  { value: 'hyperspace-portal', label: '🚪 超空间传送门' },
-  { value: 'cyber-energy-explosion', label: '💥 赛博能量爆炸' },
-  { value: 'galaxy-time-portal', label: '⏰ 银河时光传送门' },
   // 其他动画
   { value: 'epic-dive', label: '🎬 史诗俯冲' },
   { value: 'space-warp', label: '🌀 空间扭曲' },
@@ -142,8 +141,18 @@ const resetAnimation = () => {
 
 // 如果需要随机选择动画类型，可以在父组件中调用此函数
 const selectRandomAnimation = () => {
-  const getRandomIndex = () => Math.floor(Math.random() * 5)
-  const list = ['cosmic-rainfall', 'hyperspace-portal', 'cyber-energy-explosion', 'galaxy-time-portal', 'quantum-leap']
+  const getRandomIndex = () => Math.floor(Math.random() * 9)
+  const list = [
+    'cosmic-rainfall',
+    'hyperspace-portal',
+    'cyber-energy-explosion',
+    'galaxy-time-portal',
+    'crystal-aurora-dream',
+    'quantum-fire-storm',
+    'butterfly-nebula-dance',
+    'ancient-lightning-awakening',
+    'dna-quantum-evolution'
+  ]
   const randomIndex = getRandomIndex()
   handleChange(list[randomIndex])
   return list[randomIndex]

@@ -67,6 +67,12 @@ import animateCosmicRainfall from './cosmic-rainfall.js'
 import animateHyperspacePortal from './hyperspace-portal.js'
 import animateCyberEnergyExplosion from './cyber-energy-explosion.js'
 import animateGalaxyTimePortal from './galaxy-time-portal.js'
+// 新增组合动画
+import animateCrystalAuroraDream from './crystal-aurora-dream.js'
+import animateQuantumFireStorm from './quantum-fire-storm.js'
+import animateButterflyNebulaDance from './butterfly-nebula-dance.js'
+import animateAncientLightningAwakening from './ancient-lightning-awakening.js'
+import animateDNAQuantumEvolution from './dna-quantum-evolution.js'
 
 /**
  * 动画函数映射表
@@ -131,6 +137,12 @@ export const animations = {
    'hyperspace-portal': animateHyperspacePortal,
    'cyber-energy-explosion': animateCyberEnergyExplosion,
    'galaxy-time-portal': animateGalaxyTimePortal,
+   // 新增组合动画
+   'crystal-aurora-dream': animateCrystalAuroraDream,
+   'quantum-fire-storm': animateQuantumFireStorm,
+   'butterfly-nebula-dance': animateButterflyNebulaDance,
+   'ancient-lightning-awakening': animateAncientLightningAwakening,
+   'dna-quantum-evolution': animateDNAQuantumEvolution,
 }
 
 /**

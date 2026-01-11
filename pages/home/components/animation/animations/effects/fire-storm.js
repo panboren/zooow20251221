@@ -70,9 +70,28 @@ export function createFireStorm(scene, options = {}) {
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
   geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1))
 
-  // 粒子材质
-  const textureLoader = new THREE.TextureLoader()
-  const particleTexture = textureLoader.load('textures/particle.png')
+  // 粒子材质 - 使用 data URI 创建圆形纹理，避免依赖外部文件
+  function createParticleTexture() {
+    const canvas = document.createElement('canvas')
+    canvas.width = 64
+    canvas.height = 64
+    const ctx = canvas.getContext('2d')
+
+    // 绘制径向渐变
+    const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32)
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)')
+    gradient.addColorStop(0.3, 'rgba(255, 255, 255, 0.8)')
+    gradient.addColorStop(0.6, 'rgba(255, 255, 255, 0.3)')
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
+
+    ctx.fillStyle = gradient
+    ctx.fillRect(0, 0, 64, 64)
+
+    const texture = new THREE.CanvasTexture(canvas)
+    return texture
+  }
+
+  const particleTexture = createParticleTexture()
 
   const material = new THREE.PointsMaterial({
     size: 2,
@@ -99,7 +118,7 @@ export function createFireStorm(scene, options = {}) {
     vertexShader: `
         varying vec3 vNormal;
         void main() {
-          vNormal = normalize(vec3(normalMatrix * vec4(normal, 0.0)));
+          vNormal = normalize(normalMatrix * normal);
           gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
         }
       `,
