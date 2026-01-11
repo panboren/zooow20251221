@@ -25,7 +25,6 @@ import animateCrystalShards from './crystal-shards'
 import animateLightningChain from './lightning-chain'
 import animateNebulaVortex from './nebula-vortex'
 import animateQuantumRainbowTunnel from './quantum-rainbow-tunnel'
-import animateEnergyPulseRing from './energy-pulse-ring'
 import animateLightWings from './light-wings'
 // 新增炸裂特效动画
 import animateCosmicSupernova from './cosmic-supernova'
@@ -107,7 +106,6 @@ export const animations = {
 
   'nebula-vortex': animateNebulaVortex,
   'quantum-rainbow-tunnel': animateQuantumRainbowTunnel,
-  'energy-pulse-ring': animateEnergyPulseRing,
   'light-wings': animateLightWings,
   // 新增炸裂特效动画
   'cosmic-supernova': animateCosmicSupernova,
