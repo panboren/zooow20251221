@@ -41,12 +41,9 @@
     gap: 8px;
   }
 
-  // 移动端优化
+  // 移动端隐藏
   @media (max-width: 768px) {
-    font-size: 11px;
-    padding: 10px 12px;
-    bottom: 15px;
-    left: 15px;
+    display: none;
   }
 }
 

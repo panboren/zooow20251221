@@ -1,39 +1,40 @@
-template
 <template>
   <div
-    class="animation-selector"
-    role="region"
-    aria-label="动画控制"
+      class="animation-selector"
+      role="region"
+      aria-label="动画控制"
   >
     <label for="animation-type">动画类型:</label>
 
     <el-select
-      style="width: 200px;"
-      :model-value="sanitizedValue"
-      @update:model-value="handleModelUpdate"
-      @change="handleChange"
-      filterable
-      placeholder="选择开场动画类型"
-      popper-class="custom-animation-select-dropdown"
+        style="width: 200px;"
+        :model-value="sanitizedValue"
+        @update:model-value="handleModelUpdate"
+        @change="handleChange"
+        :filterable="isPcEnvironment"
+        placeholder="选择开场动画类型"
+        popper-class="custom-animation-select-dropdown"
     >
       <el-option
-        v-for="(item,index) in animationOptions"
-        :key="`${item.value}-${index}`"
-        :label="item.label"
-        :value="item.value">
+          v-for="(item,index) in animationOptions"
+          :key="`${item.value}-${index}`"
+          :label="item.label"
+          :value="item.value">
       </el-option>
     </el-select>
-    <button
-      aria-label="重新播放动画"
-      @click="resetAnimation"
+    <el-button
+        aria-label="重新播放动画"
+        @click="resetAnimation"
     >
       重新播放
-    </button>
+    </el-button>
   </div>
 </template>
 
+
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'  // 添加 ref 导入
+import {isPc} from '../../../../utils/index.js'
 
 const props = defineProps({
   modelValue: {
@@ -42,6 +43,8 @@ const props = defineProps({
   },
 })
 
+// 判断是否为PC端环境
+let isPcEnvironment = ref(isPc())
 const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 
 // 动画选项数组 - 使用 v-for 渲染
@@ -97,8 +100,6 @@ const animationOptions = [
   { value: 'energy-sphere', label: '⚡ 能量球' },
   { value: 'crystal-pyramid', label: '🔮 水晶金字塔' },
 ]
-
-
 
 const validValues = computed(() => new Set(animationOptions.map(item => item.value)))
 
@@ -205,14 +206,24 @@ defineExpose({
     }
   }
 
-  button {
+  :deep(.el-button) {
     background: $select-bg;
     color: white;
     border: 1px solid $border-color;
     border-radius: 4px;
-    padding: 7px 12px;
     cursor: pointer;
     transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding: 0 12px;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     &:hover {
       background: $select-hover-bg;
@@ -221,6 +232,176 @@ defineExpose({
     &:focus {
       outline: 2px solid $focus-outline;
       outline-offset: 1px;
+    }
+  }
+
+  // 移动端适配
+  @media (max-width: 768px) {
+    position: fixed;  // 改为固定定位便于居中
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);  // 实现居中
+    width: 85vw;      // 宽度调整为视窗宽度的85%
+    max-width: 300px; // 限制最大宽度
+    padding: 4px 8px; // 减少内边距
+    font-size: 12px;   // 字体缩小
+    gap: 5px;
+    height: auto;
+    min-height: 32px;
+
+    // 调整子元素尺寸
+    label {
+      font-size: 12px;
+    }
+
+    :deep(.el-select) {
+      flex: 1;  // 使用 flex 布局自适应
+      min-width: 120px !important;
+      max-width: none !important;
+
+      :deep(.el-input__wrapper) {
+        padding: 2px 5px !important; // 减少输入框内边距
+        min-height: 26px;
+      }
+    }
+
+    :deep(.el-button) {
+      font-size: 12px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      height: 26px;
+      padding: 0 7px !important;
+
+      span {
+        line-height: 1;
+      }
+    }
+  }
+
+  // 小屏手机优化
+  @media (max-width: 480px) {
+    top: 8px;
+    padding: 3px 6px;
+    font-size: 11px;
+    gap: 4px;
+    max-width: 280px;
+    min-height: 28px;
+
+    label {
+      display: none;
+    }
+
+    :deep(.el-select) {
+      flex: 1;
+      min-width: 100px !important;
+      max-width: none !important;
+      font-size: 11px;
+
+      :deep(.el-input__wrapper) {
+        padding: 2px 4px !important;
+        min-height: 24px;
+      }
+    }
+
+    :deep(.el-button) {
+      font-size: 11px;
+      height: 24px;
+      padding: 0 6px !important;
+      min-width: 40px;
+
+      span {
+        line-height: 1;
+      }
+    }
+  }
+
+  // 超小屏手机优化
+  @media (max-width: 375px) {
+    top: 6px;
+    padding: 3px 5px;
+    font-size: 10px;
+    gap: 3px;
+    max-width: 260px;
+    border-radius: 6px;
+    min-height: 26px;
+
+    label {
+      display: none;
+    }
+
+    :deep(.el-select) {
+      flex: 1;
+      min-width: 90px !important;
+      max-width: none !important;
+      font-size: 10px;
+
+      :deep(.el-input__wrapper) {
+        padding: 1px 4px !important;
+        min-height: 22px;
+      }
+    }
+
+    :deep(.el-button) {
+      font-size: 10px;
+      height: 22px;
+      padding: 0 5px !important;
+      min-width: 36px;
+
+      span {
+        line-height: 1;
+      }
+    }
+  }
+
+  // 横屏模式优化
+  @media (max-width: 768px) and (orientation: landscape) {
+    top: 8px;
+    padding: 4px 6px;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 4px;
+    min-height: 30px;
+
+    label {
+      display: none;
+    }
+
+    :deep(.el-select) {
+      flex: 1;
+      min-width: 150px !important;
+      max-width: none !important;
+
+      :deep(.el-input__wrapper) {
+        padding: 2px 5px !important;
+        min-height: 24px;
+      }
+    }
+
+    :deep(.el-button) {
+      height: 24px;
+      padding: 0 7px !important;
+
+      span {
+        line-height: 1;
+      }
+    }
+  }
+
+  // 触摸设备优化
+  @media (hover: none) and (pointer: coarse) {
+    :deep(.el-button) {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+
+      &:active {
+        opacity: 0.7;
+        transform: scale(0.95);
+        transition: all 0.1s ease;
+      }
+    }
+
+    :deep(.el-select__wrapper) {
+      -webkit-tap-highlight-color: transparent;
     }
   }
 }
@@ -239,7 +420,7 @@ defineExpose({
   }
 
   .el-select-dropdown__item {
-    color: white !important;  /* 确保未选中项为白色 */
+    color: white !important; /* 确保未选中项为白色 */
     background: transparent !important;
     margin: 2px 4px !important;
     border-radius: 3px !important;
@@ -247,14 +428,14 @@ defineExpose({
     &:not(.selected):not([aria-selected="true"]):hover,
     &:not(.selected):not([aria-selected="true"]).hover {
       background: rgba(9, 82, 89, 0.5) !important;
-      color: white !important;  /* 确保悬停时文字仍为白色 */
+      color: white !important; /* 确保悬停时文字仍为白色 */
     }
 
     &.selected,
     &.selected.hover,
     &[aria-selected="true"] {
       background: rgba(9, 82, 89, 0.8) !important;
-      color: #f5d60a !important;  /* 选中项为亮黄色 */
+      color: #f5d60a !important; /* 选中项为亮黄色 */
       font-weight: bold;
     }
 
@@ -263,7 +444,35 @@ defineExpose({
       background: transparent !important;
     }
   }
+
+  // 移动端下拉菜单优化
+  @media (max-width: 768px) {
+    .el-select-dropdown__list {
+      max-height: 250px !important;
+      padding: 3px 0 !important;
+    }
+
+    .el-select-dropdown__item {
+      font-size: 13px;
+      padding: 8px 12px !important;
+      margin: 1px 3px !important;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  // 小屏手机下拉菜单优化
+  @media (max-width: 480px) {
+    .el-select-dropdown__list {
+      max-height: 200px !important;
+    }
+
+    .el-select-dropdown__item {
+      font-size: 12px;
+      padding: 6px 10px !important;
+      min-height: 40px;
+    }
+  }
 }
-
-
 </style>

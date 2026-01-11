@@ -37,7 +37,12 @@
     />
 
     <!-- 视角控制组件 -->
-    <CameraControls   :camera="camera"  @set-camera-view="setCameraView" />
+    <CameraControls
+      v-if="camera && controls && textureLoaded"
+      :camera="camera"
+      :controls="controls"
+      @set-camera-view="setCameraView"
+    />
 
     <!-- 全景图切换器 -->
     <PanoramaSwitcher

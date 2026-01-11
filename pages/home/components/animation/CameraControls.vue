@@ -245,26 +245,9 @@ const setView = (view) => {
     }
   }
 
-  // 移动端优化
+  // 移动端隐藏
   @media (max-width: 768px) {
-    top: 15px;
-    right: 15px;
-    padding: 12px;
-    min-width: 160px;
-
-    h4 {
-      font-size: 12px;
-    }
-
-    .view-buttons {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
-
-      .view-btn {
-        padding: 6px 3px;
-        font-size: 11px;
-      }
-    }
+    display: none;
   }
 }
 </style>
