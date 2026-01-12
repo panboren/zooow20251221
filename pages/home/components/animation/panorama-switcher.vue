@@ -161,7 +161,7 @@ onMounted(() => {
     const timer = setTimeout(() => {
       clearTimeout(timer)
       loading.value = true
-    }, 9000)
+    }, 1200)
   }
 })
 </script>
@@ -190,7 +190,8 @@ onMounted(() => {
   .arrow-btn {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 28px;
     height: 28px;
     background: rgba(255, 255, 255, 0.1);
@@ -204,14 +205,15 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    line-height: 1;
 
     &:hover:not(:disabled) {
       background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-50%) scale(1.1);
+      transform: translate(-50%, -50%) scale(1.1);
     }
 
     &:active:not(:disabled) {
-      transform: translateY(-50%) scale(0.95);
+      transform: translate(-50%, -50%) scale(0.95);
     }
 
     &:disabled {
