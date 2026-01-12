@@ -160,7 +160,7 @@ onMounted(() => {
     const timer = setTimeout(() => {
       clearTimeout(timer)
       loading.value = true
-    }, 12000)
+    }, 9000)
   }
 })
 </script>
@@ -285,6 +285,8 @@ onMounted(() => {
     cursor: pointer;
     transition: all 0.3s ease;
     overflow: hidden;
+    border: 2px solid transparent; /* 预留边框空间 */
+    box-sizing: border-box;
 
     :deep(.el-image__inner) {
       width: 100%;
@@ -305,23 +307,9 @@ onMounted(() => {
     }
 
     &.activated {
-      position: relative;
-      border: 2px solid #f5d60a;
+      border-color: #f5d60a;
+      box-shadow: 0 0 10px rgba(245, 214, 10, 0.5);
       box-sizing: border-box;
-
-      // 使用伪元素作为边框，确保完整显示
-     /* &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border: 2px solid #f5d60a;
-        border-radius: 8px;
-        pointer-events: none;
-        box-sizing: border-box;
-      }*/
     }
 
     &:hover {
@@ -356,6 +344,7 @@ onMounted(() => {
     padding: 6px 28px;
     bottom: 20px;
     left: 50%;
+    box-sizing: border-box;
 
     .arrow-btn {
       width: 24px;
@@ -378,9 +367,11 @@ onMounted(() => {
     .panorama-description-img {
       width: 100px;
       height: 80px;
+      border-width: 3px;
 
       &.activated {
-        border-width: 3px;
+        border-color: #f5d60a;
+        box-shadow: 0 0 8px rgba(245, 214, 10, 0.6);
       }
     }
 
@@ -397,6 +388,7 @@ onMounted(() => {
     height: 70px;
     padding: 5px 25px;
     bottom: 15px;
+    box-sizing: border-box;
 
     .arrow-btn {
       width: 22px;
@@ -419,9 +411,11 @@ onMounted(() => {
     .panorama-description-img {
       width: 88px;
       height: 70px;
+      border-width: 3px;
 
       &.activated {
-        border-width: 3px;
+        border-color: #f5d60a;
+        box-shadow: 0 0 8px rgba(245, 214, 10, 0.6);
       }
     }
 
@@ -438,6 +432,7 @@ onMounted(() => {
     height: 60px;
     padding: 4px 22px;
     bottom: 10px;
+    box-sizing: border-box;
 
     .arrow-btn {
       width: 20px;
@@ -460,9 +455,11 @@ onMounted(() => {
     .panorama-description-img {
       width: 80px;
       height: 60px;
+      border-width: 2px;
 
       &.activated {
-        border-width: 2px;
+        border-color: #f5d60a;
+        box-shadow: 0 0 6px rgba(245, 214, 10, 0.6);
       }
     }
 
