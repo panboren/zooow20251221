@@ -140,9 +140,9 @@ const resetAnimation = () => {
 
 // 如果需要随机选择动画类型，可以在父组件中调用此函数
 const selectRandomAnimation = () => {
-  const getRandomIndex = () => Math.floor(Math.random() * 9)
+  // const getRandomIndex = () => Math.floor(Math.random() * 9)
   const list = [
-    'cosmic-rainfall',
+/*    'cosmic-rainfall',
     'hyperspace-portal',
     'cyber-energy-explosion',
     'galaxy-time-portal',
@@ -150,11 +150,12 @@ const selectRandomAnimation = () => {
     'quantum-fire-storm',
     'butterfly-nebula-dance',
     'ancient-lightning-awakening',
-    'dna-quantum-evolution'
+    'dna-quantum-evolution'*/
+      'epic-dive'
   ]
-  const randomIndex = getRandomIndex()
-  handleChange(list[randomIndex])
-  return list[randomIndex]
+  // const randomIndex = getRandomIndex()
+  handleChange(list[0])
+  return list[0]
 }
 
 // 暴露给父组件调用
