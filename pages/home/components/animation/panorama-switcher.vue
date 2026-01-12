@@ -4,23 +4,31 @@
     v-if="homeOptions.length > 0 && loading"
     class="panorama-switcher"
   >
-    <el-carousel
-      :autoplay="false"
-      type="card"
-      height="auto"
-      indicator-position="none"
-      :pause-on-hover="true"
+    <!-- 左箭头 -->
+    <button
+      class="arrow-btn arrow-left"
+      @click="scrollLeft"
+      :disabled="isAtStart"
+      aria-label="向左滚动"
     >
-      <el-carousel-item
-        v-for="(item, index) in homeOptions"
-        :key="item.id+ '_'+index"
-      >
+      ‹
+    </button>
+
+    <!-- 滚动容器 -->
+    <div
+      class="scroll-container"
+      ref="scrollContainer"
+      @scroll="handleScroll"
+    >
+      <div class="scroll-content">
         <el-image
+          v-for="(item, index) in homeOptions"
+          :key="item.id + '_' + index"
           class="panorama-description-img"
           :class="{ activated: currentPanorama.id === item.id }"
           :src="item.image"
           :alt="item.title"
-          :lazy="index > 2"
+          :lazy="index > 5"
           fit="contain"
           @click="changePanorama(item)"
         >
@@ -35,8 +43,18 @@
             </div>
           </template>
         </el-image>
-      </el-carousel-item>
-    </el-carousel>
+      </div>
+    </div>
+
+    <!-- 右箭头 -->
+    <button
+      class="arrow-btn arrow-right"
+      @click="scrollRight"
+      :disabled="isAtEnd"
+      aria-label="向右滚动"
+    >
+      ›
+    </button>
   </div>
 </template>
 
@@ -99,6 +117,38 @@ const changePanorama = (item) => {
   emits('change', item)
 }
 
+// 滚动相关
+const scrollContainer = ref(null)
+const isAtStart = ref(true)
+const isAtEnd = ref(false)
+
+const handleScroll = () => {
+  if (!scrollContainer.value) return
+
+  const container = scrollContainer.value
+  isAtStart.value = container.scrollLeft <= 0
+  isAtEnd.value = container.scrollLeft >= container.scrollWidth - container.clientWidth - 1
+}
+
+const scrollLeft = () => {
+  if (!scrollContainer.value) return
+  const scrollAmount = scrollContainer.value.clientWidth * 0.8
+  scrollContainer.value.scrollBy({ left: -scrollAmount, behavior: 'smooth' })
+}
+
+const scrollRight = () => {
+  if (!scrollContainer.value) return
+  const scrollAmount = scrollContainer.value.clientWidth * 0.8
+  scrollContainer.value.scrollBy({ left: scrollAmount, behavior: 'smooth' })
+}
+
+// 支持滚轮横向滚动
+const handleWheel = (e) => {
+  if (!scrollContainer.value) return
+  e.preventDefault()
+  scrollContainer.value.scrollLeft += e.deltaY
+}
+
 onMounted(() => {
   if (homeOptions.length > 0) {
 
@@ -126,11 +176,100 @@ onMounted(() => {
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
-  padding: 10px;
+  padding: 10px 35px; /* 左右留出箭头空间 */
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   z-index: 100;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+
+  // 箭头按钮
+  .arrow-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    &.arrow-left {
+      left: 5px;
+    }
+
+    &.arrow-right {
+      right: 5px;
+    }
+  }
+
+  // 滚动容器
+  .scroll-container {
+    padding: 5px;
+    flex: 1;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+
+    // 自定义滚动条
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+    }
+
+    // 隐藏滚动条但保持滚动功能
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+  }
+
+  // 滚动内容
+  .scroll-content {
+    display: flex;
+    gap: 10px;
+    height: 100%;
+    padding: 0 5px;
+    align-items: center; // 垂直居中
+  }
 
   .image-slot {
     padding-top: 10px;
@@ -138,43 +277,55 @@ onMounted(() => {
     font-size: 12px;
   }
 
-  :deep(.el-carousel__container) {
-    height: 100px !important;
-  }
+  .panorama-description-img {
+    flex-shrink: 0;
+    width: 133px; /* 根据容器宽度动态计算 */
+    height: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
 
-  :deep(.el-carousel__item) {
-    .panorama-description-img {
+    :deep(.el-image__inner) {
       width: 100%;
       height: 100%;
-      border-radius: 8px;
-
-      :deep(.el-image__inner) {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-
-      :deep(.el-image__placeholder),
-      :deep(.el-image__error) {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.3);
-        color: #fff;
-        font-size: 12px;
-      }
+      object-fit: cover;
     }
-  }
 
-  .panorama-description-img {
-    width: 100%;
-    height: 100px;
+    :deep(.el-image__placeholder),
+    :deep(.el-image__error) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      font-size: 12px;
+    }
 
     &.activated {
+      position: relative;
       border: 2px solid #f5d60a;
       box-sizing: border-box;
+
+      // 使用伪元素作为边框，确保完整显示
+     /* &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px solid #f5d60a;
+        border-radius: 8px;
+        pointer-events: none;
+        box-sizing: border-box;
+      }*/
+    }
+
+    &:hover {
+      transform: scale(1.05);
     }
   }
 
@@ -182,14 +333,17 @@ onMounted(() => {
   @media (max-width: 1024px) {
     width: 500px;
     height: 90px;
-    padding: 8px;
+    padding: 8px 30px;
     bottom: 15px;
 
-    :deep(.el-carousel__container) {
-      height: 90px !important;
+    .arrow-btn {
+      width: 26px;
+      height: 26px;
+      font-size: 18px;
     }
 
     .panorama-description-img {
+      width: 111px;
       height: 90px;
     }
   }
@@ -199,51 +353,40 @@ onMounted(() => {
     width: 90%;
     max-width: 400px;
     height: 80px;
-    padding: 6px;
+    padding: 6px 28px;
     bottom: 20px;
     left: 50%;
 
-    :deep(.el-carousel__container) {
-      height: 80px !important;
+    .arrow-btn {
+      width: 24px;
+      height: 24px;
+      font-size: 16px;
+
+      &.arrow-left {
+        left: 4px;
+      }
+
+      &.arrow-right {
+        right: 4px;
+      }
+    }
+
+    .scroll-container::-webkit-scrollbar {
+      height: 3px;
     }
 
     .panorama-description-img {
+      width: 100px;
       height: 80px;
+
+      &.activated {
+        border-width: 3px;
+      }
     }
 
     .image-slot {
       font-size: 10px;
       padding-top: 8px;
-    }
-
-    // 移动端触摸优化
-    .panorama-description-img {
-      &.activated {
-        border-width: 3px; // 移动端加粗边框，更明显
-      }
-    }
-
-    // 移动端箭头按钮显示
-    :deep(.el-carousel__arrow) {
-      display: flex !important;
-      width: 32px;
-      height: 32px;
-      background-color: rgba(0, 0, 0, 0.7) !important;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: white;
-      font-size: 16px;
-
-      &.el-carousel__arrow--left {
-        left: 5px !important;
-      }
-
-      &.el-carousel__arrow--right {
-        right: 5px !important;
-      }
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.2) !important;
-      }
     }
   }
 
@@ -252,39 +395,39 @@ onMounted(() => {
     width: 95%;
     max-width: 350px;
     height: 70px;
-    padding: 5px;
+    padding: 5px 25px;
     bottom: 15px;
 
-    :deep(.el-carousel__container) {
-      height: 70px !important;
+    .arrow-btn {
+      width: 22px;
+      height: 22px;
+      font-size: 14px;
+
+      &.arrow-left {
+        left: 3px;
+      }
+
+      &.arrow-right {
+        right: 3px;
+      }
+    }
+
+    .scroll-container::-webkit-scrollbar {
+      height: 2px;
     }
 
     .panorama-description-img {
+      width: 88px;
       height: 70px;
+
+      &.activated {
+        border-width: 3px;
+      }
     }
 
     .image-slot {
       font-size: 9px;
       padding-top: 6px;
-    }
-
-    // 移动端箭头按钮显示
-    :deep(.el-carousel__arrow) {
-      display: flex !important;
-      width: 28px;
-      height: 28px;
-      background-color: rgba(0, 0, 0, 0.7) !important;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: white;
-      font-size: 14px;
-
-      &.el-carousel__arrow--left {
-        left: 4px !important;
-      }
-
-      &.el-carousel__arrow--right {
-        right: 4px !important;
-      }
     }
   }
 
@@ -293,44 +436,53 @@ onMounted(() => {
     width: 98%;
     max-width: 320px;
     height: 60px;
-    padding: 4px;
+    padding: 4px 22px;
     bottom: 10px;
 
-    :deep(.el-carousel__container) {
-      height: 60px !important;
+    .arrow-btn {
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+
+      &.arrow-left {
+        left: 2px;
+      }
+
+      &.arrow-right {
+        right: 2px;
+      }
+    }
+
+    .scroll-container::-webkit-scrollbar {
+      display: none;
     }
 
     .panorama-description-img {
+      width: 80px;
       height: 60px;
+
+      &.activated {
+        border-width: 2px;
+      }
     }
 
     .image-slot {
       font-size: 8px;
       padding-top: 5px;
     }
-
-    // 移动端箭头按钮显示
-    :deep(.el-carousel__arrow) {
-      display: flex !important;
-      width: 26px;
-      height: 26px;
-      background-color: rgba(0, 0, 0, 0.7) !important;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: white;
-      font-size: 12px;
-
-      &.el-carousel__arrow--left {
-        left: 3px !important;
-      }
-
-      &.el-carousel__arrow--right {
-        right: 3px !important;
-      }
-    }
   }
 
   // 触摸设备优化
   @media (hover: none) and (pointer: coarse) {
+    // 隐藏箭头按钮，使用手势滑动
+    .arrow-btn {
+      display: none;
+    }
+
+    // 减小左右padding，增加滚动区域
+    padding-left: 10px;
+    padding-right: 10px;
+
     // 增加触摸目标大小
     .panorama-description-img {
       cursor: pointer;
@@ -338,10 +490,18 @@ onMounted(() => {
 
       &:active {
         opacity: 0.8;
-        transform: scale(0.98);
+        transform: scale(0.95);
         transition: all 0.1s ease;
       }
     }
+  }
+
+  // 横屏模式优化
+  @media (max-width: 768px) and (orientation: landscape) {
+    top: 10px;
+    bottom: auto;
+    height: 60px;
+    padding: 4px 28px;
   }
 }
 </style>
