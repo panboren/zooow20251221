@@ -28,7 +28,6 @@
           :class="{ activated: currentPanorama.id === item.id }"
           :src="item.image"
           :alt="item.title"
-          :lazy="index > 5"
           fit="contain"
           @click="changePanorama(item)"
         >
