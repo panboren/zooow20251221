@@ -51,8 +51,8 @@
     />
 
     <!-- 控制提示 -->
-    <ControlsHint />
-    <Beian />
+    <ControlsHint   v-if="textureLoaded" />
+    <Beian   v-if="textureLoaded" />
   </div>
 </template>
 

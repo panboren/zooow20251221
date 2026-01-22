@@ -70,6 +70,12 @@ import animateVoidCreation from './void-creation-symphony.js'
 // 全新量子纠缠时空交响曲特效
 import animateQuantumEntanglement from './quantum-entanglement-symphony.js'
 
+// 全新宇宙史诗交响曲特效
+import animateCosmicEpic from './cosmic-epic-symphony.js'
+
+// 全新时间之沙特效
+import animateTimeSand from './time-sand.js'
+
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
 import animateHyperspacePortal from './hyperspace-portal.js'
@@ -147,6 +153,12 @@ export const animations = {
 
    // 全新量子纠缠时空交响曲特效
    'quantum-entanglement': animateQuantumEntanglement,
+
+   // 全新宇宙史诗交响曲特效
+   'cosmic-epic': animateCosmicEpic,
+
+   // 全新时间之沙特效
+   'time-sand': animateTimeSand,
 
    // 组合动画
    'cosmic-rainfall': animateCosmicRainfall,

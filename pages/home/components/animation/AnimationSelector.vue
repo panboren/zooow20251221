@@ -70,6 +70,8 @@ const animationOptions = [
   { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
   { value: 'void-creation', label: '🌌 虚空创世交响曲' },
   { value: 'quantum-entanglement', label: '🔮 量子纠缠交响曲' },
+  { value: 'cosmic-epic', label: '🌟 宇宙史诗交响曲' },
+  { value: 'time-sand', label: '⏳ 时间之沙' },
   // 其他动画
   { value: 'epic-dive', label: '🎬 史诗俯冲' },
   { value: 'space-warp', label: '🌀 空间扭曲' },
