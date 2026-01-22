@@ -58,8 +58,28 @@
 </template>
 
 <script setup>
+
+let config={
+  1:{
+    num: 37,
+    pre: 'h',
+    imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjingtu/'
+  },
+  2:{
+    num: 17,
+    pre: 'h-v2',
+    imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjing-v2/'
+  }
+
+}
+
 // 使用外部图片路径（不打包）
-const getImageUrl = (name) => `/images/${name}`
+const getImageUrl = (name,url='') => {
+  return `${url}${name}`
+}
+
+// https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjingtu/h-1-a.png
+// https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjing-v2/h-v2-1-a.png
 
 const emits = defineEmits(['prevPanorama', 'nextPanorama', 'change'])
 const currentPanorama = defineModel()
@@ -96,20 +116,31 @@ const homeOptions = [
   },*/
 ]
 
-for (let i = 1; i <= 37; i++) {
-  homeOptions.push( {
-    id: i,
-    image: getImageUrl(`h-${i}.png`),
-    icon: getImageUrl(`h-${i}-a.png`),
-    title: 'Home'+i,
-    description: 'home'+i,
-    target: list[i-1] || {
-      x: 7.9,
-      y: -2.6,
-      z: 4.0,
-    }, // 最终定格位置
-  })
+
+
+let initImg=(cur)=>{
+  for (let i = 1; i <= cur.num; i++) {
+    homeOptions.push( {
+      id: i,
+      image: getImageUrl(`${cur.pre}-${i}.png`,cur.imgUrl),
+      icon: getImageUrl(`${cur.pre}-${i}-a.png`,cur.imgUrl),
+      title: 'Home'+cur.pre+i,
+      description: 'home'+cur.pre+i,
+      target: list[i-1] || {
+        x: 7.9,
+        y: -2.6,
+        z: 4.0,
+      }, // 最终定格位置
+    })
+  }
 }
+
+for (let key in config){
+  let cur= config[key]
+  initImg(cur)
+}
+
+
 
 const changePanorama = (item) => {
   currentPanorama.value = item
