@@ -69,6 +69,7 @@ const animationOptions = [
   { value: 'quantum-leap', label: '🚀 量子跃迁' },
   { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
   { value: 'void-creation', label: '🌌 虚空创世交响曲' },
+  { value: 'quantum-entanglement', label: '🔮 量子纠缠交响曲' },
   // 其他动画
   { value: 'epic-dive', label: '🎬 史诗俯冲' },
   { value: 'space-warp', label: '🌀 空间扭曲' },
