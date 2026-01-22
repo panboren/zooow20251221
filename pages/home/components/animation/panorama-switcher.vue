@@ -61,16 +61,15 @@
 
 let config={
   1:{
+    num: 17,
+    pre: 'h-v2',
+    imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjing-v2/'
+  },
+  2:{
     num: 37,
     pre: 'h',
     imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjingtu/'
   },
-  2:{
-    num: 17,
-    pre: 'h-v2',
-    imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjing-v2/'
-  }
-
 }
 
 // 使用外部图片路径（不打包）
