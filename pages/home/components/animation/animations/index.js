@@ -79,6 +79,9 @@ import animateTimeSand from './time-sand.js'
 // 全新风花雪月特效
 import animateWindFlowerSnowMoon from './wind-flower-snow-moon.js'
 
+// 全新烟花月夜特效
+import animateFireworksMoonNight from './fireworks-moon-night.js'
+
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
 import animateHyperspacePortal from './hyperspace-portal.js'
@@ -165,6 +168,9 @@ export const animations = {
 
    // 全新风花雪月特效
    'wind-flower-snow-moon': animateWindFlowerSnowMoon,
+
+   // 全新烟花月夜特效
+   'fireworks-moon-night': animateFireworksMoonNight,
 
    // 组合动画
    'cosmic-rainfall': animateCosmicRainfall,

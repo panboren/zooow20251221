@@ -73,6 +73,7 @@ const animationOptions = [
   { value: 'cosmic-epic', label: '🌟 宇宙史诗交响曲' },
   { value: 'time-sand', label: '⏳ 时间之沙' },
   { value: 'wind-flower-snow-moon', label: '🌸 风花雪月' },
+  { value: 'fireworks-moon-night', label: '🎆 烟花月夜' },
   // 其他动画
   { value: 'epic-dive', label: '🎬 史诗俯冲' },
   { value: 'space-warp', label: '🌀 空间扭曲' },
