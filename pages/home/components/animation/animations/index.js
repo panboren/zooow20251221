@@ -76,6 +76,9 @@ import animateCosmicEpic from './cosmic-epic-symphony.js'
 // 全新时间之沙特效
 import animateTimeSand from './time-sand.js'
 
+// 全新风花雪月特效
+import animateWindFlowerSnowMoon from './wind-flower-snow-moon.js'
+
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
 import animateHyperspacePortal from './hyperspace-portal.js'
@@ -159,6 +162,9 @@ export const animations = {
 
    // 全新时间之沙特效
    'time-sand': animateTimeSand,
+
+   // 全新风花雪月特效
+   'wind-flower-snow-moon': animateWindFlowerSnowMoon,
 
    // 组合动画
    'cosmic-rainfall': animateCosmicRainfall,
