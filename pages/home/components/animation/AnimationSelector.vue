@@ -49,6 +49,15 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
+  { value: 'wind-flower-snow-moon', label: '🌸 风花雪月' },
+  { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
+  { value: 'void-creation', label: '🌌 虚空创世交响曲' },
+  { value: 'quantum-entanglement', label: '🔮 量子纠缠交响曲' },
+  { value: 'cosmic-epic', label: '🌟 宇宙史诗交响曲' },
+  { value: 'time-sand', label: '⏳ 时间之沙' },
+
+  { value: 'fireworks-moon-night', label: '🎆 烟花月夜' },
+  { value: 'youthful-years', label: '💕 青春年华' },
   // 组合动画 (创新特效组合)
   { value: 'cosmic-rainfall', label: '🌌 宇宙雨落' },
   { value: 'hyperspace-portal', label: '🚪 超空间传送门' },
@@ -67,13 +76,7 @@ const animationOptions = [
   { value: 'stellar-whisperer', label: '⭐ 星语者' },
   { value: 'galactic-vortex', label: '🌌 星际漩涡' },
   { value: 'quantum-leap', label: '🚀 量子跃迁' },
-  { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
-  { value: 'void-creation', label: '🌌 虚空创世交响曲' },
-  { value: 'quantum-entanglement', label: '🔮 量子纠缠交响曲' },
-  { value: 'cosmic-epic', label: '🌟 宇宙史诗交响曲' },
-  { value: 'time-sand', label: '⏳ 时间之沙' },
-  { value: 'wind-flower-snow-moon', label: '🌸 风花雪月' },
-  { value: 'fireworks-moon-night', label: '🎆 烟花月夜' },
+
   // 其他动画
   { value: 'epic-dive', label: '🎬 史诗俯冲' },
   { value: 'space-warp', label: '🌀 空间扭曲' },
@@ -158,7 +161,7 @@ const selectRandomAnimation = () => {
     'butterfly-nebula-dance',
     'ancient-lightning-awakening',
     'dna-quantum-evolution'*/
-      'dimensional-resonance'
+      'wind-flower-snow-moon'
   ]
   // const randomIndex = getRandomIndex()
   handleChange(list[0])
