@@ -61,6 +61,9 @@ import animateStellarWhisperer from './stellar-whisperer.js'
 import animateGalacticVortex from './galactic-vortex.js'
 import animateQuantumLeap from './quantum-leap.js'
 
+// 全新维度共鸣交响曲特效
+import animateDimensionalResonance from './dimensional-resonance-symphony.js'
+
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
 import animateHyperspacePortal from './hyperspace-portal.js'
@@ -129,6 +132,9 @@ export const animations = {
 
    'galactic-vortex': animateGalacticVortex,
    'quantum-leap': animateQuantumLeap,
+
+   // 全新维度共鸣交响曲特效
+   'dimensional-resonance': animateDimensionalResonance,
 
    // 组合动画
    'cosmic-rainfall': animateCosmicRainfall,

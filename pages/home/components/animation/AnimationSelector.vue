@@ -67,6 +67,7 @@ const animationOptions = [
   { value: 'stellar-whisperer', label: '⭐ 星语者' },
   { value: 'galactic-vortex', label: '🌌 星际漩涡' },
   { value: 'quantum-leap', label: '🚀 量子跃迁' },
+  { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
   // 其他动画
   { value: 'epic-dive', label: '🎬 史诗俯冲' },
   { value: 'space-warp', label: '🌀 空间扭曲' },
@@ -151,7 +152,7 @@ const selectRandomAnimation = () => {
     'butterfly-nebula-dance',
     'ancient-lightning-awakening',
     'dna-quantum-evolution'*/
-      'epic-dive'
+      'dimensional-resonance'
   ]
   // const randomIndex = getRandomIndex()
   handleChange(list[0])
