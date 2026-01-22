@@ -50,6 +50,8 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
   { value: 'wind-flower-snow-moon', label: '🌸 风花雪月' },
+
+
   { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
   { value: 'void-creation', label: '🌌 虚空创世交响曲' },
   { value: 'quantum-entanglement', label: '🔮 量子纠缠交响曲' },
@@ -119,6 +121,8 @@ const animationOptions = [
   { value: 'portal-gate', label: '🚪 传送门' },
   { value: 'energy-sphere', label: '⚡ 能量球' },
   { value: 'crystal-pyramid', label: '🔮 水晶金字塔' },
+  { value: 'galaxy-flow', label: '🌌 星河涌动 ' },
+  { value: 'big-bang-genesis', label: '🧨 宇宙大爆炸 ' },
 ]
 
 const validValues = computed(() => new Set(animationOptions.map(item => item.value)))

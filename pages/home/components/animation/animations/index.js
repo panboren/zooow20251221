@@ -97,6 +97,9 @@ import animateButterflyNebulaDance from './butterfly-nebula-dance.js'
 import animateAncientLightningAwakening from './ancient-lightning-awakening.js'
 import animateDNAQuantumEvolution from './dna-quantum-evolution.js'
 
+import animateGalaxyFlow from './galaxy-flow.js'
+import animateBigBangGenesis from './big-bang-genesis.js'
+
 /**
  * 动画函数映射表
  * 将动画类型字符串映射到对应的动画函数
@@ -189,6 +192,12 @@ export const animations = {
    'butterfly-nebula-dance': animateButterflyNebulaDance,
    'ancient-lightning-awakening': animateAncientLightningAwakening,
    'dna-quantum-evolution': animateDNAQuantumEvolution,
+
+
+//     星河涌动 - 银河系动态流动特效（宇宙史诗版）
+    'galaxy-flow': animateGalaxyFlow,
+    'big-bang-genesis': animateBigBangGenesis,
+
 }
 
 /**
