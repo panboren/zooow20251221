@@ -68,6 +68,7 @@ const animationOptions = [
   { value: 'galactic-vortex', label: '🌌 星际漩涡' },
   { value: 'quantum-leap', label: '🚀 量子跃迁' },
   { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
+  { value: 'void-creation', label: '🌌 虚空创世交响曲' },
   // 其他动画
   { value: 'epic-dive', label: '🎬 史诗俯冲' },
   { value: 'space-warp', label: '🌀 空间扭曲' },

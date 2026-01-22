@@ -64,6 +64,9 @@ import animateQuantumLeap from './quantum-leap.js'
 // 全新维度共鸣交响曲特效
 import animateDimensionalResonance from './dimensional-resonance-symphony.js'
 
+// 全新虚空创世交响曲特效
+import animateVoidCreation from './void-creation-symphony.js'
+
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
 import animateHyperspacePortal from './hyperspace-portal.js'
@@ -135,6 +138,9 @@ export const animations = {
 
    // 全新维度共鸣交响曲特效
    'dimensional-resonance': animateDimensionalResonance,
+
+   // 全新虚空创世交响曲特效
+   'void-creation': animateVoidCreation,
 
    // 组合动画
    'cosmic-rainfall': animateCosmicRainfall,
