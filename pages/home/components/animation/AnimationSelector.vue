@@ -51,6 +51,7 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 const animationOptions = [
   { value: 'wind-flower-snow-moon', label: '🌸 风花雪月' },
 
+  { value: 'taichi-three', label: '☯️ 太极融合特效' },
 
   { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
   { value: 'void-creation', label: '🌌 虚空创世交响曲' },
@@ -165,6 +166,7 @@ const selectRandomAnimation = () => {
     'butterfly-nebula-dance',
     'ancient-lightning-awakening',
     'dna-quantum-evolution'*/
+     'taichi-three',
       'wind-flower-snow-moon'
   ]
   // const randomIndex = getRandomIndex()

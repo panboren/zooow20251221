@@ -34,6 +34,8 @@ export const ANIMATION_CONFIG = {
   QUANTUM_MATRIX: 'quantum-matrix',
   TIME_WEAVER: 'time-weaver',
   STELLAR_WHISPERER: 'stellar-whisperer',
+  TAICHI_THREE: 'taichi-three',
+  QUANTUM_STORM: 'quantum-storm',
 
   // ✅ 新增：全局速度倍率配置
   // 值越小，动画越快。建议范围：0.4-1.0

@@ -100,6 +100,10 @@ import animateDNAQuantumEvolution from './dna-quantum-evolution.js'
 import animateGalaxyFlow from './galaxy-flow.js'
 import animateBigBangGenesis from './big-bang-genesis.js'
 
+// 太极-Taichi.js + Three.js 融合特效
+import animateTaichiThree from './taichi-three-animation/taichi-three-effect.js'
+
+
 /**
  * 动画函数映射表
  * 将动画类型字符串映射到对应的动画函数
@@ -197,6 +201,9 @@ export const animations = {
 //     星河涌动 - 银河系动态流动特效（宇宙史诗版）
     'galaxy-flow': animateGalaxyFlow,
     'big-bang-genesis': animateBigBangGenesis,
+
+    // 太极-Taichi.js + Three.js 融合特效
+    [ANIMATION_CONFIG.TAICHI_THREE]: animateTaichiThree,
 
 }
 

@@ -230,6 +230,10 @@ import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { animations } from './animations'
 import './animations/styles/index.scss'  // 导入样式入口文件
+import { useTaichi } from '~/composables/useTaichi'
+
+// 获取Taichi工具
+const taichiUtils = useTaichi()
 
 /**
  * Props定义
@@ -353,8 +357,14 @@ const startAnimation = () => {
   const animationFn = animations[props.animationType]
 
   if (animationFn) {
+    // 准备传递给动画的props（包含taichiUtils）
+    const animationProps = {
+      ...props,
+      taichiUtils
+    }
+
     // 执行动画
-    animationFn(props, {
+    animationFn(animationProps, {
       onComplete: onAnimationComplete,
       onError: onAnimationError
     })
