@@ -166,7 +166,7 @@ const selectRandomAnimation = () => {
     'butterfly-nebula-dance',
     'ancient-lightning-awakening',
     'dna-quantum-evolution'*/
-     'taichi-three',
+    /* 'taichi-three',*/
       'wind-flower-snow-moon'
   ]
   // const randomIndex = getRandomIndex()
