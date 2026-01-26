@@ -102,6 +102,10 @@ import animateBigBangGenesis from './big-bang-genesis.js'
 
 // 太极-Taichi.js + Three.js 融合特效
 import animateTaichiThree from '../taichi-three-animation/taichi-shuimo-effect.js'
+import animateTaichiYouth from '../taichi-three-animation/taichi-youth.js'
+import animateDewdropLens from '../taichi-three-animation/dewdrop-lens-prairie.js'
+import animateGalaxyButterfly from '../taichi-three-animation/galaxy-butterfly.js'
+import animateElegantSnowMoon from '../taichi-three-animation/elegant-snow-moon.js'
 
 
 /**
@@ -204,6 +208,10 @@ export const animations = {
 
     // 太极-Taichi.js + Three.js 融合特效
     [ANIMATION_CONFIG.TAICHI_THREE]: animateTaichiThree,
+    'taichi-youth': animateTaichiYouth,
+    'dewdrop-lens-prairie': animateDewdropLens,
+    'galaxy-butterfly': animateGalaxyButterfly,
+    'elegant-snow-moon': animateElegantSnowMoon
 
 }
 

@@ -52,6 +52,9 @@ const animationOptions = [
   { value: 'wind-flower-snow-moon', label: '🌸 风花雪月' },
 
   { value: 'taichi-three', label: '☯️ 太极融合特效' },
+  { value: 'taichi-youth', label: '💕 青春绚丽' },
+  { value: 'dewdrop-lens-prairie', label: '💧 露珠透镜草原' },
+
 
   { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
   { value: 'void-creation', label: '🌌 虚空创世交响曲' },
@@ -124,6 +127,11 @@ const animationOptions = [
   { value: 'crystal-pyramid', label: '🔮 水晶金字塔' },
   { value: 'galaxy-flow', label: '🌌 星河涌动 ' },
   { value: 'big-bang-genesis', label: '🧨 宇宙大爆炸 ' },
+  { value: 'taichi-three', label: '☯️ 太极融合特效' },
+  { value: 'taichi-youth', label: '💕 青春绚丽' },
+  { value: 'dewdrop-lens-prairie', label: '💧 露珠透镜草原' },
+  { value: 'galaxy-butterfly', label: '🦋 银河蝴蝶' },
+  { value: 'elegant-snow-moon', label: '🌙 风华雪月' },
 ]
 
 const validValues = computed(() => new Set(animationOptions.map(item => item.value)))

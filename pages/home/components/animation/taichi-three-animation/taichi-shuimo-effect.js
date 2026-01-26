@@ -417,6 +417,9 @@ export default async function animateTaichiThree(props, callbacks) {
         }, null, 14.5);
 
         // ========== 更新循环 ==========
+        let lastTaichiUpdate = 0;
+        const TAIICHI_UPDATE_INTERVAL = 16; // ~60fps 限制更新频率
+
         const updateHandler = async () => {
             const time = Date.now() * 0.001;
 
@@ -438,20 +441,24 @@ export default async function animateTaichiThree(props, callbacks) {
             // 更新水墨云雾
             inkClouds.update(time);
 
-            // 如果使用 Taichi.js，更新水墨物理
-            if (useTaichi && updateKernel) {
+            // 如果使用 Taichi.js，更新水墨物理（限制更新频率以提升性能）
+            if (useTaichi && updateKernel && time - lastTaichiUpdate >= TAIICHI_UPDATE_INTERVAL / 1000) {
                 try {
+                    lastTaichiUpdate = time;
+
                     // 执行水墨物理 kernel
                     updateKernel();
 
-                    // 获取计算结果
-                    const taichiPositions = await positionsField.toArray1D();
-                    const taichiColors = await colorsField.toArray1D();
-                    const taichiOpacity = await opacityField.toArray1D();
-                    const taichiSize = await sizeField.toArray1D();
+                    // 获取计算结果（使用 Promise.all 并行获取）
+                    const [taichiPositions, taichiColors, taichiOpacity, taichiSize] = await Promise.all([
+                        positionsField.toArray1D(),
+                        colorsField.toArray1D(),
+                        opacityField.toArray1D(),
+                        sizeField.toArray1D()
+                    ]);
 
                     // 更新墨滴粒子
-                    if (inkDrops && inkDrops.geometry) {
+                    if (inkDrops?.geometry) {
                         const dropPositions = inkDrops.geometry.attributes.position.array;
                         const dropColors = inkDrops.geometry.attributes.color.array;
                         const dropOpacity = inkDrops.geometry.attributes.opacity.array;
@@ -462,13 +469,15 @@ export default async function animateTaichiThree(props, callbacks) {
                             dropPositions.length / 3
                         );
 
+                        // 批量更新位置数据
+                        const scale = 0.8;
                         for (let i = 0; i < count; i++) {
                             const i3 = i * 3;
 
                             // 应用水墨物理计算的位置
-                            dropPositions[i3] = taichiPositions[i3] * 0.8;
-                            dropPositions[i3 + 1] = taichiPositions[i3 + 1] * 0.8;
-                            dropPositions[i3 + 2] = taichiPositions[i3 + 2] * 0.8;
+                            dropPositions[i3] = taichiPositions[i3] * scale;
+                            dropPositions[i3 + 1] = taichiPositions[i3 + 1] * scale;
+                            dropPositions[i3 + 2] = taichiPositions[i3 + 2] * scale;
 
                             // 墨色浓度
                             dropColors[i3] = taichiColors[i3];
@@ -489,7 +498,7 @@ export default async function animateTaichiThree(props, callbacks) {
                     }
 
                     // 更新墨晕
-                    if (inkMist && inkMist.geometry) {
+                    if (inkMist?.geometry) {
                         const mistPositions = inkMist.geometry.attributes.position.array;
                         const mistColors = inkMist.geometry.attributes.color.array;
                         const offset = 30000;
@@ -498,14 +507,15 @@ export default async function animateTaichiThree(props, callbacks) {
                             mistPositions.length / 3
                         );
 
+                        const mistScale = 0.6;
                         for (let i = 0; i < count; i++) {
                             const i3 = i * 3;
                             const tiIndex = offset + i;
                             const ti3 = tiIndex * 3;
 
-                            mistPositions[i3] = taichiPositions[ti3] * 0.6;
-                            mistPositions[i3 + 1] = taichiPositions[ti3 + 1] * 0.6;
-                            mistPositions[i3 + 2] = taichiPositions[ti3 + 2] * 0.6;
+                            mistPositions[i3] = taichiPositions[ti3] * mistScale;
+                            mistPositions[i3 + 1] = taichiPositions[ti3 + 1] * mistScale;
+                            mistPositions[i3 + 2] = taichiPositions[ti3 + 2] * mistScale;
 
                             // 墨晕颜色更淡
                             mistColors[i3] = taichiColors[ti3] * 0.3 + 0.7;
@@ -526,13 +536,23 @@ export default async function animateTaichiThree(props, callbacks) {
         // 清理函数
         const cleanup = () => {
             console.log('🧹 清理水墨特效资源');
-            inkCore.destroy();
-            inkDrops.destroy();
-            inkMist.destroy();
-            inkFlow.destroy();
-            inkRipples.destroy();
-            inkClouds.destroy();
 
+            // 清理 Three.js 资源
+            if (inkCore) inkCore.destroy();
+            if (inkDrops) inkDrops.destroy();
+            if (inkMist) inkMist.destroy();
+            if (inkFlow) inkFlow.destroy();
+            if (inkRipples) inkRipples.destroy();
+            if (inkClouds) inkClouds.destroy();
+
+            // 清理 Taichi 资源
+            if (positionsField?.destroy) positionsField.destroy();
+            if (velocitiesField?.destroy) velocitiesField.destroy();
+            if (colorsField?.destroy) colorsField.destroy();
+            if (opacityField?.destroy) opacityField.destroy();
+            if (sizeField?.destroy) sizeField.destroy();
+
+            // 清空引用
             positionsField = null;
             velocitiesField = null;
             colorsField = null;
@@ -1183,22 +1203,26 @@ function createExplosionSystem(scene) {
             // 更新粒子位置
             const positionsArray = geometry.attributes.position.array;
             const velocitiesArray = velocities;
+            const gravity = 0.001;
+            const dt = 0.016;
 
             for (let i = 0; i < particleCount; i++) {
                 const i3 = i * 3;
 
-                // 应用速度
-                positionsArray[i3] += velocitiesArray[i3] * 0.016;
-                positionsArray[i3 + 1] += velocitiesArray[i3 + 1] * 0.016;
-                positionsArray[i3 + 2] += velocitiesArray[i3 + 2] * 0.016;
-
                 // 添加重力效果
-                velocitiesArray[i3 + 1] -= 0.001;
+                velocitiesArray[i3 + 1] -= gravity;
 
-                // 添加随机扰动
-                positionsArray[i3] += (Math.random() - 0.5) * 0.01;
-                positionsArray[i3 + 1] += (Math.random() - 0.5) * 0.01;
-                positionsArray[i3 + 2] += (Math.random() - 0.5) * 0.01;
+                // 应用速度
+                positionsArray[i3] += velocitiesArray[i3] * dt;
+                positionsArray[i3 + 1] += velocitiesArray[i3 + 1] * dt;
+                positionsArray[i3 + 2] += velocitiesArray[i3 + 2] * dt;
+
+                // 添加随机扰动（减少频率以提升性能）
+                if (Math.random() < 0.1) {
+                    positionsArray[i3] += (Math.random() - 0.5) * 0.01;
+                    positionsArray[i3 + 1] += (Math.random() - 0.5) * 0.01;
+                    positionsArray[i3 + 2] += (Math.random() - 0.5) * 0.01;
+                }
             }
 
             geometry.attributes.position.needsUpdate = true;
@@ -1362,17 +1386,25 @@ function createInkDrops(scene, options) {
             const positions = geometry.attributes.position.array;
             const phases = geometry.attributes.phase.array;
 
-            for (let i = 0; i < particleCount; i++) {
-                const i3 = i * 3;
-                const phase = phases[i];
+            // 只有当 spreadFactor 或 flowSpeed 不为零时才更新
+            if (spreadFactor > 1.0 || flowSpeed > 0) {
+                const time05 = time * 0.5;
+                const time03 = time * 0.3;
+                const time04 = time * 0.4;
+                const spreadSpeed = 0.01 * spreadFactor;
 
-                // 墨汁流动
-                positions[i3] += Math.sin(time * 0.5 + phase) * 0.01 * spreadFactor;
-                positions[i3 + 1] += Math.cos(time * 0.3 + phase) * 0.005;
-                positions[i3 + 2] += Math.sin(time * 0.4 + phase) * 0.01 * spreadFactor;
+                for (let i = 0; i < particleCount; i++) {
+                    const i3 = i * 3;
+                    const phase = phases[i];
+
+                    // 墨汁流动
+                    positions[i3] += Math.sin(time05 + phase) * spreadSpeed;
+                    positions[i3 + 1] += Math.cos(time03 + phase) * 0.005;
+                    positions[i3 + 2] += Math.sin(time04 + phase) * spreadSpeed;
+                }
+
+                geometry.attributes.position.needsUpdate = true;
             }
-
-            geometry.attributes.position.needsUpdate = true;
 
             group.rotation.y += flowSpeed * 0.01;
             group.rotation.x = Math.sin(time * 0.2) * 0.05;
@@ -1525,23 +1557,26 @@ function createInkFlow(scene) {
             });
         },
         update(time) {
-            curves.forEach((curveObj, i) => {
-                // 动态更新曲线点
-                const points = curveObj.originalPoints.map((point, j) => {
-                    const t = j / curveObj.originalPoints.length;
-                    const waveOffset = Math.sin(time * 2 + i + j * 0.2) * 2;
+            // 只在必要时更新曲线几何体（每隔几帧更新一次以提升性能）
+            if (Math.floor(time * 60) % 2 === 0) {
+                curves.forEach((curveObj, i) => {
+                    // 动态更新曲线点
+                    const points = curveObj.originalPoints.map((point, j) => {
+                        const t = j / curveObj.originalPoints.length;
+                        const waveOffset = Math.sin(time * 2 + i + j * 0.2) * 2;
 
-                    return new THREE.Vector3(
-                        point.x + Math.cos(time + i) * waveOffset,
-                        point.y + Math.sin(time * 1.5 + i) * waveOffset * 0.5,
-                        point.z + Math.sin(time + i) * waveOffset
-                    );
+                        return new THREE.Vector3(
+                            point.x + Math.cos(time + i) * waveOffset,
+                            point.y + Math.sin(time * 1.5 + i) * waveOffset * 0.5,
+                            point.z + Math.sin(time + i) * waveOffset
+                        );
+                    });
+
+                    const newCurve = new THREE.CatmullRomCurve3(points);
+                    curveObj.line.geometry.dispose();
+                    curveObj.line.geometry = new THREE.BufferGeometry().setFromPoints(newCurve.getPoints(100));
                 });
-
-                const newCurve = new THREE.CatmullRomCurve3(points);
-                curveObj.line.geometry.dispose();
-                curveObj.line.geometry = new THREE.BufferGeometry().setFromPoints(newCurve.getPoints(100));
-            });
+            }
 
             group.rotation.y = time * 0.05;
         },
