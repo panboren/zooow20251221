@@ -1099,46 +1099,48 @@ function createExplosionSystem(scene) {
     const material = new THREE.ShaderMaterial({
         uniforms: {
             uTime: { value: 0 },
-            uAlpha: { value: 0 }
+            uAlpha: { value: 0 }  // 确保这个 uniform 存在
         },
         vertexShader: `
-            precision highp float;
-            attribute float size;
-            attribute vec3 color;
-            uniform float uTime;
-            varying vec3 vColor;
-            varying float vAlpha;
+        precision highp float;
+        attribute float size;
+        attribute vec3 color;
+        uniform float uTime;
+        uniform float uAlpha;  // ✅ 添加缺失的 uniform 声明
+        varying vec3 vColor;
+        varying float vAlpha;
 
-            void main() {
-                vColor = color;
-                
-                vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-                gl_PointSize = size * (300.0 / -mvPosition.z);
-                gl_Position = projectionMatrix * mvPosition;
-                
-                vAlpha = uAlpha;
-            }
-        `,
+        void main() {
+            vColor = color;
+            
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_PointSize = size * (300.0 / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+            
+            vAlpha = uAlpha;  // 现在可以正常使用
+        }
+    `,
         fragmentShader: `
-            precision highp float;
-            varying vec3 vColor;
-            varying float vAlpha;
+        precision highp float;
+        varying vec3 vColor;
+        varying float vAlpha;
 
-            void main() {
-                vec2 center = gl_PointCoord - vec2(0.5);
-                float dist = length(center);
-                
-                if (dist > 0.5) discard;
-                
-                float alpha = smoothstep(0.5, 0.0, dist) * vAlpha;
-                
-                gl_FragColor = vec4(vColor, alpha);
-            }
-        `,
+        void main() {
+            vec2 center = gl_PointCoord - vec2(0.5);
+            float dist = length(center);
+            
+            if (dist > 0.5) discard;
+            
+            float alpha = smoothstep(0.5, 0.0, dist) * vAlpha;
+            
+            gl_FragColor = vec4(vColor, alpha);
+        }
+    `,
         transparent: true,
         blending: THREE.NormalBlending,
         depthWrite: false
     })
+
 
     const particles = new THREE.Points(geometry, material)
     group.add(particles)
