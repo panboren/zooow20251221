@@ -24,7 +24,7 @@
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
-import { createTimeline, setupInitialCamera, safeCameraTransform } from '../utils'
+import { createTimeline, setupInitialCamera, safeCameraTransform } from '../animations/utils.js'
 
 /**
  * 水墨-Taichi.js 特效主函数
