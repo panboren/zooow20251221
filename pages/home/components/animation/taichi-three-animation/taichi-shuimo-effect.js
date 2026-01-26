@@ -22,9 +22,9 @@
  * 阶段7: 收尾 - 水墨大成
  */
 
-import * as THREE from 'three'
-import { gsap } from 'gsap'
-import { createTimeline, setupInitialCamera, safeCameraTransform } from '../animations/utils.js'
+import * as THREE from 'three';
+import { gsap } from 'gsap';
+import { createTimeline, setupInitialCamera, safeCameraTransform } from '../animations/utils.js';
 
 /**
  * 水墨-Taichi.js 特效主函数
@@ -32,74 +32,74 @@ import { createTimeline, setupInitialCamera, safeCameraTransform } from '../anim
  * @param {Object} callbacks - 回调函数 { onComplete, onError }
  */
 export default async function animateTaichiThree(props, callbacks) {
-    const { camera, renderer, scene, controls } = props
-    const { onComplete, onError } = callbacks || {}
+    const { camera, renderer, scene, controls } = props;
+    const { onComplete, onError } = callbacks || {};
 
-    console.log('🎬 启动水墨-Taichi.js 特效')
+    console.log('🎬 启动水墨-Taichi.js 特效');
 
     // Taichi.js 相关
-    let ti = null
-    let useTaichi = false
+    let ti = null;
+    let useTaichi = false;
 
     // Taichi 字段
-    let positionsField = null
-    let velocitiesField = null
-    let colorsField = null
-    let opacityField = null
-    let sizeField = null
+    let positionsField = null;
+    let velocitiesField = null;
+    let colorsField = null;
+    let opacityField = null;
+    let sizeField = null;
 
     // Taichi kernels
-    let initKernel = null
-    let updateKernel = null
+    let initKernel = null;
+    let updateKernel = null;
 
     // 粒子数量
-    const PARTICLE_COUNT = 50000
+    const PARTICLE_COUNT = 50000;
 
     try {
         // ========== 步骤1: 加载和初始化 Taichi.js ==========
-        console.log('📦 步骤 1/4: 加载 Taichi.js...')
+        console.log('📦 步骤 1/4: 加载 Taichi.js...');
 
-        const { $loadTaichi, $initTaichi } = useNuxtApp()
+        const { $loadTaichi, $initTaichi } = useNuxtApp();
 
         try {
-            ti = await $loadTaichi()
-            console.log('✅ Taichi.js 加载成功')
+            ti = await $loadTaichi();
+            console.log('✅ Taichi.js 加载成功');
 
-            await $initTaichi(ti)
-            console.log('✅ Taichi.js 初始化成功')
+            await $initTaichi(ti);
+            console.log('✅ Taichi.js 初始化成功');
 
             // 检查Taichi实例是否有效
             if (!ti || typeof ti.Vector !== 'object') {
-                console.warn('⚠️ Taichi.js 实例无效，使用 JavaScript 模拟')
-                useTaichi = false
+                console.warn('⚠️ Taichi.js 实例无效，使用 JavaScript 模拟');
+                useTaichi = false;
             } else {
-                useTaichi = true
+                useTaichi = true;
             }
         } catch (error) {
-            console.warn('⚠️ Taichi.js 加载或初始化失败，使用 JavaScript 模拟:', error.message)
-            useTaichi = false
+            console.warn('⚠️ Taichi.js 加载或初始化失败，使用 JavaScript 模拟:', error.message);
+            useTaichi = false;
         }
 
         // ========== 步骤2: 创建 Taichi 字段和 Kernels（水墨物理）==========
         if (useTaichi && ti) {
-            console.log('🔨 步骤 2/4: 创建水墨 Taichi 字段和 Kernels...')
+            console.log('🔨 步骤 2/4: 创建水墨 Taichi 字段和 Kernels...');
 
             try {
-                await new Promise(resolve => setTimeout(resolve, 200))
+                await new Promise(resolve => setTimeout(resolve, 200));
 
                 // 检查Taichi实例是否仍然有效
                 if (!ti.Vector) {
-                    throw new Error('Taichi实例已失效')
+                    throw new Error('Taichi实例已失效');
                 }
 
                 // 水墨专用字段
-                positionsField = ti.Vector.field(3, ti.f32, [PARTICLE_COUNT])
-                velocitiesField = ti.Vector.field(3, ti.f32, [PARTICLE_COUNT])
-                colorsField = ti.Vector.field(3, ti.f32, [PARTICLE_COUNT])
-                opacityField = ti.field(ti.f32, [PARTICLE_COUNT])
-                sizeField = ti.field(ti.f32, [PARTICLE_COUNT])
+                positionsField = ti.Vector.field(3, ti.f32, [PARTICLE_COUNT]);
+                velocitiesField = ti.Vector.field(3, ti.f32, [PARTICLE_COUNT]);
+                colorsField = ti.Vector.field(3, ti.f32, [PARTICLE_COUNT]);
+                opacityField = ti.field(ti.f32, [PARTICLE_COUNT]);
+                sizeField = ti.field(ti.f32, [PARTICLE_COUNT]);
 
-                console.log('✅ 水墨 Taichi 字段创建成功')
+                console.log('✅ 水墨 Taichi 字段创建成功');
 
                 // 水墨常量
                 ti.addToKernelScope({
@@ -108,107 +108,107 @@ export default async function animateTaichiThree(props, callbacks) {
                     colors: colorsField,
                     opacity: opacityField,
                     size: sizeField
-                })
+                });
 
-                console.log('✅ 水墨 Kernel scope 设置完成')
+                console.log('✅ 水墨 Kernel scope 设置完成');
 
                 // 初始化内核 - 创建墨滴
                 initKernel = ti.kernel(() => {
                     for (let i of ti.range(50000)) {
                         // 墨滴从中心随机分布（模拟研墨）
-                        const angle = ti.random() * 6.28318
-                        const radius = ti.random() * 5.0
-                        const height = (ti.random() - 0.5) * 3.0
+                        const angle = ti.random() * 6.28318;
+                        const radius = ti.random() * 5.0;
+                        const height = (ti.random() - 0.5) * 3.0;
 
                         positions[i] = [
                             radius * ti.cos(angle),
                             height,
                             radius * ti.sin(angle)
-                        ]
+                        ];
 
                         // 初始速度（墨汁扩散速度）
-                        const spreadSpeed = 0.2 + ti.random() * 0.5
+                        const spreadSpeed = 0.2 + ti.random() * 0.5;
                         velocities[i] = [
                             ti.cos(angle) * spreadSpeed,
                             (ti.random() - 0.5) * 0.3,
                             ti.sin(angle) * spreadSpeed
-                        ]
+                        ];
 
                         // 墨色浓度（0=浓墨，1=淡墨）
-                        const inkDensity = ti.random()
-                        colors[i] = [inkDensity * 0.1, inkDensity * 0.1, inkDensity * 0.1]
+                        const inkDensity = ti.random();
+                        colors[i] = [inkDensity * 0.1, inkDensity * 0.1, inkDensity * 0.1];
 
                         // 透明度（模拟墨色深浅）
-                        opacity[i] = 0.3 + inkDensity * 0.5
+                        opacity[i] = 0.3 + inkDensity * 0.5;
 
                         // 笔触大小（模拟毛笔笔触）
-                        size[i] = 0.5 + ti.random() * 2.0
+                        size[i] = 0.5 + ti.random() * 2.0;
                     }
-                })
+                });
 
                 // 更新内核 - 水墨流动物理
                 updateKernel = ti.kernel(() => {
                     for (let i of ti.range(50000)) {
                         // 更新位置
-                        positions[i][0] += velocities[i][0] * 0.016
-                        positions[i][1] += velocities[i][1] * 0.016
-                        positions[i][2] += velocities[i][2] * 0.016
+                        positions[i][0] += velocities[i][0] * 0.016;
+                        positions[i][1] += velocities[i][1] * 0.016;
+                        positions[i][2] += velocities[i][2] * 0.016;
 
                         // 墨汁扩散阻力（模拟水的粘度）
-                        velocities[i][0] *= 0.995
-                        velocities[i][1] *= 0.995
-                        velocities[i][2] *= 0.995
+                        velocities[i][0] *= 0.995;
+                        velocities[i][1] *= 0.995;
+                        velocities[i][2] *= 0.995;
 
                         // 随机微动（模拟墨晕）
-                        velocities[i][0] += (ti.random() - 0.5) * 0.02
-                        velocities[i][1] += (ti.random() - 0.5) * 0.01
-                        velocities[i][2] += (ti.random() - 0.5) * 0.02
+                        velocities[i][0] += (ti.random() - 0.5) * 0.02;
+                        velocities[i][1] += (ti.random() - 0.5) * 0.01;
+                        velocities[i][2] += (ti.random() - 0.5) * 0.02;
 
                         // 边界反弹（柔和，模拟墨汁在容器中的流动）
-                        const x = positions[i][0]
-                        const y = positions[i][1]
-                        const z = positions[i][2]
-                        const dist = ti.sqrt(x * x + y * y + z * z)
+                        const x = positions[i][0];
+                        const y = positions[i][1];
+                        const z = positions[i][2];
+                        const dist = ti.sqrt(x * x + y * y + z * z);
 
                         if (dist > 80.0) {
-                            velocities[i][0] *= -0.8
-                            velocities[i][1] *= -0.8
-                            velocities[i][2] *= -0.8
+                            velocities[i][0] *= -0.8;
+                            velocities[i][1] *= -0.8;
+                            velocities[i][2] *= -0.8;
                         }
 
                         // 墨色渐变（随时间变淡）
-                        opacity[i] *= 0.9995
+                        opacity[i] *= 0.9995;
 
                         // 笔触大小变化（模拟墨晕扩散）
-                        size[i] += 0.001
+                        size[i] += 0.001;
                         if (size[i] > 4.0) {
-                            size[i] = 4.0
+                            size[i] = 4.0;
                         }
                     }
-                })
+                });
 
-                console.log('✅ 水墨 Taichi Kernels 编译完成')
+                console.log('✅ 水墨 Taichi Kernels 编译完成');
 
                 // 执行初始化
-                initKernel()
-                console.log('✅ 水墨初始化执行完成')
+                initKernel();
+                console.log('✅ 水墨初始化执行完成');
 
             } catch (error) {
-                console.warn('⚠️ 水墨 Taichi 字段或 Kernels 创建失败，降级到 JavaScript:', error.message)
-                useTaichi = false
+                console.warn('⚠️ 水墨 Taichi 字段或 Kernels 创建失败，降级到 JavaScript:', error.message);
+                useTaichi = false;
             }
         }
 
         // ========== 步骤3: 初始化 Three.js 水墨场景 ==========
-        console.log('🎨 步骤 3/4: 初始化水墨场景...')
+        console.log('🎨 步骤 3/4: 初始化水墨场景...');
 
         // 初始设置 - 远距离俯瞰
-        setupInitialCamera(camera, new THREE.Vector3(0, 60, 120), 85, controls)
-        camera.lookAt(0, 0, 0)
-        renderer.render(scene, camera)
+        setupInitialCamera(camera, new THREE.Vector3(0, 60, 120), 85, controls);
+        camera.lookAt(0, 0, 0);
+        renderer.render(scene, camera);
 
         // 创建水墨核心
-        const inkCore = createInkCore(scene)
+        const inkCore = createInkCore(scene);
 
         // 创建墨滴粒子系统
         const inkDrops = createInkDrops(scene, {
@@ -218,7 +218,7 @@ export default async function animateTaichiThree(props, callbacks) {
             colorsField,
             opacityField,
             sizeField
-        })
+        });
 
         // 创建墨晕层
         const inkMist = createInkMist(scene, {
@@ -226,27 +226,33 @@ export default async function animateTaichiThree(props, callbacks) {
             useTaichi,
             positionsField,
             colorsField
-        })
+        });
 
         // 创建水墨流动线
-        const inkFlow = createInkFlow(scene)
+        const inkFlow = createInkFlow(scene);
 
-        console.log('✅ 水墨场景创建完成')
+        // 创建水墨涟漪效果
+        const inkRipples = createInkRipples(scene);
+
+        // 创建水墨云雾效果
+        const inkClouds = createInkClouds(scene);
+
+        console.log('✅ 水墨场景创建完成');
 
         // ========== 步骤4: 创建水墨动画时间轴 ==========
-        console.log('⏱️  步骤 4/4: 创建水墨动画时间轴...')
+        console.log('⏱️  步骤 4/4: 创建水墨动画时间轴...');
 
         const tl = createTimeline(
             () => {
-                cleanup()
-                if (onComplete) onComplete({ type: 'taichi-three' })
+                cleanup();
+                if (onComplete) onComplete({ type: 'taichi-three' });
             },
             onError,
             '水墨-Taichi.js 特效',
             controls
-        )
+        );
 
-        console.log('✅ 水墨动画时间轴创建完成')
+        console.log('✅ 水墨动画时间轴创建完成');
 
         // ========== 水墨动画阶段 ==========
 
@@ -261,12 +267,12 @@ export default async function animateTaichiThree(props, callbacks) {
                 () => camera.lookAt(0, 0, 0),
                 '研墨错误'
             )
-        })
+        });
 
         tl.call(() => {
-            inkCore.form()
-            inkDrops.appear()
-        }, null, 0.5)
+            inkCore.form();
+            inkDrops.appear();
+        }, null, 0.5);
 
         // 阶段2: 落笔 - 墨汁散开
         tl.to(camera.position, {
@@ -279,12 +285,12 @@ export default async function animateTaichiThree(props, callbacks) {
                 () => camera.lookAt(0, 0, 0),
                 '落笔错误'
             )
-        }, 2.5)
+        }, 2.5);
 
         tl.call(() => {
-            inkDrops.spread()
-            inkMist.reveal()
-        }, null, 3.5)
+            inkDrops.spread();
+            inkMist.reveal();
+        }, null, 3.5);
 
         // 阶段3: 润色 - 墨晕扩散
         tl.to(camera.position, {
@@ -297,12 +303,13 @@ export default async function animateTaichiThree(props, callbacks) {
                 () => camera.lookAt(0, 0, 0),
                 '润色错误'
             )
-        }, 4.5)
+        }, 4.5);
 
         tl.call(() => {
-            inkDrips.diffuse()
-            inkMist.expand()
-        }, null, 5.5)
+            inkDrops.diffuse();
+            inkMist.expand();
+            inkRipples.generate(0, 0, 0); // 在中心生成涟漪
+        }, null, 5.5);
 
         tl.to(camera, {
             fov: 95,
@@ -312,7 +319,7 @@ export default async function animateTaichiThree(props, callbacks) {
                 () => camera.updateProjectionMatrix(),
                 'FOV变化错误'
             )
-        }, 6)
+        }, 6);
 
         // 阶段4: 渲染 - 笔触加深
         tl.to(camera.position, {
@@ -325,12 +332,12 @@ export default async function animateTaichiThree(props, callbacks) {
                 () => camera.lookAt(0, 0, 0),
                 '渲染错误'
             )
-        }, 6.8)
+        }, 6.8);
 
         tl.call(() => {
-            inkDrips.deepen()
-            inkFlow.begin()
-        }, null, 8)
+            inkDrops.deepen();
+            inkFlow.begin();
+        }, null, 8);
 
         // 阶段5: 晕染 - 墨韵流动
         tl.to(camera.position, {
@@ -343,13 +350,14 @@ export default async function animateTaichiThree(props, callbacks) {
                 () => camera.lookAt(0, 0, 0),
                 '晕染错误'
             )
-        }, 8.8)
+        }, 8.8);
 
         tl.call(() => {
-            inkCore.harmonize()
-            inkDrips.flow()
-            inkMist.swirl()
-        }, null, 10.5)
+            inkCore.harmonize();
+            inkDrops.flow();
+            inkMist.swirl();
+            inkClouds.appear();
+        }, null, 10.5);
 
         tl.to(camera, {
             fov: 105,
@@ -359,7 +367,7 @@ export default async function animateTaichiThree(props, callbacks) {
                 () => camera.updateProjectionMatrix(),
                 '晕染冲击错误'
             )
-        }, 10.5)
+        }, 10.5);
 
         // 阶段6: 留白 - 意境营造
         tl.to(camera.position, {
@@ -372,12 +380,13 @@ export default async function animateTaichiThree(props, callbacks) {
                 () => camera.lookAt(0, 0, 0),
                 '留白错误'
             )
-        }, 11.3)
+        }, 11.3);
 
         tl.call(() => {
-            inkDrips.fade()
-            inkMist.enhance()
-        }, null, 12.5)
+            inkDrops.fade();
+            inkMist.enhance();
+            inkClouds.expand();
+        }, null, 12.5);
 
         // 阶段7: 收尾 - 水墨大成
         tl.to(camera.position, {
@@ -390,7 +399,7 @@ export default async function animateTaichiThree(props, callbacks) {
                 () => camera.lookAt(0, 0, 0),
                 '收尾错误'
             )
-        }, 13.3)
+        }, 13.3);
 
         tl.to(camera, {
             fov: 75,
@@ -400,139 +409,147 @@ export default async function animateTaichiThree(props, callbacks) {
                 () => camera.updateProjectionMatrix(),
                 'FOV恢复错误'
             )
-        }, 13)
+        }, 13);
 
         // 添加爆炸效果
         tl.call(() => {
-            inkCore.explode()
-        }, null, 14.5)
+            inkCore.explode();
+        }, null, 14.5);
 
         // ========== 更新循环 ==========
         const updateHandler = async () => {
-            const time = Date.now() * 0.001
+            const time = Date.now() * 0.001;
 
             // 更新水墨核心
-            inkCore.update(time)
+            inkCore.update(time);
 
             // 更新墨滴
-            inkDrops.update(time)
+            inkDrops.update(time);
 
             // 更新墨晕
-            inkMist.update(time)
+            inkMist.update(time);
 
             // 更新水墨流动线
-            inkFlow.update(time)
+            inkFlow.update(time);
+
+            // 更新水墨涟漪
+            inkRipples.update(time);
+
+            // 更新水墨云雾
+            inkClouds.update(time);
 
             // 如果使用 Taichi.js，更新水墨物理
             if (useTaichi && updateKernel) {
                 try {
                     // 执行水墨物理 kernel
-                    updateKernel()
+                    updateKernel();
 
                     // 获取计算结果
-                    const taichiPositions = await positionsField.toArray1D()
-                    const taichiColors = await colorsField.toArray1D()
-                    const taichiOpacity = await opacityField.toArray1D()
-                    const taichiSize = await sizeField.toArray1D()
+                    const taichiPositions = await positionsField.toArray1D();
+                    const taichiColors = await colorsField.toArray1D();
+                    const taichiOpacity = await opacityField.toArray1D();
+                    const taichiSize = await sizeField.toArray1D();
 
                     // 更新墨滴粒子
                     if (inkDrops && inkDrops.geometry) {
-                        const dropPositions = inkDrops.geometry.attributes.position.array
-                        const dropColors = inkDrops.geometry.attributes.color.array
-                        const dropOpacity = inkDrops.geometry.attributes.opacity.array
-                        const dropSize = inkDrops.geometry.attributes.size.array
+                        const dropPositions = inkDrops.geometry.attributes.position.array;
+                        const dropColors = inkDrops.geometry.attributes.color.array;
+                        const dropOpacity = inkDrops.geometry.attributes.opacity.array;
+                        const dropSize = inkDrops.geometry.attributes.size.array;
 
                         const count = Math.min(
                             taichiPositions.length / 3,
                             dropPositions.length / 3
-                        )
+                        );
 
                         for (let i = 0; i < count; i++) {
-                            const i3 = i * 3
+                            const i3 = i * 3;
 
                             // 应用水墨物理计算的位置
-                            dropPositions[i3] = taichiPositions[i3] * 0.8
-                            dropPositions[i3 + 1] = taichiPositions[i3 + 1] * 0.8
-                            dropPositions[i3 + 2] = taichiPositions[i3 + 2] * 0.8
+                            dropPositions[i3] = taichiPositions[i3] * 0.8;
+                            dropPositions[i3 + 1] = taichiPositions[i3 + 1] * 0.8;
+                            dropPositions[i3 + 2] = taichiPositions[i3 + 2] * 0.8;
 
                             // 墨色浓度
-                            dropColors[i3] = taichiColors[i3]
-                            dropColors[i3 + 1] = taichiColors[i3 + 1]
-                            dropColors[i3 + 2] = taichiColors[i3 + 2]
+                            dropColors[i3] = taichiColors[i3];
+                            dropColors[i3 + 1] = taichiColors[i3 + 1];
+                            dropColors[i3 + 2] = taichiColors[i3 + 2];
 
                             // 透明度（墨色深浅）
-                            dropOpacity[i] = taichiOpacity[i]
+                            dropOpacity[i] = taichiOpacity[i];
 
                             // 笔触大小
-                            dropSize[i] = taichiSize[i]
+                            dropSize[i] = taichiSize[i];
                         }
 
-                        inkDrops.geometry.attributes.position.needsUpdate = true
-                        inkDrops.geometry.attributes.color.needsUpdate = true
-                        inkDrops.geometry.attributes.opacity.needsUpdate = true
-                        inkDrops.geometry.attributes.size.needsUpdate = true
+                        inkDrops.geometry.attributes.position.needsUpdate = true;
+                        inkDrops.geometry.attributes.color.needsUpdate = true;
+                        inkDrops.geometry.attributes.opacity.needsUpdate = true;
+                        inkDrops.geometry.attributes.size.needsUpdate = true;
                     }
 
                     // 更新墨晕
                     if (inkMist && inkMist.geometry) {
-                        const mistPositions = inkMist.geometry.attributes.position.array
-                        const mistColors = inkMist.geometry.attributes.color.array
-                        const offset = 30000
+                        const mistPositions = inkMist.geometry.attributes.position.array;
+                        const mistColors = inkMist.geometry.attributes.color.array;
+                        const offset = 30000;
                         const count = Math.min(
                             (taichiPositions.length / 3) - offset,
                             mistPositions.length / 3
-                        )
+                        );
 
                         for (let i = 0; i < count; i++) {
-                            const i3 = i * 3
-                            const tiIndex = offset + i
-                            const ti3 = tiIndex * 3
+                            const i3 = i * 3;
+                            const tiIndex = offset + i;
+                            const ti3 = tiIndex * 3;
 
-                            mistPositions[i3] = taichiPositions[ti3] * 0.6
-                            mistPositions[i3 + 1] = taichiPositions[ti3 + 1] * 0.6
-                            mistPositions[i3 + 2] = taichiPositions[ti3 + 2] * 0.6
+                            mistPositions[i3] = taichiPositions[ti3] * 0.6;
+                            mistPositions[i3 + 1] = taichiPositions[ti3 + 1] * 0.6;
+                            mistPositions[i3 + 2] = taichiPositions[ti3 + 2] * 0.6;
 
                             // 墨晕颜色更淡
-                            mistColors[i3] = taichiColors[ti3] * 0.3 + 0.7
-                            mistColors[i3 + 1] = taichiColors[ti3 + 1] * 0.3 + 0.7
-                            mistColors[i3 + 2] = taichiColors[ti3 + 2] * 0.3 + 0.7
+                            mistColors[i3] = taichiColors[ti3] * 0.3 + 0.7;
+                            mistColors[i3 + 1] = taichiColors[ti3 + 1] * 0.3 + 0.7;
+                            mistColors[i3 + 2] = taichiColors[ti3 + 2] * 0.3 + 0.7;
                         }
 
-                        inkMist.geometry.attributes.position.needsUpdate = true
-                        inkMist.geometry.attributes.color.needsUpdate = true
+                        inkMist.geometry.attributes.position.needsUpdate = true;
+                        inkMist.geometry.attributes.color.needsUpdate = true;
                     }
 
                 } catch (error) {
-                    console.warn('⚠️ 水墨 Taichi 更新失败:', error)
+                    console.warn('⚠️ 水墨 Taichi 更新失败:', error);
                 }
             }
-        }
+        };
 
         // 清理函数
         const cleanup = () => {
-            console.log('🧹 清理水墨特效资源')
-            inkCore.destroy()
-            inkDrops.destroy()
-            inkMist.destroy()
-            inkFlow.destroy()
+            console.log('🧹 清理水墨特效资源');
+            inkCore.destroy();
+            inkDrops.destroy();
+            inkMist.destroy();
+            inkFlow.destroy();
+            inkRipples.destroy();
+            inkClouds.destroy();
 
-            positionsField = null
-            velocitiesField = null
-            colorsField = null
-            opacityField = null
-            sizeField = null
-            initKernel = null
-            updateKernel = null
-        }
+            positionsField = null;
+            velocitiesField = null;
+            colorsField = null;
+            opacityField = null;
+            sizeField = null;
+            initKernel = null;
+            updateKernel = null;
+        };
 
-        tl.call(cleanup, null, 16)
+        tl.call(cleanup, null, 16);
 
-        return { updateHandler }
+        return { updateHandler };
 
     } catch (error) {
-        console.error('❌ 水墨-Taichi.js 特效启动失败:', error)
-        if (onError) onError(error)
-        return null
+        console.error('❌ 水墨-Taichi.js 特效启动失败:', error);
+        if (onError) onError(error);
+        return null;
     }
 }
 
@@ -540,38 +557,38 @@ export default async function animateTaichiThree(props, callbacks) {
  * 创建水墨核心 - 水墨莲花绽放效果（增强版）
  */
 function createInkCore(scene) {
-    const group = new THREE.Group()
-    scene.add(group)
+    const group = new THREE.Group();
+    scene.add(group);
 
     // 爆炸粒子系统
-    const explosionParticles = createExplosionSystem(scene)
+    const explosionParticles = createExplosionSystem(scene);
 
     // 水墨莲心（多层花瓣）
-    const petalCount = 8
-    const petals = []
-    const petalGeometries = []
-    const petalMaterials = []
+    const petalCount = 8;
+    const petals = [];
+    const petalGeometries = [];
+    const petalMaterials = [];
 
     for (let i = 0; i < petalCount; i++) {
         // 每片花瓣使用曲线形状
-        const petalGeometry = new THREE.PlaneGeometry(6, 3, 32, 16)
+        const petalGeometry = new THREE.PlaneGeometry(6, 3, 32, 16);
 
         // 弯曲花瓣
-        const positions = petalGeometry.attributes.position
+        const positions = petalGeometry.attributes.position;
         for (let j = 0; j < positions.count; j++) {
-            const x = positions.getX(j)
-            const y = positions.getY(j)
+            const x = positions.getX(j);
+            const y = positions.getY(j);
 
             // 花瓣弯曲效果
-            const bend = Math.pow(y / 3, 2) * 2
-            positions.setZ(j, bend)
+            const bend = Math.pow(y / 3, 2) * 2;
+            positions.setZ(j, bend);
 
             // 花瓣边缘卷曲
-            const edgeFactor = Math.abs(x) / 3
-            positions.setY(j, y * (1 - edgeFactor * 0.3))
+            const edgeFactor = Math.abs(x) / 3;
+            positions.setY(j, y * (1 - edgeFactor * 0.3));
         }
 
-        petalGeometry.computeVertexNormals()
+        petalGeometry.computeVertexNormals();
 
         const petalMaterial = new THREE.ShaderMaterial({
             uniforms: {
@@ -663,19 +680,19 @@ function createInkCore(scene) {
             blending: THREE.NormalBlending,
             depthWrite: false,
             side: THREE.DoubleSide
-        })
+        });
 
-        const petal = new THREE.Mesh(petalGeometry, petalMaterial)
-        petal.rotation.x = Math.PI * 0.3  // 花瓣微微上翘
-        group.add(petal)
+        const petal = new THREE.Mesh(petalGeometry, petalMaterial);
+        petal.rotation.x = Math.PI * 0.3;  // 花瓣微微上翘
+        group.add(petal);
 
-        petals.push(petal)
-        petalGeometries.push(petalGeometry)
-        petalMaterials.push(petalMaterial)
+        petals.push(petal);
+        petalGeometries.push(petalGeometry);
+        petalMaterials.push(petalMaterial);
     }
 
     // 莲心（花蕊）- 增强爆炸效果
-    const centerGeometry = new THREE.SphereGeometry(1.5, 32, 32)
+    const centerGeometry = new THREE.SphereGeometry(1.5, 32, 32);
     const centerMaterial = new THREE.ShaderMaterial({
         uniforms: {
             uTime: { value: 0 },
@@ -741,20 +758,20 @@ function createInkCore(scene) {
         transparent: true,
         blending: THREE.AdditiveBlending,
         depthWrite: false
-    })
-    const center = new THREE.Mesh(centerGeometry, centerMaterial)
-    center.position.y = 1
-    group.add(center)
+    });
+    const center = new THREE.Mesh(centerGeometry, centerMaterial);
+    center.position.y = 1;
+    group.add(center);
 
     // 花蕊粒子
-    const stamenCount = 12
-    const stamens = []
-    const stamenGeometries = []
-    const stamenMaterials = []
+    const stamenCount = 12;
+    const stamens = [];
+    const stamenGeometries = [];
+    const stamenMaterials = [];
 
     for (let i = 0; i < stamenCount; i++) {
-        const angle = (i / stamenCount) * Math.PI * 2
-        const stamenGeometry = new THREE.CylinderGeometry(0.05, 0.02, 3, 8)
+        const angle = (i / stamenCount) * Math.PI * 2;
+        const stamenGeometry = new THREE.CylinderGeometry(0.05, 0.02, 3, 8);
         const stamenMaterial = new THREE.ShaderMaterial({
             uniforms: {
                 uTime: { value: 0 },
@@ -825,25 +842,25 @@ function createInkCore(scene) {
             transparent: true,
             blending: THREE.NormalBlending,
             depthWrite: false
-        })
+        });
 
-        const stamen = new THREE.Mesh(stamenGeometry, stamenMaterial)
+        const stamen = new THREE.Mesh(stamenGeometry, stamenMaterial);
         stamen.position.set(
             Math.cos(angle) * 0.8,
             1,
             Math.sin(angle) * 0.8
-        )
-        stamen.rotation.z = Math.PI * 0.3
-        stamen.rotation.y = angle
-        group.add(stamen)
+        );
+        stamen.rotation.z = Math.PI * 0.3;
+        stamen.rotation.y = angle;
+        group.add(stamen);
 
-        stamens.push(stamen)
-        stamenGeometries.push(stamenGeometry)
-        stamenMaterials.push(stamenMaterial)
+        stamens.push(stamen);
+        stamenGeometries.push(stamenGeometry);
+        stamenMaterials.push(stamenMaterial);
     }
 
     // 水墨雾气（周围氛围）
-    const mistGeometry = new THREE.SphereGeometry(20, 32, 32)
+    const mistGeometry = new THREE.SphereGeometry(20, 32, 32);
     const mistMaterial = new THREE.ShaderMaterial({
         uniforms: {
             uTime: { value: 0 },
@@ -903,9 +920,9 @@ function createInkCore(scene) {
         transparent: true,
         blending: THREE.AdditiveBlending,
         depthWrite: false
-    })
-    const mist = new THREE.Mesh(mistGeometry, mistMaterial)
-    group.add(mist)
+    });
+    const mist = new THREE.Mesh(mistGeometry, mistMaterial);
+    group.add(mist);
 
     return {
         group,
@@ -917,15 +934,15 @@ function createInkCore(scene) {
                     value: 1,
                     duration: 2,
                     delay: i * 0.1
-                })
-            })
+                });
+            });
 
             // 莲心显现
             gsap.to(centerMaterial.uniforms.uOpacity, {
                 value: 1,
                 duration: 1.5,
                 delay: 0.8
-            })
+            });
 
             // 花蕊生长
             stamenMaterials.forEach((material, i) => {
@@ -933,25 +950,25 @@ function createInkCore(scene) {
                     value: 1,
                     duration: 1.5,
                     delay: 1.0 + i * 0.05
-                })
-            })
+                });
+            });
 
             // 墨雾扩散
             gsap.to(mistMaterial.uniforms.uOpacity, {
                 value: 1,
                 duration: 2.5,
                 delay: 0.3
-            })
+            });
         },
         harmonize() {
             // 花瓣轻颤
-            group.scale.setScalar(1.1)
+            group.scale.setScalar(1.1);
             gsap.to(group.scale, {
                 x: 1, y: 1, z: 1,
                 duration: 2,
                 yoyo: true,
                 repeat: 1
-            })
+            });
 
             // 莲心光芒
             gsap.to(centerMaterial.uniforms.uOpacity, {
@@ -959,7 +976,7 @@ function createInkCore(scene) {
                 duration: 1,
                 yoyo: true,
                 repeat: 1
-            })
+            });
         },
         explode() {
             // 触发爆炸效果
@@ -967,7 +984,7 @@ function createInkCore(scene) {
                 value: 1,
                 duration: 0.8,
                 ease: "power2.inOut"
-            })
+            });
 
             // 爆炸进度动画
             gsap.to([centerMaterial.uniforms.uExplodeProgress, ...petalMaterials.map(m => m.uniforms.uExplodeProgress), ...stamenMaterials.map(m => m.uniforms.uExplodeProgress), mistMaterial.uniforms.uExplodeProgress], {
@@ -976,125 +993,125 @@ function createInkCore(scene) {
                 ease: "power2.in",
                 onComplete: () => {
                     // 爆炸后隐藏对象
-                    center.visible = false
-                    petals.forEach(p => p.visible = false)
-                    stamens.forEach(s => s.visible = false)
-                    mist.visible = false
+                    center.visible = false;
+                    petals.forEach(p => p.visible = false);
+                    stamens.forEach(s => s.visible = false);
+                    mist.visible = false;
 
                     // 启动爆炸粒子效果
                     if (this.explosionParticles) {
-                        this.explosionParticles.explode()
+                        this.explosionParticles.explode();
                     }
                 }
-            })
+            });
         },
         finalize() {
             // 收缩
             gsap.to(group.scale, {
                 x: 0.9, y: 0.9, z: 0.9,
                 duration: 1.5
-            })
+            });
 
             // 淡化
             petalMaterials.forEach(material => {
-                gsap.to(material.uniforms.uOpacity, { value: 0.8, duration: 1 })
-            })
-            gsap.to(centerMaterial.uniforms.uOpacity, { value: 0.9, duration: 1 })
-            gsap.to(mistMaterial.uniforms.uOpacity, { value: 0.8, duration: 1 })
+                gsap.to(material.uniforms.uOpacity, { value: 0.8, duration: 1 });
+            });
+            gsap.to(centerMaterial.uniforms.uOpacity, { value: 0.9, duration: 1 });
+            gsap.to(mistMaterial.uniforms.uOpacity, { value: 0.8, duration: 1 });
         },
         update(time) {
             // 更新所有 uniforms
             petals.forEach((petal, i) => {
-                petalMaterials[i].uniforms.uTime.value = time
-            })
-            centerMaterial.uniforms.uTime.value = time
+                petalMaterials[i].uniforms.uTime.value = time;
+            });
+            centerMaterial.uniforms.uTime.value = time;
             stamens.forEach((stamen, i) => {
-                stamenMaterials[i].uniforms.uTime.value = time
-            })
-            mistMaterial.uniforms.uTime.value = time
+                stamenMaterials[i].uniforms.uTime.value = time;
+            });
+            mistMaterial.uniforms.uTime.value = time;
 
             // 整体旋转
-            group.rotation.y = time * 0.15
+            group.rotation.y = time * 0.15;
 
             // 上下浮动
-            group.position.y = Math.sin(time * 0.5) * 0.3
+            group.position.y = Math.sin(time * 0.5) * 0.3;
 
             // 更新爆炸粒子系统
             if (this.explosionParticles) {
-                this.explosionParticles.update(time)
+                this.explosionParticles.update(time);
             }
         },
         destroy() {
-            scene.remove(group)
+            scene.remove(group);
 
             petals.forEach((petal, i) => {
-                petalGeometries[i].dispose()
-                petalMaterials[i].dispose()
-            })
+                petalGeometries[i].dispose();
+                petalMaterials[i].dispose();
+            });
 
-            centerGeometry.dispose()
-            centerMaterial.dispose()
+            centerGeometry.dispose();
+            centerMaterial.dispose();
 
             stamens.forEach((stamen, i) => {
-                stamenGeometries[i].dispose()
-                stamenMaterials[i].dispose()
-            })
+                stamenGeometries[i].dispose();
+                stamenMaterials[i].dispose();
+            });
 
-            mistGeometry.dispose()
-            mistMaterial.dispose()
+            mistGeometry.dispose();
+            mistMaterial.dispose();
 
             // 销毁爆炸粒子系统
             if (this.explosionParticles) {
-                this.explosionParticles.destroy()
+                this.explosionParticles.destroy();
             }
         }
-    }
+    };
 }
 
 /**
  * 创建爆炸粒子系统
  */
 function createExplosionSystem(scene) {
-    const group = new THREE.Group()
-    scene.add(group)
+    const group = new THREE.Group();
+    scene.add(group);
 
-    const particleCount = 2000
-    const geometry = new THREE.BufferGeometry()
-    const positions = new Float32Array(particleCount * 3)
-    const colors = new Float32Array(particleCount * 3)
-    const sizes = new Float32Array(particleCount)
-    const velocities = new Float32Array(particleCount * 3)
+    const particleCount = 2000;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+    const velocities = new Float32Array(particleCount * 3);
 
     // 初始化粒子数据
     for (let i = 0; i < particleCount; i++) {
         // 随机位置（从中心向外）
-        const radius = Math.random() * 2
-        const theta = Math.random() * Math.PI * 2
-        const phi = Math.random() * Math.PI
+        const radius = Math.random() * 2;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
 
-        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
-        positions[i * 3 + 1] = radius * Math.cos(phi)
-        positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta)
+        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = radius * Math.cos(phi);
+        positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
 
         // 颜色（墨色变化）
-        const density = Math.random()
-        colors[i * 3] = density * 0.1
-        colors[i * 3 + 1] = density * 0.1
-        colors[i * 3 + 2] = density * 0.1
+        const density = Math.random();
+        colors[i * 3] = density * 0.1;
+        colors[i * 3 + 1] = density * 0.1;
+        colors[i * 3 + 2] = density * 0.1;
 
         // 大小
-        sizes[i] = 0.1 + Math.random() * 0.5
+        sizes[i] = 0.1 + Math.random() * 0.5;
 
         // 初始速度（向外爆炸）
-        const speed = 0.5 + Math.random() * 2
-        velocities[i * 3] = positions[i * 3] * speed
-        velocities[i * 3 + 1] = positions[i * 3 + 1] * speed
-        velocities[i * 3 + 2] = positions[i * 3 + 2] * speed
+        const speed = 0.5 + Math.random() * 2;
+        velocities[i * 3] = positions[i * 3] * speed;
+        velocities[i * 3 + 1] = positions[i * 3 + 1] * speed;
+        velocities[i * 3 + 2] = positions[i * 3 + 2] * speed;
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1))
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
     const material = new THREE.ShaderMaterial({
         uniforms: {
@@ -1139,14 +1156,14 @@ function createExplosionSystem(scene) {
         transparent: true,
         blending: THREE.NormalBlending,
         depthWrite: false
-    })
+    });
 
 
-    const particles = new THREE.Points(geometry, material)
-    group.add(particles)
+    const particles = new THREE.Points(geometry, material);
+    group.add(particles);
 
-    let isActive = false
-    let startTime = 0
+    let isActive = false;
+    let startTime = 0;
 
     return {
         group,
@@ -1154,103 +1171,103 @@ function createExplosionSystem(scene) {
         geometry,
         material,
         explode() {
-            isActive = true
-            startTime = performance.now()
-            material.uniforms.uAlpha.value = 1
+            isActive = true;
+            startTime = performance.now();
+            material.uniforms.uAlpha.value = 1;
         },
         update(time) {
-            if (!isActive) return
+            if (!isActive) return;
 
-            const elapsed = (performance.now() - startTime) / 1000
+            const elapsed = (performance.now() - startTime) / 1000;
 
             // 更新粒子位置
-            const positionsArray = geometry.attributes.position.array
-            const velocitiesArray = velocities
+            const positionsArray = geometry.attributes.position.array;
+            const velocitiesArray = velocities;
 
             for (let i = 0; i < particleCount; i++) {
-                const i3 = i * 3
+                const i3 = i * 3;
 
                 // 应用速度
-                positionsArray[i3] += velocitiesArray[i3] * 0.016
-                positionsArray[i3 + 1] += velocitiesArray[i3 + 1] * 0.016
-                positionsArray[i3 + 2] += velocitiesArray[i3 + 2] * 0.016
+                positionsArray[i3] += velocitiesArray[i3] * 0.016;
+                positionsArray[i3 + 1] += velocitiesArray[i3 + 1] * 0.016;
+                positionsArray[i3 + 2] += velocitiesArray[i3 + 2] * 0.016;
 
                 // 添加重力效果
-                velocitiesArray[i3 + 1] -= 0.001
+                velocitiesArray[i3 + 1] -= 0.001;
 
                 // 添加随机扰动
-                positionsArray[i3] += (Math.random() - 0.5) * 0.01
-                positionsArray[i3 + 1] += (Math.random() - 0.5) * 0.01
-                positionsArray[i3 + 2] += (Math.random() - 0.5) * 0.01
+                positionsArray[i3] += (Math.random() - 0.5) * 0.01;
+                positionsArray[i3 + 1] += (Math.random() - 0.5) * 0.01;
+                positionsArray[i3 + 2] += (Math.random() - 0.5) * 0.01;
             }
 
-            geometry.attributes.position.needsUpdate = true
+            geometry.attributes.position.needsUpdate = true;
 
             // 随时间减小透明度
-            const alpha = Math.max(0, 1 - elapsed * 0.8)
-            material.uniforms.uAlpha.value = alpha
+            const alpha = Math.max(0, 1 - elapsed * 0.8);
+            material.uniforms.uAlpha.value = alpha;
 
             // 5秒后停止
             if (elapsed > 5) {
-                isActive = false
-                material.uniforms.uAlpha.value = 0
+                isActive = false;
+                material.uniforms.uAlpha.value = 0;
             }
         },
         destroy() {
-            scene.remove(group)
-            geometry.dispose()
-            material.dispose()
+            scene.remove(group);
+            geometry.dispose();
+            material.dispose();
         }
-    }
+    };
 }
 
 /**
  * 创建墨滴粒子系统
  */
 function createInkDrops(scene, options) {
-    const { particleCount = 30000, useTaichi = false } = options
+    const { particleCount = 30000, useTaichi = false } = options;
 
-    const group = new THREE.Group()
-    scene.add(group)
+    const group = new THREE.Group();
+    scene.add(group);
 
-    const geometry = new THREE.BufferGeometry()
-    const positions = new Float32Array(particleCount * 3)
-    const colors = new Float32Array(particleCount * 3)
-    const opacity = new Float32Array(particleCount)
-    const size = new Float32Array(particleCount)
-    const phases = new Float32Array(particleCount)
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    const opacity = new Float32Array(particleCount);
+    const size = new Float32Array(particleCount);
+    const phases = new Float32Array(particleCount);
 
     for (let i = 0; i < particleCount; i++) {
         // 墨滴分布
-        const theta = Math.random() * Math.PI * 2
-        const phi = Math.random() * Math.PI
-        const radius = Math.random() * 10
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        const radius = Math.random() * 10;
 
-        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
-        positions[i * 3 + 1] = radius * Math.cos(phi)
-        positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta)
+        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = radius * Math.cos(phi);
+        positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
 
         // 墨色（浓墨到淡墨）
-        const inkDensity = Math.random()
-        colors[i * 3] = inkDensity * 0.15
-        colors[i * 3 + 1] = inkDensity * 0.15
-        colors[i * 3 + 2] = inkDensity * 0.15
+        const inkDensity = Math.random();
+        colors[i * 3] = inkDensity * 0.15;
+        colors[i * 3 + 1] = inkDensity * 0.15;
+        colors[i * 3 + 2] = inkDensity * 0.15;
 
         // 透明度（墨色深浅）
-        opacity[i] = 0.2 + inkDensity * 0.6
+        opacity[i] = 0.2 + inkDensity * 0.6;
 
         // 笔触大小
-        size[i] = 0.3 + Math.random() * 1.5
+        size[i] = 0.3 + Math.random() * 1.5;
 
         // 相位（用于动画）
-        phases[i] = Math.random() * Math.PI * 2
+        phases[i] = Math.random() * Math.PI * 2;
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-    geometry.setAttribute('opacity', new THREE.BufferAttribute(opacity, 1))
-    geometry.setAttribute('size', new THREE.BufferAttribute(size, 1))
-    geometry.setAttribute('phase', new THREE.BufferAttribute(phases, 1))
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('opacity', new THREE.BufferAttribute(opacity, 1));
+    geometry.setAttribute('size', new THREE.BufferAttribute(size, 1));
+    geometry.setAttribute('phase', new THREE.BufferAttribute(phases, 1));
 
     // 自定义着色器材质 - 水墨笔触效果
     const material = new THREE.ShaderMaterial({
@@ -1303,103 +1320,103 @@ function createInkDrops(scene, options) {
         transparent: true,
         blending: THREE.NormalBlending,
         depthWrite: false
-    })
+    });
 
-    const particles = new THREE.Points(geometry, material)
-    group.add(particles)
+    const particles = new THREE.Points(geometry, material);
+    group.add(particles);
 
-    let spreadFactor = 1.0
-    let flowSpeed = 0.0
+    let spreadFactor = 1.0;
+    let flowSpeed = 0.0;
 
     return {
         group,
         particles,
         geometry,
         appear() {
-            gsap.to(material.uniforms.uGlobalOpacity, { value: 1, duration: 2 })
+            gsap.to(material.uniforms.uGlobalOpacity, { value: 1, duration: 2 });
         },
         spread() {
-            spreadFactor = 2.0
+            spreadFactor = 2.0;
         },
         diffuse() {
-            spreadFactor = 3.0
+            spreadFactor = 3.0;
         },
         deepen() {
-            const colors = geometry.attributes.color.array
+            const colors = geometry.attributes.color.array;
             for (let i = 0; i < particleCount; i++) {
-                colors[i * 3] *= 0.7
-                colors[i * 3 + 1] *= 0.7
-                colors[i * 3 + 2] *= 0.7
+                colors[i * 3] *= 0.7;
+                colors[i * 3 + 1] *= 0.7;
+                colors[i * 3 + 2] *= 0.7;
             }
-            geometry.attributes.color.needsUpdate = true
+            geometry.attributes.color.needsUpdate = true;
         },
         flow() {
-            flowSpeed = 1.0
+            flowSpeed = 1.0;
         },
         fade() {
-            gsap.to(material.uniforms.uGlobalOpacity, { value: 0.4, duration: 2 })
+            gsap.to(material.uniforms.uGlobalOpacity, { value: 0.4, duration: 2 });
         },
         update(time) {
-            material.uniforms.uTime.value = time
+            material.uniforms.uTime.value = time;
 
-            const positions = geometry.attributes.position.array
-            const phases = geometry.attributes.phase.array
+            const positions = geometry.attributes.position.array;
+            const phases = geometry.attributes.phase.array;
 
             for (let i = 0; i < particleCount; i++) {
-                const i3 = i * 3
-                const phase = phases[i]
+                const i3 = i * 3;
+                const phase = phases[i];
 
                 // 墨汁流动
-                positions[i3] += Math.sin(time * 0.5 + phase) * 0.01 * spreadFactor
-                positions[i3 + 1] += Math.cos(time * 0.3 + phase) * 0.005
-                positions[i3 + 2] += Math.sin(time * 0.4 + phase) * 0.01 * spreadFactor
+                positions[i3] += Math.sin(time * 0.5 + phase) * 0.01 * spreadFactor;
+                positions[i3 + 1] += Math.cos(time * 0.3 + phase) * 0.005;
+                positions[i3 + 2] += Math.sin(time * 0.4 + phase) * 0.01 * spreadFactor;
             }
 
-            geometry.attributes.position.needsUpdate = true
+            geometry.attributes.position.needsUpdate = true;
 
-            group.rotation.y += flowSpeed * 0.01
-            group.rotation.x = Math.sin(time * 0.2) * 0.05
+            group.rotation.y += flowSpeed * 0.01;
+            group.rotation.x = Math.sin(time * 0.2) * 0.05;
         },
         destroy() {
-            scene.remove(group)
-            geometry.dispose()
-            material.dispose()
+            scene.remove(group);
+            geometry.dispose();
+            material.dispose();
         }
-    }
+    };
 }
 
 /**
  * 创建墨晕层
  */
 function createInkMist(scene, options) {
-    const { particleCount = 15000 } = options
+    const { particleCount = 15000 } = options;
 
-    const group = new THREE.Group()
-    scene.add(group)
+    const group = new THREE.Group();
+    scene.add(group);
 
-    const geometry = new THREE.BufferGeometry()
-    const positions = new Float32Array(particleCount * 3)
-    const colors = new Float32Array(particleCount * 3)
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
 
     for (let i = 0; i < particleCount; i++) {
         // 墨晕分布（更广范围）
-        const theta = Math.random() * Math.PI * 2
-        const phi = Math.random() * Math.PI
-        const radius = 20 + Math.random() * 60
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        const radius = 20 + Math.random() * 60;
 
-        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
-        positions[i * 3 + 1] = radius * Math.cos(phi)
-        positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta)
+        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = radius * Math.cos(phi);
+        positions[i * 3 + 2] = radius * Math.sin(phi) * Math.sin(theta);
 
         // 墨晕颜色（非常淡）
-        const mistDensity = Math.random() * 0.1
-        colors[i * 3] = mistDensity
-        colors[i * 3 + 1] = mistDensity
-        colors[i * 3 + 2] = mistDensity
+        const mistDensity = Math.random() * 0.1;
+        colors[i * 3] = mistDensity;
+        colors[i * 3 + 1] = mistDensity;
+        colors[i * 3 + 2] = mistDensity;
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
         size: 2.0,
@@ -1408,92 +1425,92 @@ function createInkMist(scene, options) {
         opacity: 0,
         blending: THREE.AdditiveBlending,
         depthWrite: false
-    })
+    });
 
-    const particles = new THREE.Points(geometry, material)
-    group.add(particles)
+    const particles = new THREE.Points(geometry, material);
+    group.add(particles);
 
     return {
         group,
         particles,
         geometry,
         reveal() {
-            gsap.to(material, { opacity: 0.3, duration: 2.5 })
+            gsap.to(material, { opacity: 0.3, duration: 2.5 });
         },
         expand() {
-            const positions = geometry.attributes.position.array
+            const positions = geometry.attributes.position.array;
             for (let i = 0; i < particleCount; i++) {
-                positions[i * 3] *= 1.3
-                positions[i * 3 + 1] *= 1.3
-                positions[i * 3 + 2] *= 1.3
+                positions[i * 3] *= 1.3;
+                positions[i * 3 + 1] *= 1.3;
+                positions[i * 3 + 2] *= 1.3;
             }
-            geometry.attributes.position.needsUpdate = true
+            geometry.attributes.position.needsUpdate = true;
         },
         swirl() {
-            gsap.to(material, { opacity: 0.5, duration: 1 })
+            gsap.to(material, { opacity: 0.5, duration: 1 });
         },
         enhance() {
-            const colors = geometry.attributes.color.array
+            const colors = geometry.attributes.color.array;
             for (let i = 0; i < particleCount; i++) {
-                colors[i * 3] *= 0.8
-                colors[i * 3 + 1] *= 0.8
-                colors[i * 3 + 2] *= 0.8
+                colors[i * 3] *= 0.8;
+                colors[i * 3 + 1] *= 0.8;
+                colors[i * 3 + 2] *= 0.8;
             }
-            geometry.attributes.color.needsUpdate = true
+            geometry.attributes.color.needsUpdate = true;
         },
         update(time) {
-            group.rotation.y = time * 0.08
-            group.rotation.x = Math.sin(time * 0.15) * 0.1
+            group.rotation.y = time * 0.08;
+            group.rotation.x = Math.sin(time * 0.15) * 0.1;
         },
         destroy() {
-            scene.remove(group)
-            geometry.dispose()
-            material.dispose()
+            scene.remove(group);
+            geometry.dispose();
+            material.dispose();
         }
-    }
+    };
 }
 
 /**
  * 创建水墨流动线
  */
 function createInkFlow(scene) {
-    const group = new THREE.Group()
-    scene.add(group)
+    const group = new THREE.Group();
+    scene.add(group);
 
-    const curves = []
-    const lineMaterials = []
+    const curves = [];
+    const lineMaterials = [];
 
     // 创建多条水墨流动线
     for (let i = 0; i < 20; i++) {
-        const points = []
-        const segments = 50
+        const points = [];
+        const segments = 50;
 
         for (let j = 0; j < segments; j++) {
-            const t = j / segments
-            const angle = t * Math.PI * 4 + i * 0.3
-            const radius = 15 + t * 40
+            const t = j / segments;
+            const angle = t * Math.PI * 4 + i * 0.3;
+            const radius = 15 + t * 40;
 
             points.push(new THREE.Vector3(
                 radius * Math.cos(angle),
                 Math.sin(t * Math.PI * 2 + i) * 10,
                 radius * Math.sin(angle)
-            ))
+            ));
         }
 
-        const curve = new THREE.CatmullRomCurve3(points)
-        const curveGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(100))
+        const curve = new THREE.CatmullRomCurve3(points);
+        const curveGeometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(100));
         const curveMaterial = new THREE.LineBasicMaterial({
             color: 0x111111,
             transparent: true,
             opacity: 0,
             linewidth: 1
-        })
+        });
 
-        const curveLine = new THREE.Line(curveGeometry, curveMaterial)
-        group.add(curveLine)
+        const curveLine = new THREE.Line(curveGeometry, curveMaterial);
+        group.add(curveLine);
 
-        curves.push({ line: curveLine, curve, originalPoints: points })
-        lineMaterials.push(curveMaterial)
+        curves.push({ line: curveLine, curve, originalPoints: points });
+        lineMaterials.push(curveMaterial);
     }
 
     return {
@@ -1504,36 +1521,182 @@ function createInkFlow(scene) {
                     opacity: 0.3 + Math.random() * 0.2,
                     duration: 1.5,
                     delay: i * 0.05
-                })
-            })
+                });
+            });
         },
         update(time) {
             curves.forEach((curveObj, i) => {
                 // 动态更新曲线点
                 const points = curveObj.originalPoints.map((point, j) => {
-                    const t = j / curveObj.originalPoints.length
-                    const waveOffset = Math.sin(time * 2 + i + j * 0.2) * 2
+                    const t = j / curveObj.originalPoints.length;
+                    const waveOffset = Math.sin(time * 2 + i + j * 0.2) * 2;
 
                     return new THREE.Vector3(
                         point.x + Math.cos(time + i) * waveOffset,
                         point.y + Math.sin(time * 1.5 + i) * waveOffset * 0.5,
                         point.z + Math.sin(time + i) * waveOffset
-                    )
-                })
+                    );
+                });
 
-                const newCurve = new THREE.CatmullRomCurve3(points)
-                curveObj.line.geometry.dispose()
-                curveObj.line.geometry = new THREE.BufferGeometry().setFromPoints(newCurve.getPoints(100))
-            })
+                const newCurve = new THREE.CatmullRomCurve3(points);
+                curveObj.line.geometry.dispose();
+                curveObj.line.geometry = new THREE.BufferGeometry().setFromPoints(newCurve.getPoints(100));
+            });
 
-            group.rotation.y = time * 0.05
+            group.rotation.y = time * 0.05;
         },
         destroy() {
-            scene.remove(group)
+            scene.remove(group);
             curves.forEach(curveObj => {
-                curveObj.line.geometry.dispose()
-                curveObj.line.material.dispose()
-            })
+                curveObj.line.geometry.dispose();
+                curveObj.line.material.dispose();
+            });
         }
+    };
+}
+
+/**
+ * 创建水墨涟漪效果
+ */
+function createInkRipples(scene) {
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const ripples = [];
+    const rippleMaterial = new THREE.MeshBasicMaterial({
+        color: 0x000000,
+        transparent: true,
+        opacity: 0.3,
+        side: THREE.DoubleSide
+    });
+
+    return {
+        group,
+        ripples,
+        generate(centerX, centerY, centerZ) {
+            // 创建涟漪效果
+            const rippleGeometry = new THREE.RingGeometry(0.5, 1, 32);
+            const ripple = new THREE.Mesh(rippleGeometry, rippleMaterial.clone());
+            ripple.position.set(centerX, centerY, centerZ);
+            ripple.rotation.x = Math.PI / 2; // 平躺
+
+            group.add(ripple);
+            ripples.push(ripple);
+
+            // 动画涟漪扩散
+            gsap.to(ripple.scale, {
+                x: 10, y: 10, z: 10,
+                duration: 2,
+                ease: 'power2.out'
+            });
+
+            // 淡出效果
+            gsap.to(ripple.material, {
+                opacity: 0,
+                duration: 2,
+                onComplete: () => {
+                    group.remove(ripple);
+                    ripples.splice(ripples.indexOf(ripple), 1);
+                    ripple.geometry.dispose();
+                    ripple.material.dispose();
+                }
+            });
+        },
+        update(time) {
+            // 更新涟漪效果
+            ripples.forEach(ripple => {
+                // 微微波动效果
+                ripple.position.y += Math.sin(time * 2) * 0.01;
+            });
+        },
+        destroy() {
+            scene.remove(group);
+            ripples.forEach(ripple => {
+                ripple.geometry.dispose();
+                ripple.material.dispose();
+            });
+            ripples.length = 0;
+        }
+    };
+}
+
+/**
+ * 创建水墨云雾效果
+ */
+function createInkClouds(scene) {
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const cloudCount = 5;
+    const clouds = [];
+
+    for (let i = 0; i < cloudCount; i++) {
+        const cloudGeometry = new THREE.SphereGeometry(
+            5 + Math.random() * 10,
+            16,
+            16
+        );
+
+        const cloudMaterial = new THREE.MeshBasicMaterial({
+            color: 0x111111,
+            transparent: true,
+            opacity: 0.15,
+            wireframe: true
+        });
+
+        const cloud = new THREE.Mesh(cloudGeometry, cloudMaterial);
+        cloud.position.set(
+            (Math.random() - 0.5) * 50,
+            (Math.random() - 0.5) * 30,
+            (Math.random() - 0.5) * 50
+        );
+
+        group.add(cloud);
+        clouds.push(cloud);
     }
+
+    return {
+        group,
+        clouds,
+        appear() {
+            clouds.forEach((cloud, index) => {
+                gsap.to(cloud.material, {
+                    opacity: 0.2,
+                    duration: 3,
+                    delay: index * 0.2
+                });
+            });
+        },
+        expand() {
+            clouds.forEach(cloud => {
+                gsap.to(cloud.scale, {
+                    x: 1.5, y: 1.5, z: 1.5,
+                    duration: 2,
+                    ease: 'power2.inOut'
+                });
+            });
+        },
+        update(time) {
+            clouds.forEach((cloud, index) => {
+                // 缓慢漂移
+                cloud.position.x += Math.sin(time * 0.1 + index) * 0.02;
+                cloud.position.z += Math.cos(time * 0.1 + index) * 0.02;
+
+                // 轻微起伏
+                cloud.position.y += Math.sin(time * 0.3 + index) * 0.01;
+
+                // 呼吸效果
+                cloud.scale.x = 1 + Math.sin(time * 0.5 + index) * 0.05;
+                cloud.scale.y = 1 + Math.cos(time * 0.5 + index) * 0.05;
+                cloud.scale.z = 1 + Math.sin(time * 0.5 + index + 1) * 0.05;
+            });
+        },
+        destroy() {
+            scene.remove(group);
+            clouds.forEach(cloud => {
+                cloud.geometry.dispose();
+                cloud.material.dispose();
+            });
+        }
+    };
 }
