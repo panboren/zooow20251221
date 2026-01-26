@@ -100,6 +100,13 @@ import animateDNAQuantumEvolution from './dna-quantum-evolution.js'
 import animateGalaxyFlow from './galaxy-flow.js'
 import animateBigBangGenesis from './big-bang-genesis.js'
 
+// 全新超越级特效
+import animateCyberSpaceRift from './cyber-space-rift.js'
+import animateInterstellarSupernova from './interstellar-supernova.js'
+import animateQuantumDreamWeaver from './quantum-dream-weaver.js'
+import animateEternalReturn from './eternal-return.js'
+import animateAuroraFantasy from './aurora-fantasy.js'
+
 // 太极-Taichi.js + Three.js 融合特效
 import animateTaichiThree from '../taichi-three-animation/taichi-shuimo-effect.js'
 import animateTaichiYouth from '../taichi-three-animation/taichi-youth.js'
@@ -205,6 +212,13 @@ export const animations = {
 //     星河涌动 - 银河系动态流动特效（宇宙史诗版）
     'galaxy-flow': animateGalaxyFlow,
     'big-bang-genesis': animateBigBangGenesis,
+
+    // 全新超越级特效
+    'cyber-space-rift': animateCyberSpaceRift,
+    'interstellar-supernova': animateInterstellarSupernova,
+    'quantum-dream-weaver': animateQuantumDreamWeaver,
+    'eternal-return': animateEternalReturn,
+    'aurora-fantasy': animateAuroraFantasy,
 
     // 太极-Taichi.js + Three.js 融合特效
     [ANIMATION_CONFIG.TAICHI_THREE]: animateTaichiThree,

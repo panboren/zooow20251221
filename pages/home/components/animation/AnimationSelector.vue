@@ -48,12 +48,19 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
+  // ★★★ 超越级特效（全新突破）★★★
+  { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝' },
+  { value: 'interstellar-supernova', label: '💥 星际超新星爆发' },
+  { value: 'quantum-dream-weaver', label: '🔮 量子梦境编织' },
+  { value: 'eternal-return', label: '⏳ 永恒轮回之轮' },
+  { value: 'aurora-fantasy', label: '🌌 极光幻境' },
+
+  { value: 'orbital-rotation', label: '🛰️ 轨道环绕' },
   { value: 'wind-flower-snow-moon', label: '🌸 风花雪月' },
 
   { value: 'taichi-three', label: '☯️ 太极融合特效' },
   { value: 'taichi-youth', label: '💕 青春绚丽' },
   { value: 'dewdrop-lens-prairie', label: '💧 露珠透镜草原' },
-
 
   { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
   { value: 'void-creation', label: '🌌 虚空创世交响曲' },
@@ -94,7 +101,7 @@ const animationOptions = [
   { value: 'planet-explosion', label: '💥 星球爆炸' },
   { value: 'virtual-reality', label: '👓 虚拟现实' },
   { value: 'scene-roaming', label: '🚶 场景漫游' },
-  { value: 'orbital-rotation', label: '🛰️ 轨道环绕' },
+
   { value: 'dimensional-portal', label: '🚪 维度传送门' },
   { value: 'time-travel', label: '⏰ 时空穿梭' },
   { value: 'time-rewind', label: '⏪ 时空逆流' },
@@ -174,6 +181,7 @@ const selectRandomAnimation = () => {
     'ancient-lightning-awakening',
     'dna-quantum-evolution'*/
     /* 'taichi-three',*/
+      "orbital-rotation",
       'wind-flower-snow-moon'
   ]
   // const randomIndex = getRandomIndex()
