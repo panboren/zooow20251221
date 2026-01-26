@@ -29,6 +29,7 @@
           :src="item.image"
           :alt="item.title"
           fit="contain"
+          lazy
           @click="changePanorama(item)"
         >
           <template #placeholder>

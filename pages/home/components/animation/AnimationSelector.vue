@@ -4,12 +4,11 @@
       role="region"
       aria-label="动画控制"
   >
-    <label for="animation-type">动画类型:</label>
+    <label for="animation-type">特效类型：</label>
 
     <el-select
         style="width: 200px;"
-        :model-value="sanitizedValue"
-        @update:model-value="handleModelUpdate"
+        v-model="sanitizedValue"
         @change="handleChange"
         :filterable="isPcEnvironment"
         placeholder="选择开场动画类型"
@@ -40,7 +39,7 @@ const props = defineProps({
   modelValue: {
     type: String,
     required: true,
-  },
+  }
 })
 
 // 判断是否为PC端环境
@@ -136,19 +135,19 @@ const animationOptions = [
 
 const validValues = computed(() => new Set(animationOptions.map(item => item.value)))
 
-const sanitizedValue = computed(() => {
-  return validValues.value.has(props.modelValue) ? props.modelValue : animationOptions[0]?.value || ''
-})
-
-const handleModelUpdate = (value) => {
-  if (validValues.value.has(value)) {
-    emit('update:modelValue', value)
+const sanitizedValue = computed({
+  get() {
+    return validValues.value.has(props.modelValue) ? props.modelValue : animationOptions[0]?.value || ''
+  },
+  set(value) {
+    if (validValues.value.has(value)) {
+      emit('update:modelValue', value)
+    }
   }
-}
+})
 
 const handleChange = (value) => {
   if (validValues.value.has(value)) {
-    emit('update:modelValue', value)
     emit('change', value)
   }
 }

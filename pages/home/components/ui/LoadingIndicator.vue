@@ -1,18 +1,20 @@
 <template>
-  <div
-    class="loading-indicator"
-    role="status"
-    aria-live="polite"
-  >
-    <div
-      class="loading-spinner"
-      aria-hidden="true"
-    />
-    <p>{{ text }}</p>
-    <div class="loading-progress">
-      {{ progress }}
-    </div>
-  </div>
+   <div class="loading-container-layer">
+     <div
+         class="loading-indicator"
+         role="status"
+         aria-live="polite"
+     >
+       <div
+           class="loading-spinner"
+           aria-hidden="true"
+       />
+       <p>{{ text }}</p>
+       <div class="loading-progress">
+         {{ progress }}
+       </div>
+     </div>
+   </div>
 </template>
 
 <script setup>
@@ -39,6 +41,21 @@ defineProps({
 </script>
 
 <style scoped lang="scss">
+.loading-container-layer{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
 .loading-indicator {
   position: absolute;
   top: 50%;
