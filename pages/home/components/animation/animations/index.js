@@ -101,7 +101,7 @@ import animateGalaxyFlow from './galaxy-flow.js'
 import animateBigBangGenesis from './big-bang-genesis.js'
 
 // 太极-Taichi.js + Three.js 融合特效
-import animateTaichiThree from '../taichi-three-animation/taichi-three-lession'
+import animateTaichiThree from '../taichi-three-animation/taichi-shuimo-effect.js'
 
 
 /**
