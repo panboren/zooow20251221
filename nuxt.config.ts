@@ -36,12 +36,12 @@ export default defineNuxtConfig({
   // ============================================
   app: {
     head: {
-      title: '企业产品官网',
+      title: 'ZOOOW官网',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: '专业的企业产品展示官网' },
-        { name: 'keywords', content: '企业,产品,官网' },
+        { name: 'description', content: 'ZOOOW-AI - 专业的AI工具与全景图展示平台 | 3D全景 | 特效工具 | 智能化解决方案' },
+        { name: 'keywords', content: 'ZOOOW,ZOOOW-AI,AI工具,人工智能,智能助手,文本生成,图像处理,数据分析,3D全景,全景图,WebGL,Three.js,AI解决方案,智能化,AI平台,虚拟现实' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -69,8 +69,8 @@ export default defineNuxtConfig({
     },
     // 公共配置（客户端可用）
     public: {
-      siteName: '企业产品官网',
-      siteUrl: 'https://your-domain.com',
+      siteName: 'ZOOOW官网',
+      siteUrl: 'https://www.zooow.xyz',
       apiBase: '/api',
     },
   },
