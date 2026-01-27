@@ -36,7 +36,8 @@ export default defineNuxtPlugin({
         let taichi
         try {
           console.log('📂 尝试从本地路径加载...')
-          taichi = await import('../taichijs/dist/taichi.js')
+          // taichi = await import('../taichijs/dist/taichi.js')
+          taichi = await import('taichi.js')
           console.log('✅ 从本地路径加载成功')
         } catch (localError) {
           console.warn('⚠️ 本地加载失败，尝试从 npm 包加载:', localError.message)

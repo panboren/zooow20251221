@@ -45,7 +45,6 @@
         </el-image>
       </div>
     </div>
-
     <!-- 右箭头 -->
     <button
       class="arrow-btn arrow-right"
