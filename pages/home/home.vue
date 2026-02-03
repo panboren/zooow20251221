@@ -128,6 +128,141 @@ const loadingProgress = computed(() => '准备进入沉浸式体验')
 const currentPanorama = ref({})
 const isChangingPanorama = ref(false)
 
+// ==================== 全景图缓存管理 ====================
+const panoramaCache = new Map() // 全景图纹理缓存 (Blob URL)
+let db = null
+
+// IndexedDB 配置
+const DB_NAME = 'panoramaTextureCache'
+const DB_VERSION = 1
+const STORE_NAME = 'textures'
+
+// 初始化 IndexedDB
+const initDB = () => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION)
+
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => {
+      db = request.result
+      resolve(db)
+    }
+
+    request.onupgradeneeded = (event) => {
+      const database = event.target.result
+      if (!database.objectStoreNames.contains(STORE_NAME)) {
+        database.createObjectStore(STORE_NAME, { keyPath: 'url' })
+      }
+    }
+  })
+}
+
+// 从 IndexedDB 获取纹理
+const getTextureFromDB = (url) => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      resolve(null)
+      return
+    }
+    const transaction = db.transaction([STORE_NAME], 'readonly')
+    const store = transaction.objectStore(STORE_NAME)
+    const request = store.get(url)
+
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => {
+      const result = request.result
+      if (result && Date.now() - result.timestamp < 7 * 24 * 60 * 60 * 1000) {
+        resolve(result.blob)
+      } else {
+        resolve(null)
+      }
+    }
+  })
+}
+
+// 保存纹理到 IndexedDB
+const saveTextureToDB = (url, blob) => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      resolve(false)
+      return
+    }
+    const transaction = db.transaction([STORE_NAME], 'readwrite')
+    const store = transaction.objectStore(STORE_NAME)
+    const request = store.put({
+      url,
+      blob,
+      timestamp: Date.now()
+    })
+
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => resolve(true)
+  })
+}
+
+// 获取缓存的全景图 URL
+const getCachedPanoramaUrl = (url) => {
+  return panoramaCache.get(url) || url
+}
+
+// 预加载全景图纹理
+const preloadPanoramaTexture = (url) => {
+  return new Promise(async (resolve, reject) => {
+    // 检查内存缓存
+    if (panoramaCache.has(url)) {
+      resolve(panoramaCache.get(url))
+      return
+    }
+
+    // 检查 IndexedDB 缓存
+    const blob = await getTextureFromDB(url)
+    if (blob) {
+      const blobUrl = URL.createObjectURL(blob)
+      panoramaCache.set(url, blobUrl)
+      resolve(blobUrl)
+      return
+    }
+
+    // 从网络加载
+    try {
+      const response = await fetch(url)
+      const blobData = await response.blob()
+      const blobUrl = URL.createObjectURL(blobData)
+
+      // 存储到内存缓存
+      panoramaCache.set(url, blobUrl)
+
+      // 存储到 IndexedDB
+      await saveTextureToDB(url, blobData)
+
+      resolve(blobUrl)
+    } catch (error) {
+      reject(null)
+    }
+  })
+}
+
+// 预加载全景图纹理 (同步方式)
+const preloadPanoramaTextureSync = (url) => {
+  if (panoramaCache.has(url)) return
+
+  getTextureFromDB(url).then(blob => {
+    if (blob) {
+      const blobUrl = URL.createObjectURL(blob)
+      panoramaCache.set(url, blobUrl)
+      return
+    }
+
+    fetch(url).then(response => {
+      return response.blob()
+    }).then(blob => {
+      const blobUrl = URL.createObjectURL(blob)
+      panoramaCache.set(url, blobUrl)
+      saveTextureToDB(url, blob)
+    }).catch(() => {})
+  })
+}
+
 // ==================== 性能监控工具 ====================
 const performanceMonitor = {
   frameCount: 0,
@@ -313,13 +448,24 @@ const createSphereGeometry = () => {
 }
 
 /**
- * 加载纹理 - 支持切换全景图
+ * 加载纹理 - 支持切换全景图并使用缓存
  * @param {string} imageUrl - 全景图URL
  * @returns {Promise<THREE.Texture>} 加载的纹理对象
  */
-const loadTexture = (imageUrl) => {
-  return new Promise((resolve, reject) => {
+const loadTexture = async (imageUrl) => {
+  return new Promise(async (resolve, reject) => {
     logger.info(`开始加载纹理: ${imageUrl}`)
+
+    // 尝试从缓存获取全景图
+    let cachedUrl = null
+    try {
+      cachedUrl = await preloadPanoramaTexture(imageUrl)
+      if (cachedUrl && cachedUrl !== imageUrl) {
+        logger.info('使用缓存的全景图')
+      }
+    } catch (e) {
+      logger.warn('获取缓存失败，使用原图:', e)
+    }
 
     const textureLoader = new THREE.TextureLoader()
 
@@ -430,8 +576,8 @@ const switchPanorama = async () => {
       texture.value = null
     }
 
-    // 加载新纹理
-    const newImageUrl = currentPanorama.value.image
+    // 加载新纹理 - 使用 icon 字段(全景图)
+    const newImageUrl = currentPanorama.value.icon || currentPanorama.value.image
     await loadTexture(newImageUrl)
 
     // 获取新全景图的目标位置
@@ -1065,6 +1211,11 @@ const initThreeJS = async () => {
 
 onMounted(async () => {
   try {
+    // 初始化 IndexedDB
+    await initDB().catch(err => {
+      logger.warn('IndexedDB 初始化失败:', err)
+    })
+
     // 设置CSS变量
     const root = document.documentElement
     root.style.setProperty('--background-color', STYLE_CONFIG.BACKGROUND_COLOR)

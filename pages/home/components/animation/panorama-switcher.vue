@@ -26,7 +26,7 @@
           :key="item.id + '_' + index"
           class="panorama-description-img"
           :class="{ activated: currentPanorama.id === item.id }"
-          :src="item.image"
+          :src="getCachedImageUrl(item.image)"
           :alt="item.title"
           fit="contain"
           lazy
@@ -97,7 +97,193 @@ let list=[
   { x: 1.25, y: -1.52, z: -9.7 }
 ]
 
+// 图片缓存管理器 - 使用 IndexedDB 存储大图
+const thumbnailCache = new Map() // 缩略图缓存 (Base64)
+const panoramaCache = new Map()  // 全景图缓存 (Blob URL)
 
+// IndexedDB 配置
+const DB_NAME = 'panoramaImageCache'
+const DB_VERSION = 1
+const STORE_NAME = 'images'
+let db = null
+
+// 初始化 IndexedDB
+const initDB = () => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION)
+
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => {
+      db = request.result
+      resolve(db)
+    }
+
+    request.onupgradeneeded = (event) => {
+      const database = event.target.result
+      if (!database.objectStoreNames.contains(STORE_NAME)) {
+        database.createObjectStore(STORE_NAME, { keyPath: 'url' })
+      }
+    }
+  })
+}
+
+// 从 IndexedDB 获取图片
+const getImageFromDB = (url) => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      resolve(null)
+      return
+    }
+    const transaction = db.transaction([STORE_NAME], 'readonly')
+    const store = transaction.objectStore(STORE_NAME)
+    const request = store.get(url)
+
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => {
+      const result = request.result
+      if (result && Date.now() - result.timestamp < 7 * 24 * 60 * 60 * 1000) {
+        resolve(result.blob)
+      } else {
+        resolve(null)
+      }
+    }
+  })
+}
+
+// 保存图片到 IndexedDB
+const saveImageToDB = (url, blob) => {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      resolve(false)
+      return
+    }
+    const transaction = db.transaction([STORE_NAME], 'readwrite')
+    const store = transaction.objectStore(STORE_NAME)
+    const request = store.put({
+      url,
+      blob,
+      timestamp: Date.now()
+    })
+
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => resolve(true)
+  })
+}
+
+// 获取缓存的图片 URL
+const getCachedImageUrl = (url, isPanorama = false) => {
+  if (isPanorama) {
+    // 全景图优先从内存缓存获取 Blob URL
+    return panoramaCache.get(url) || url
+  } else {
+    // 缩略图优先从 Base64 缓存获取
+    return thumbnailCache.get(url) || url
+  }
+}
+
+// 预加载缩略图 (转换为 Base64 存储)
+const preloadThumbnail = (url) => {
+  return new Promise((resolve, reject) => {
+    if (thumbnailCache.has(url)) {
+      resolve(thumbnailCache.get(url))
+      return
+    }
+
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const canvas = document.createElement('canvas')
+      canvas.width = img.width
+      canvas.height = img.height
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(img, 0, 0)
+
+      const base64 = canvas.toDataURL('image/png')
+      thumbnailCache.set(url, base64)
+      resolve(base64)
+    }
+    img.onerror = () => reject(null)
+    img.src = url
+  })
+}
+
+// 预加载全景图 (存储为 Blob URL)
+const preloadPanorama = (url) => {
+  return new Promise(async (resolve, reject) => {
+    // 检查内存缓存
+    if (panoramaCache.has(url)) {
+      resolve(panoramaCache.get(url))
+      return
+    }
+
+    // 检查 IndexedDB 缓存
+    const blob = await getImageFromDB(url)
+    if (blob) {
+      const blobUrl = URL.createObjectURL(blob)
+      panoramaCache.set(url, blobUrl)
+      resolve(blobUrl)
+      return
+    }
+
+    // 从网络加载
+    try {
+      const response = await fetch(url)
+      const blobData = await response.blob()
+      const blobUrl = URL.createObjectURL(blobData)
+
+      // 存储到内存缓存
+      panoramaCache.set(url, blobUrl)
+
+      // 存储到 IndexedDB
+      await saveImageToDB(url, blobData)
+
+      resolve(blobUrl)
+    } catch (error) {
+      reject(null)
+    }
+  })
+}
+
+// 预加载缩略图 (同步方式)
+const preloadThumbnailSync = (url) => {
+  if (thumbnailCache.has(url)) return
+
+  const img = new Image()
+  img.crossOrigin = 'anonymous'
+  img.onload = () => {
+    const canvas = document.createElement('canvas')
+    canvas.width = img.width
+    canvas.height = img.height
+    const ctx = canvas.getContext('2d')
+    ctx.drawImage(img, 0, 0)
+
+    const base64 = canvas.toDataURL('image/png')
+    thumbnailCache.set(url, base64)
+  }
+  img.onerror = () => {}
+  img.src = url
+}
+
+// 预加载全景图 (同步方式)
+const preloadPanoramaSync = (url) => {
+  if (panoramaCache.has(url)) return
+
+  getImageFromDB(url).then(blob => {
+    if (blob) {
+      const blobUrl = URL.createObjectURL(blob)
+      panoramaCache.set(url, blobUrl)
+      return
+    }
+
+    fetch(url).then(response => {
+      return response.blob()
+    }).then(blob => {
+      const blobUrl = URL.createObjectURL(blob)
+      panoramaCache.set(url, blobUrl)
+      saveImageToDB(url, blob)
+    }).catch(() => {})
+  })
+}
 
 // 全景图选项数组 - 带 target 字段控制最终定格位置
 const homeOptions = [
@@ -138,6 +324,27 @@ for (let key in config){
   let cur= config[key]
   initImg(cur)
 }
+
+// 预加载所有图片到缓存
+onMounted(() => {
+  // 初始化 IndexedDB
+  initDB().then(() => {
+    console.log('IndexedDB initialized')
+  }).catch(err => {
+    console.warn('IndexedDB initialization failed:', err)
+  })
+
+  // 异步预加载所有缩略图 (预览图)
+  homeOptions.forEach(item => {
+    if (!thumbnailCache.has(item.image)) {
+      preloadThumbnailSync(item.image)
+    }
+    // icon 是缩略图，也预加载
+    if (!thumbnailCache.has(item.icon)) {
+      preloadThumbnailSync(item.icon)
+    }
+  })
+})
 
 
 
@@ -192,6 +399,30 @@ onMounted(() => {
       loading.value = true
     }, 9000)
   }
+})
+
+// 监听当前全景图变化，预加载相邻全景图
+watch(currentPanorama, (newVal) => {
+  if (!newVal) return
+
+  const currentIndex = homeOptions.findIndex(item => item.id === newVal.id)
+  if (currentIndex === -1) return
+
+  // 预加载前后各3张全景图
+  const preloadIndices = []
+  for (let i = Math.max(0, currentIndex - 3); i <= Math.min(homeOptions.length - 1, currentIndex + 3); i++) {
+    if (i !== currentIndex) {
+      preloadIndices.push(i)
+    }
+  }
+
+  preloadIndices.forEach(index => {
+    const item = homeOptions[index]
+    if (item && item.icon) {
+      // 预加载全景图
+      preloadPanoramaSync(item.icon)
+    }
+  })
 })
 </script>
 
