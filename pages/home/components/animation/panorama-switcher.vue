@@ -239,6 +239,13 @@ onMounted(() => {
   // 从 localStorage 恢复缓存
   loadThumbnailCacheFromStorage()
 
+  // 初始化时随机选择一个全景图
+  if (homeOptions.length > 0) {
+    const randomNumber = Math.floor(Math.random() * homeOptions.length)
+    const item = homeOptions[randomNumber] || {}
+    changePanorama(item)
+  }
+
   // 立即显示切换器
   loading.value = false
   const timer = setTimeout(() => {
@@ -293,6 +300,8 @@ onMounted(() => {
 
 
 
+
+
 const changePanorama = (item) => {
   currentPanorama.value = item
   emits('change', item)
@@ -309,6 +318,22 @@ const handleScroll = () => {
   const container = scrollContainer.value
   isAtStart.value = container.scrollLeft <= 0
   isAtEnd.value = container.scrollLeft >= container.scrollWidth - container.clientWidth - 1
+
+  // 滚动时预加载可见区域的缩略图
+  const scrollLeft = container.scrollLeft
+  const containerWidth = container.clientWidth
+  const itemWidth = 143 // 133px + 10px gap
+
+  const startIndex = Math.floor(scrollLeft / itemWidth)
+  const endIndex = Math.min(homeOptions.length - 1, Math.ceil((scrollLeft + containerWidth) / itemWidth) + 2)
+
+  // 预加载可见及相邻的缩略图
+  for (let i = startIndex; i <= endIndex; i++) {
+    const item = homeOptions[i]
+    if (item && !thumbnailCache.has(item.icon)) {
+      preloadThumbnailSync(item.icon)
+    }
+  }
 }
 
 const scrollLeft = () => {
@@ -329,18 +354,6 @@ const handleWheel = (e) => {
   e.preventDefault()
   scrollContainer.value.scrollLeft += e.deltaY
 }
-
-onMounted(() => {
-  if (homeOptions.length > 0) {
-
-    const randomNumber = Math.floor(Math.random() * 37) + 1;
-
-    const item = homeOptions[randomNumber] || {}
-    changePanorama(item)
-
-    // 删除延迟显示逻辑，移到 onMounted 中处理
-  }
-})
 </script>
 
 <style scoped lang="scss">

@@ -1137,6 +1137,16 @@ const cleanup = () => {
       texture.value = null
     }
 
+    // 清理 Blob URL 缓存，避免内存泄漏
+    panoramaCache.forEach((blobUrl) => {
+      try {
+        URL.revokeObjectURL(blobUrl)
+      } catch (e) {
+        console.warn('释放 Blob URL 失败:', e)
+      }
+    })
+    panoramaCache.clear()
+
     // 清理场景
     if (scene.value) {
       scene.value.clear()
@@ -1259,7 +1269,9 @@ watch(currentPanorama, (newVal) => {
   if (!newVal || !newVal.image) return
 
   const currentUrl = newVal.image
-  const currentIndex = -1 // 需要从 panorama-switcher 获取索引，这里简化为预加载所有
+
+  // 如果当前全景图已缓存，跳过
+  if (panoramaCache.has(currentUrl)) return
 
   // 预加载当前全景图
   preloadPanoramaTextureSync(currentUrl)
