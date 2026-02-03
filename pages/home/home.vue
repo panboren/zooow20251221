@@ -200,11 +200,6 @@ const saveTextureToDB = (url, blob) => {
   })
 }
 
-// 获取缓存的全景图 URL
-const getCachedPanoramaUrl = (url) => {
-  return panoramaCache.get(url) || url
-}
-
 // 预加载全景图纹理
 const preloadPanoramaTexture = (url) => {
   return new Promise(async (resolve, reject) => {
@@ -544,7 +539,7 @@ const loadTexture = async (imageUrl) => {
       }
     }
 
-    textureLoader.load(imageUrl, onLoad, onProgress, onError)
+    textureLoader.load(cachedUrl || imageUrl, onLoad, onProgress, onError)
   })
 }
 
@@ -576,8 +571,8 @@ const switchPanorama = async () => {
       texture.value = null
     }
 
-    // 加载新纹理 - 使用 icon 字段(全景图)
-    const newImageUrl = currentPanorama.value.icon || currentPanorama.value.image
+    // 加载新纹理 - 使用 image 字段(全景图)
+    const newImageUrl = currentPanorama.value.image
     await loadTexture(newImageUrl)
 
     // 获取新全景图的目标位置
@@ -1191,8 +1186,9 @@ const initThreeJS = async () => {
     // 设置事件监听器
     setupEventListeners()
 
-    // 加载初始纹理
-    await loadTexture(currentPanorama.value.image)
+    // 加载初始纹理 - 使用 image 字段(全景图)
+    const initialImageUrl = currentPanorama.value.image
+    await loadTexture(initialImageUrl)
 
     // 启动渲染循环
     animate()
@@ -1234,6 +1230,17 @@ watch(animationType, () => {
   if (cinematicAnimationsRef.value?.resetAnimation) {
     cinematicAnimationsRef.value.resetAnimation()
   }
+})
+
+// 监听当前全景图变化，预加载相邻全景图
+watch(currentPanorama, (newVal) => {
+  if (!newVal || !newVal.image) return
+
+  const currentUrl = newVal.image
+  const currentIndex = -1 // 需要从 panorama-switcher 获取索引，这里简化为预加载所有
+
+  // 预加载当前全景图
+  preloadPanoramaTextureSync(currentUrl)
 })
 
 onUnmounted(() => {
