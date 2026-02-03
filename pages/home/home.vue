@@ -115,7 +115,7 @@ const lastRenderTime = ref(performance.now())
 const isLoading = ref(true)
 const autoRotateEnabled = ref(false)
 const animationComplete = ref(false)
-const animationType = ref('orbital-rotation')
+const animationType = ref('wind-flower-snow-moon')
 const isInitialized = ref(false)
 const isAnimationPlaying = ref(false) // 动画播放状态
 const textureLoaded = ref(false) // 纹理是否已加载
@@ -1188,6 +1188,16 @@ const initThreeJS = async () => {
 
     // 加载初始纹理 - 使用 image 字段(全景图)
     const initialImageUrl = currentPanorama.value.image
+
+    // 优先从缓存加载首屏全景图
+  let cachedUrl = panoramaCache.get(initialImageUrl)
+  if (cachedUrl) {
+    logger.info('使用缓存的首屏全景图')
+  } else {
+    // 异步预加载首屏全景图到缓存
+    preloadPanoramaTextureSync(initialImageUrl)
+  }
+
     await loadTexture(initialImageUrl)
 
     // 启动渲染循环
@@ -1195,6 +1205,16 @@ const initThreeJS = async () => {
 
     isInitialized.value = true
     logger.info('Three.js初始化完成')
+
+    // 首屏优化：延迟预加载后续全景图（空闲时）
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => {
+        // 预加载当前和相邻的全景图
+        if (currentPanorama.value?.image) {
+          preloadPanoramaTextureSync(currentPanorama.value.image)
+        }
+      }, { timeout: 2000 })
+    }
   }
   catch (error) {
     logger.error('初始化Three.js失败:', error)
@@ -1207,8 +1227,10 @@ const initThreeJS = async () => {
 
 onMounted(async () => {
   try {
-    // 初始化 IndexedDB
-    await initDB().catch(err => {
+    // 首屏优化：非阻塞初始化 IndexedDB
+    initDB().then(() => {
+      logger.info('IndexedDB 初始化成功')
+    }).catch(err => {
       logger.warn('IndexedDB 初始化失败:', err)
     })
 

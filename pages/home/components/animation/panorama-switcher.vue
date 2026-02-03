@@ -19,6 +19,7 @@
       class="scroll-container"
       ref="scrollContainer"
       @scroll="handleScroll"
+      @wheel="handleWheel"
     >
       <div class="scroll-content">
         <el-image
@@ -233,17 +234,61 @@ for (let key in config){
   initImg(cur)
 }
 
-// 预加载所有缩略图到缓存
+// 预加载缩略图到缓存 - 首屏优化
 onMounted(() => {
   // 从 localStorage 恢复缓存
   loadThumbnailCacheFromStorage()
 
-  // 异步预加载所有缩略图
-  homeOptions.forEach(item => {
+  // 立即显示切换器
+  loading.value = false
+  const timer = setTimeout(() => {
+    clearTimeout(timer)
+    loading.value = true
+  }, 1000) // 缩短为1秒
+
+  // 首屏优化：只预加载首屏可见的缩略图（前6张）
+  const visibleCount = 6
+  const priorityItems = homeOptions.slice(0, visibleCount)
+
+  // 高优先级：同步预加载首屏缩略图
+  priorityItems.forEach(item => {
     if (!thumbnailCache.has(item.icon)) {
-      preloadThumbnailSync(item.icon)
+      const img = new Image()
+      img.crossOrigin = 'anonymous'
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        canvas.width = img.width
+        canvas.height = img.height
+        const ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0)
+        const base64 = canvas.toDataURL('image/jpeg', 0.8)
+        thumbnailCache.set(item.icon, base64)
+        saveThumbnailCacheToStorage()
+      }
+      img.onerror = () => {}
+      img.src = item.icon
     }
   })
+
+  // 低优先级：延迟预加载剩余缩略图（使用 requestIdleCallback）
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => {
+      homeOptions.slice(visibleCount).forEach(item => {
+        if (!thumbnailCache.has(item.icon)) {
+          preloadThumbnailSync(item.icon)
+        }
+      })
+    }, { timeout: 3000 })
+  } else {
+    // 降级：setTimeout 延迟3秒
+    setTimeout(() => {
+      homeOptions.slice(visibleCount).forEach(item => {
+        if (!thumbnailCache.has(item.icon)) {
+          preloadThumbnailSync(item.icon)
+        }
+      })
+    }, 3000)
+  }
 })
 
 
@@ -293,11 +338,7 @@ onMounted(() => {
     const item = homeOptions[randomNumber] || {}
     changePanorama(item)
 
-    loading.value = false
-    const timer = setTimeout(() => {
-      clearTimeout(timer)
-      loading.value = true
-    }, 9000)
+    // 删除延迟显示逻辑，移到 onMounted 中处理
   }
 })
 </script>

@@ -182,8 +182,9 @@ const selectRandomAnimation = () => {
     'ancient-lightning-awakening',
     'dna-quantum-evolution'*/
     /* 'taichi-three',*/
+
+      'wind-flower-snow-moon',
       "orbital-rotation",
-      'wind-flower-snow-moon'
   ]
   // const randomIndex = getRandomIndex()
   handleChange(list[0])
