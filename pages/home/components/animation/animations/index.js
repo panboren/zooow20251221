@@ -46,6 +46,15 @@ import animateTimeShards from './time-shards'
 
 import animateCosmicParticleSymphony from './cosmic-particle-symphony'
 
+// 🔮 全息投影特效系统（全新技术栈）
+import {
+  animateHolographicDataStream,
+  animateHolographicRingArray,
+  animateHolographicSpiral,
+  animateHolographicSphereArray,
+  animateHolographicGlitch
+} from './holographic/holographic-animations-enhanced.js'
+
 // 新增特效动画
 import animateCyberGridCity from './cyber-grid-city'
 import animateDNAHelix from './dna-helix'
@@ -234,12 +243,19 @@ export const animations = {
     'digital-life-bloom': animateDigitalLifeBloom,
 
 
-    // 太极-Taichi.js + Three.js 融合特效
+// 太极-Taichi.js + Three.js 融合特效
     [ANIMATION_CONFIG.TAICHI_THREE]: animateTaichiThree,
     'taichi-youth': animateTaichiYouth,
     'dewdrop-lens-prairie': animateDewdropLens,
     'galaxy-butterfly': animateGalaxyButterfly,
-    'elegant-snow-moon': animateElegantSnowMoon
+    'elegant-snow-moon': animateElegantSnowMoon,
+
+    // 🔮 全息投影特效系统（全新技术栈）
+    'holographic-data-stream': animateHolographicDataStream,
+    'holographic-ring-array': animateHolographicRingArray,
+    'holographic-spiral': animateHolographicSpiral,
+    'holographic-sphere-array': animateHolographicSphereArray,
+    'holographic-glitch': animateHolographicGlitch
 
 }
 

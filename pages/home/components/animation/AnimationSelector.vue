@@ -48,6 +48,14 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
+  // 🔮 全息投影特效系统（全新技术栈）
+  { value: 'holographic-data-stream', label: '🔮 全息数据流' },
+  { value: 'holographic-ring-array', label: '💫 全息环形阵列' },
+  { value: 'holographic-spiral', label: '🌀 全息螺旋' },
+  { value: 'holographic-sphere-array', label: '⚪ 全息球体阵列' },
+  { value: 'holographic-glitch', label: '📺 全息故障艺术' },
+
+
   // ★★★ 超越级特效（全新突破）★★★
   { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝' },
   { value: 'interstellar-supernova', label: '💥 星际超新星爆发' },
@@ -138,9 +146,8 @@ const animationOptions = [
   { value: 'dewdrop-lens-prairie', label: '💧 露珠透镜草原' },
   { value: 'galaxy-butterfly', label: '🦋 银河蝴蝶' },
   { value: 'elegant-snow-moon', label: '🌙 风华雪月' },
-  { value: 'taichi-three', label: '☯️ 太极融合特效' },
-  { value: 'taichi-youth', label: '💕 青春绚丽' },
-  { value: 'dewdrop-lens-prairie', label: '💧 露珠透镜草原' },
+
+
 ]
 
 const validValues = computed(() => new Set(animationOptions.map(item => item.value)))

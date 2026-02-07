@@ -198,16 +198,31 @@ export default function animateAuroraFantasy(props, callbacks) {
     }, 20)
 
     // ==================== 清理函数 ====================
+    let cleaned = false
     const cleanup = () => {
-      aurora.dispose()
-      starField.dispose()
-      iceCrystals.dispose()
-      polarLandscape.dispose()
-      dreamMist.dispose()
-      fantasyParticles.dispose()
-      photonStream.dispose()
-      snowfall.dispose()
+      if (cleaned) return
+      cleaned = true
+
+      try {
+        aurora.dispose()
+        starField.dispose()
+        iceCrystals.dispose()
+        polarLandscape.dispose()
+        dreamMist.dispose()
+        fantasyParticles.dispose()
+        photonStream.dispose()
+        snowfall.dispose()
+      } catch (error) {
+        console.error('Aurora Fantasy cleanup error:', error)
+      }
     }
+
+    // 在 timeline 完成时自动清理
+    tl.eventCallback('onComplete', () => {
+      setTimeout(() => {
+        cleanup()
+      }, 100)
+    })
 
     return {
       timeline: tl,

@@ -201,16 +201,31 @@ export default function animateQuantumDreamWeaver(props, callbacks) {
     }, 18)
 
     // ==================== 清理函数 ====================
+    let cleaned = false
     const cleanup = () => {
-      quantumStates.dispose()
-      waveFunctionCloud.dispose()
-      entanglementLines.dispose()
-      superpositionSpheres.dispose()
-      tunnelingPortals.dispose()
-      schrodingerCat.dispose()
-      quantumFoam.dispose()
-      probabilityInterference.dispose()
+      if (cleaned) return
+      cleaned = true
+
+      try {
+        quantumStates.dispose()
+        waveFunctionCloud.dispose()
+        entanglementLines.dispose()
+        superpositionSpheres.dispose()
+        tunnelingPortals.dispose()
+        schrodingerCat.dispose()
+        quantumFoam.dispose()
+        probabilityInterference.dispose()
+      } catch (error) {
+        console.error('Quantum Dream Weaver cleanup error:', error)
+      }
     }
+
+    // 在 timeline 完成时自动清理
+    tl.eventCallback('onComplete', () => {
+      setTimeout(() => {
+        cleanup()
+      }, 100)
+    })
 
     return {
       timeline: tl,

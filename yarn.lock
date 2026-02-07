@@ -2692,10 +2692,15 @@ colorette@^2.0.20:
   resolved "https://registry.npmmirror.com/colorette/-/colorette-2.0.20.tgz"
   integrity sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==
 
-commander@^11.1.0, commander@^13.1.0:
+commander@^11.1.0:
   version "11.1.0"
-  resolved "https://registry.npmmirror.com/commander/-/commander-11.1.0.tgz"
+  resolved "https://mirrors.tencent.com/npm/commander/-/commander-11.1.0.tgz"
   integrity sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==
+
+commander@^13.1.0:
+  version "13.1.0"
+  resolved "https://mirrors.tencent.com/npm/commander/-/commander-13.1.0.tgz"
+  integrity sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==
 
 commander@^2.20.0:
   version "2.20.3"
@@ -6139,6 +6144,11 @@ standard-as-callback@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmmirror.com/standard-as-callback/-/standard-as-callback-2.1.0.tgz"
   integrity sha512-qoRRSyROncaz1z0mvYqIE4lCd9p2R90i6GxW3uZv5ucSu8tU7B5HXUP1gG8pVZsYNVaXjk8ClXHPttLyxAL48A==
+
+stats.js@^0.17.0:
+  version "0.17.0"
+  resolved "https://mirrors.tencent.com/npm/stats.js/-/stats.js-0.17.0.tgz"
+  integrity sha512-hNKz8phvYLPEcRkeG1rsGmV5ChMjKDAWU7/OJJdDErPBNChQXxCo3WZurGpnWc6gZhAzEPFad1aVgyOANH1sMw==
 
 statuses@^2.0.2, statuses@~2.0.2:
   version "2.0.2"

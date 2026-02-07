@@ -225,7 +225,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { animations } from './animations'
@@ -283,6 +283,7 @@ const emit = defineEmits({
  */
 const animationComplete = ref(false)
 const particleCount = ref(50)
+const currentCleanup = ref(null) // 保存当前动画的清理函数
 
 /**
  * 获取粒子样式
@@ -314,6 +315,11 @@ const onAnimationComplete = (payload) => {
   console.log(`${props.animationType} 动画完成`, payload)
   animationComplete.value = true
 
+  // 注意：不再在此处调用 cleanup
+  // cleanup 现在由各个动画的 timeline 内部自动调用
+  // 这里只负责清理引用
+  currentCleanup.value = null
+
   // 重新启用控制器
   if (props.controls) {
     props.controls.enabled = true
@@ -331,6 +337,16 @@ const onAnimationComplete = (payload) => {
 const onAnimationError = (error) => {
   console.error(`${props.animationType} 动画执行错误:`, error)
   animationComplete.value = true
+
+  // 错误时仍然调用 cleanup（因为 timeline 可能没有完成）
+  if (currentCleanup.value) {
+    try {
+      currentCleanup.value()
+    } catch (e) {
+      console.error('Cleanup error:', e)
+    }
+    currentCleanup.value = null
+  }
 
   // 确保控制器启用
   if (props.controls) {
@@ -363,11 +379,16 @@ const startAnimation = () => {
       taichiUtils
     }
 
-    // 执行动画
-    animationFn(animationProps, {
+    // 执行动画并保存返回值（可能包含 cleanup 函数）
+    const result = animationFn(animationProps, {
       onComplete: onAnimationComplete,
       onError: onAnimationError
     })
+
+    // 保存 cleanup 函数以便在动画完成时调用
+    if (result && result.cleanup) {
+      currentCleanup.value = result.cleanup
+    }
   } else {
     console.error(`未知的动画类型: ${props.animationType}`)
     onAnimationError(new Error(`未知的动画类型: ${props.animationType}`))
@@ -475,6 +496,18 @@ watch(() => props.animationType, () => {
 
 
 
+
+
+/**
+ * 组件卸载前清理
+ */
+onBeforeUnmount(() => {
+  // 确保清理当前动画
+  if (currentCleanup.value) {
+    currentCleanup.value()
+    currentCleanup.value = null
+  }
+})
 
 /**
  * 暴露给父组件的方法

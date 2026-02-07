@@ -201,16 +201,31 @@ export default function animateEternalReturn(props, callbacks) {
     }, 21)
 
     // ==================== 清理函数 ====================
+    let cleaned = false
     const cleanup = () => {
-      timeRings.dispose()
-      causalChains.dispose()
-      reincarnationStream.dispose()
-      timeSpiral.dispose()
-      destinyWheel.dispose()
-      causalWeb.dispose()
-      timeParticles.dispose()
-      eternalCore.dispose()
+      if (cleaned) return
+      cleaned = true
+
+      try {
+        timeRings.dispose()
+        causalChains.dispose()
+        reincarnationStream.dispose()
+        timeSpiral.dispose()
+        destinyWheel.dispose()
+        causalWeb.dispose()
+        timeParticles.dispose()
+        eternalCore.dispose()
+      } catch (error) {
+        console.error('Eternal Return cleanup error:', error)
+      }
     }
+
+    // 在 timeline 完成时自动清理
+    tl.eventCallback('onComplete', () => {
+      setTimeout(() => {
+        cleanup()
+      }, 100)
+    })
 
     return {
       timeline: tl,

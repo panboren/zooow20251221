@@ -208,16 +208,31 @@ export default function animateInterstellarSupernova(props, callbacks) {
     }, 23)
 
     // ==================== 清理函数 ====================
+    let cleaned = false
     const cleanup = () => {
-      stellarEvolution.dispose()
-      supernovaExplosion.dispose()
-      shockwaveRings.dispose()
-      gravitationalWaves.dispose()
-      neutronStar.dispose()
-      interstellarDust.dispose()
-      gammaRayBurst.dispose()
-      pulsarBeams.dispose()
+      if (cleaned) return
+      cleaned = true
+
+      try {
+        stellarEvolution.dispose()
+        supernovaExplosion.dispose()
+        shockwaveRings.dispose()
+        gravitationalWaves.dispose()
+        neutronStar.dispose()
+        interstellarDust.dispose()
+        gammaRayBurst.dispose()
+        pulsarBeams.dispose()
+      } catch (error) {
+        console.error('Interstellar Supernova cleanup error:', error)
+      }
     }
+
+    // 在 timeline 完成时自动清理
+    tl.eventCallback('onComplete', () => {
+      setTimeout(() => {
+        cleanup()
+      }, 100) // 稍微延迟，确保所有动画都完成
+    })
 
     return {
       timeline: tl,

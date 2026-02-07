@@ -35,6 +35,7 @@
     "@types/three": "^0.182.0",
     "eslint": "^9.18.0",
     "sass": "^1.84.0",
+    "stats.js": "^0.17.0",
     "typescript": "^5.7.2",
     "unocss": "^66.5.0"
   }

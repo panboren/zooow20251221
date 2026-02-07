@@ -198,15 +198,30 @@ export default function animateCyberSpaceRift(props, callbacks) {
     }, 21)
 
     // ==================== 清理函数 ====================
+    let cleaned = false
     const cleanup = () => {
-      cyberCity.dispose()
-      spaceRiftCore.dispose()
-      quantumTunnel.dispose()
-      neonGlow.dispose()
-      digitalRain.dispose()
-      spacetimeFragments.dispose()
-      energyBurst.dispose()
+      if (cleaned) return
+      cleaned = true
+
+      try {
+        cyberCity.dispose()
+        spaceRiftCore.dispose()
+        quantumTunnel.dispose()
+        neonGlow.dispose()
+        digitalRain.dispose()
+        spacetimeFragments.dispose()
+        energyBurst.dispose()
+      } catch (error) {
+        console.error('Cyber Space Rift cleanup error:', error)
+      }
     }
+
+    // 在 timeline 完成时自动清理
+    tl.eventCallback('onComplete', () => {
+      setTimeout(() => {
+        cleanup()
+      }, 100) // 稍微延迟，确保所有动画都完成
+    })
 
     return {
       timeline: tl,
@@ -417,13 +432,14 @@ function createSpaceRiftCore(scene, options = {}) {
       formed = true
     },
     pulse() {
-      gsap.to({ value: 0 }, {
+      const pulseObj = { value: 0 }
+      gsap.to(pulseObj, {
         value: 0.3,
         duration: 2,
         repeat: -1,
         yoyo: true,
-        onUpdate: (target) => {
-          pulseIntensity = target.value
+        onUpdate: () => {
+          pulseIntensity = pulseObj.value
         }
       })
     },
@@ -520,11 +536,12 @@ function createQuantumTunnel(scene, options = {}) {
         opacity: 0.8,
         duration: 2
       })
-      gsap.to({ value: 0 }, {
+      const speedObj = { value: 0 }
+      gsap.to(speedObj, {
         value: 3,
         duration: 3,
-        onUpdate: (target) => {
-          speed = target.value
+        onUpdate: () => {
+          speed = speedObj.value
         }
       })
     },
@@ -698,11 +715,12 @@ function createDigitalRainMatrix(scene, options = {}) {
       })
     },
     accelerate() {
-      gsap.to({ value: 1 }, {
+      const accObj = { value: 1 }
+      gsap.to(accObj, {
         value: 3,
         duration: 2,
-        onUpdate: (target) => {
-          acceleration = target.value
+        onUpdate: () => {
+          acceleration = accObj.value
         }
       })
     },
