@@ -12,6 +12,7 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera } from './utils'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateFireworksFading(props, callbacks) {
   const { camera, renderer, scene, controls } = props
@@ -24,12 +25,17 @@ export default function animateFireworksFading(props, callbacks) {
 
     renderer.render(scene, camera)
 
+    const perfMonitor = new PerformanceMonitor()
+    perfMonitor.start()
+
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'fireworks-fading' })
       },
       onError,
-      '烟花易冷',
+      '烟花易冷（终极优化版）',
       controls
     )
 
@@ -48,7 +54,7 @@ export default function animateFireworksFading(props, callbacks) {
     }
 
     // ==================== 星空系统 ====================
-    const createStarField = (starCount = 12000) => {
+    const createStarField = (starCount = 6000) => {
       const geometry = new THREE.BufferGeometry()
       const positions = new Float32Array(starCount * 3)
       const colors = new Float32Array(starCount * 3)
@@ -611,7 +617,7 @@ export default function animateFireworksFading(props, callbacks) {
         { colors: [0xff0000, 0x00ff00, 0x0000ff, 0xffff00] }
       ]
 
-      const createExplosion = (position, palette, particleCount = 800) => {
+      const createExplosion = (position, palette, particleCount = 400) => {
         const geometry = new THREE.BufferGeometry()
         const positions = new Float32Array(particleCount * 3)
         const velocities = new Float32Array(particleCount * 3)
@@ -768,7 +774,7 @@ export default function animateFireworksFading(props, callbacks) {
                 z: -100 + (Math.random() - 0.5) * 120
               }
               const palette = this.palettes[Math.floor(Math.random() * this.palettes.length)]
-              const particleCount = 600 + Math.floor(Math.random() * 400)
+              const particleCount = 300 + Math.floor(Math.random() * 200)
               const explosion = createExplosion(position, palette, particleCount)
 
               setTimeout(() => explosion.fadeIn(), 100 + Math.random() * 200)
@@ -783,7 +789,7 @@ export default function animateFireworksFading(props, callbacks) {
                     z: position.z + (Math.random() - 0.5) * 40
                   }
                   const palette2 = this.palettes[Math.floor(Math.random() * this.palettes.length)]
-                  const explosion2 = createExplosion(pos2, palette2, 400 + Math.floor(Math.random() * 300))
+                  const explosion2 = createExplosion(pos2, palette2, 200 + Math.floor(Math.random() * 150))
                   setTimeout(() => explosion2.fadeIn(), 200 + Math.random() * 300)
                   this.fireworks.push(explosion2)
                 }
@@ -809,7 +815,7 @@ export default function animateFireworksFading(props, callbacks) {
     }
 
     // ==================== 星火飘落 ====================
-    const createSparkles = (count = 12000) => {
+    const createSparkles = (count = 6000) => {
       const geometry = new THREE.BufferGeometry()
       const positions = new Float32Array(count * 3)
       const velocities = new Float32Array(count * 3)
@@ -914,7 +920,7 @@ export default function animateFireworksFading(props, callbacks) {
     }
 
     // ==================== 寂夜余晖 ====================
-    const createEmberGlow = (count = 5000) => {
+    const createEmberGlow = (count = 2500) => {
       const geometry = new THREE.BufferGeometry()
       const positions = new Float32Array(count * 3)
       const colors = new Float32Array(count * 3)

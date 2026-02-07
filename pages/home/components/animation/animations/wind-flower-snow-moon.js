@@ -11,11 +11,11 @@
  * - 梦幻光晕：柔和光晕效果
  * - 羽毛飘落：轻盈羽毛
  * - 彩虹涟漪：七彩涟漪
- * - 50000+ 自然粒子（优化后）
+ * - 25000+ 自然粒子（终极优化版）
  * - 极度唯美的视觉叙事
  *
  * 优化说明：
- * - 粒子数量从100000+减少到50000
+ * - 粒子数量从50000减少到25000
  * - 保留视觉效果的同时大幅提升性能
  */
 
@@ -42,63 +42,65 @@ export default function animateWindFlowerSnowMoon(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'wind-flower-snow-moon' })
       },
       onError,
-      '风花雪月',
+      '风花雪月（终极优化版）',
       controls
     )
 
     // 月亮盈亏（唯美版）
     const moonPhase = createMoonPhase(scene)
 
-    // 风之絮语（8000粒子 - 优化）
+    // 风之絮语（4000粒子 - 终极优化）
     const windWhispers = createWindWhispers(scene, {
-      particleCount: 8000
+      particleCount: 4000
     })
 
-    // 花之绽放（10000花瓣 - 优化）
+    // 花之绽放（5000花瓣 - 终极优化）
     const flowerBloom = createFlowerBloom(scene, {
-      petalCount: 10000
+      petalCount: 5000
     })
 
-    // 樱花飘舞（6000樱花 - 优化）
+    // 樱花飘舞（3000樱花 - 终极优化）
     const cherryBlossom = createCherryBlossom(scene, {
-      blossomCount: 6000
+      blossomCount: 3000
     })
 
-    // 雪之飘零（10000雪花 - 优化）
+    // 雪之飘零（5000雪花 - 终极优化）
     const snowDrift = createSnowDrift(scene, {
-      snowflakeCount: 10000
+      snowflakeCount: 5000
     })
 
     // 花之涟漪
     const flowerRipples = createFlowerRipples(scene)
 
-    // 风之轨迹（5000粒子 - 优化）
+    // 风之轨迹（2500粒子 - 终极优化）
     const windTrails = createWindTrails(scene, {
-      trailCount: 5000
+      trailCount: 2500
     })
 
     // 月光晕染
     const moonGlow = createMoonGlow(scene)
 
-    // 花语星尘（5000粒子 - 优化）
+    // 花语星尘（2500粒子 - 终极优化）
     const flowerStardust = createFlowerStardust(scene, {
-      stardustCount: 5000
+      stardustCount: 2500
     })
 
-    // 星空闪烁（4000星星 - 优化）
+    // 星空闪烁（2000星星 - 终极优化）
     const starField = createStarField(scene, {
-      starCount: 4000
+      starCount: 2000
     })
 
     // 梦幻光晕
     const dreamHalo = createDreamHalo(scene)
 
-    // 羽毛飘落（2500羽毛 - 优化）
+    // 羽毛飘落（1250羽毛 - 终极优化）
     const featherFall = createFeatherFall(scene, {
-      featherCount: 2500
+      featherCount: 1250
     })
 
     // 彩虹涟漪

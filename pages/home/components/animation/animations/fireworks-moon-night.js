@@ -12,6 +12,7 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera } from './utils'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateFireworksMoonNight(props, callbacks) {
   const { camera, renderer, scene, controls } = props
@@ -24,12 +25,17 @@ export default function animateFireworksMoonNight(props, callbacks) {
 
     renderer.render(scene, camera)
 
+    const perfMonitor = new PerformanceMonitor()
+    perfMonitor.start()
+
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'fireworks-moon-night' })
       },
       onError,
-      '烟花月夜',
+      '烟花月夜（终极优化版）',
       controls
     )
 
@@ -76,7 +82,7 @@ export default function animateFireworksMoonNight(props, callbacks) {
     tl.add(() => camera.lookAt(0, 40, 0), 20)
 
     // ==================== 星空系统 ====================
-    const createStarField = (starCount = 10000) => {
+    const createStarField = (starCount = 5000) => {
       const geometry = new THREE.BufferGeometry()
       const positions = new Float32Array(starCount * 3)
       const colors = new Float32Array(starCount * 3)
@@ -241,7 +247,7 @@ export default function animateFireworksMoonNight(props, callbacks) {
     }
 
     // ==================== 风粒子系统 ====================
-    const createWindParticles = (count = 12000) => {
+    const createWindParticles = (count = 6000) => {
       const geometry = new THREE.BufferGeometry()
       const positions = new Float32Array(count * 3)
       const velocities = new Float32Array(count * 3)
@@ -339,7 +345,7 @@ export default function animateFireworksMoonNight(props, callbacks) {
     }
 
     // ==================== 花瓣系统 ====================
-    const createPetals = (count = 15000) => {
+    const createPetals = (count = 7500) => {
       const geometry = new THREE.BufferGeometry()
       const positions = new Float32Array(count * 3)
       const velocities = new Float32Array(count * 3)
@@ -452,7 +458,7 @@ export default function animateFireworksMoonNight(props, callbacks) {
         { colors: [0x00ffaa, 0x44ffcc, 0x88ffdd, 0xbbffee] }
       ]
 
-      const createExplosion = (position, palette, particleCount = 700) => {
+      const createExplosion = (position, palette, particleCount = 350) => {
         const geometry = new THREE.BufferGeometry()
         const positions = new Float32Array(particleCount * 3)
         const velocities = new Float32Array(particleCount * 3)
@@ -609,7 +615,7 @@ export default function animateFireworksMoonNight(props, callbacks) {
                 z: -90 + (Math.random() - 0.5) * 110
               }
               const palette = this.palettes[Math.floor(Math.random() * this.palettes.length)]
-              const particleCount = 500 + Math.floor(Math.random() * 350)
+              const particleCount = 250 + Math.floor(Math.random() * 175)
               const explosion = createExplosion(position, palette, particleCount)
 
               setTimeout(() => explosion.fadeIn(), 120 + Math.random() * 250)
@@ -624,7 +630,7 @@ export default function animateFireworksMoonNight(props, callbacks) {
                     z: position.z + (Math.random() - 0.5) * 35
                   }
                   const palette2 = this.palettes[Math.floor(Math.random() * this.palettes.length)]
-                  const explosion2 = createExplosion(pos2, palette2, 350 + Math.floor(Math.random() * 250))
+                  const explosion2 = createExplosion(pos2, palette2, 175 + Math.floor(Math.random() * 125))
                   setTimeout(() => explosion2.fadeIn(), 220 + Math.random() * 320)
                   this.fireworks.push(explosion2)
                 }
@@ -650,7 +656,7 @@ export default function animateFireworksMoonNight(props, callbacks) {
     }
 
     // ==================== 雪花系统 ====================
-    const createSnowflakes = (count = 15000) => {
+    const createSnowflakes = (count = 7500) => {
       const geometry = new THREE.BufferGeometry()
       const positions = new Float32Array(count * 3)
       const velocities = new Float32Array(count * 3)
@@ -724,7 +730,7 @@ export default function animateFireworksMoonNight(props, callbacks) {
     }
 
     // ==================== 星火余晖 ====================
-    const createEmberGlow = (count = 4000) => {
+    const createEmberGlow = (count = 2000) => {
       const geometry = new THREE.BufferGeometry()
       const positions = new Float32Array(count * 3)
       const colors = new Float32Array(count * 3)

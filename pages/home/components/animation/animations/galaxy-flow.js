@@ -10,7 +10,7 @@
  * - 能量脉冲：高能射线的周期性爆发
  * - 量子涟漪：量子场效应的微小波动
  * - 星系碰撞：两个星系的引力相互作用
- * - 60000+ 宇宙粒子（优化后）
+ * - 40000+ 宇宙粒子（终极优化版）
  * - 史诗级的宇宙叙事体验
  *
  * 优化说明：
@@ -23,6 +23,7 @@ import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
 import { ParticleFactory } from '~/utils/ParticleFactory.js'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateGalaxyFlow(props, callbacks) {
     const { camera, renderer, scene, controls } = props
@@ -35,66 +36,71 @@ export default function animateGalaxyFlow(props, callbacks) {
 
         renderer.render(scene, camera)
 
+        const perfMonitor = new PerformanceMonitor()
+        perfMonitor.start()
+
         const tl = createTimeline(
             () => {
+                perfMonitor.stop()
+                perfMonitor.logReport()
                 if (onComplete) onComplete({ type: 'galaxy-flow' })
             },
             onError,
-            '星河涌动',
+            '星河涌动（终极优化版）',
             controls
         )
 
         // 银河中心黑洞
         const galaxyCore = createGalaxyCore(scene)
 
-        // 星云漩涡（15000粒子 - 优化）
+        // 星云漩涡（7500粒子 - 终极优化）
         const nebulaSwirl = createNebulaSwirl(scene, {
-            particleCount: 15000
+            particleCount: 7500
         })
 
-        // 恒星诞生（8000恒星 - 优化）
+        // 恒星诞生（4000恒星 - 终极优化）
         const stellarBirth = createStellarBirth(scene, {
-            starCount: 8000
+            starCount: 4000
         })
 
-        // 行星轨道（4000行星 - 优化）
+        // 行星轨道（2000行星 - 终极优化）
         const planetaryOrbits = createPlanetaryOrbits(scene, {
-            planetCount: 4000
+            planetCount: 2000
         })
 
-        // 引力波纹（10000粒子 - 优化）
+        // 引力波纹（5000粒子 - 终极优化）
         const gravityWaves = createGravityWaves(scene, {
-            waveCount: 10000
+            waveCount: 5000
         })
 
-        // 时空扭曲（5000粒子 - 优化）
+        // 时空扭曲（2500粒子 - 终极优化）
         const spacetimeDistortion = createSpacetimeDistortion(scene, {
-            distortionCount: 5000
+            distortionCount: 2500
         })
 
-        // 能量脉冲（8000粒子 - 优化）
+        // 能量脉冲（4000粒子 - 终极优化）
         const energyPulses = createEnergyPulses(scene, {
-            pulseCount: 8000
+            pulseCount: 4000
         })
 
-        // 量子涟漪（12000粒子 - 优化）
+        // 量子涟漪（6000粒子 - 终极优化）
         const quantumRipples = createQuantumRipples(scene, {
-            rippleCount: 12000
+            rippleCount: 6000
         })
 
-        // 星系臂（12000粒子 - 优化）
+        // 星系臂（6000粒子 - 终极优化）
         const galacticArms = createGalacticArms(scene, {
-            armCount: 12000
+            armCount: 6000
         })
 
-        // 黑洞喷流（6000粒子 - 优化）
+        // 黑洞喷流（3000粒子 - 终极优化）
         const blackholeJets = createBlackholeJets(scene, {
-            jetCount: 6000
+            jetCount: 3000
         })
 
-        // 星系碰撞（4000粒子 - 优化）
+        // 星系碰撞（2000粒子 - 终极优化）
         const galaxyCollision = createGalaxyCollision(scene, {
-            collisionCount: 4000
+            collisionCount: 2000
         })
 
         // 阶段1: 银河觉醒 - 星云漩涡（持续4秒）

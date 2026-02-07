@@ -10,13 +10,14 @@
  * - 生命萌芽：有机分子的组合
  * - 时空涟漪：引力波的传播
  * - 维度展开：多维空间的动态展现
- * - 200000+ 创世粒子
+ * - 120000+ 创世粒子（终极优化版）
  * - 史诗级的创世叙事体验
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateBigBangGenesis(props, callbacks) {
     const { camera, renderer, scene, controls } = props
@@ -29,66 +30,71 @@ export default function animateBigBangGenesis(props, callbacks) {
 
         renderer.render(scene, camera)
 
+        const perfMonitor = new PerformanceMonitor()
+        perfMonitor.start()
+
         const tl = createTimeline(
             () => {
+                perfMonitor.stop()
+                perfMonitor.logReport()
                 if (onComplete) onComplete({ type: 'big-bang-genesis' })
             },
             onError,
-            '宇宙大爆炸',
+            '宇宙大爆炸（终极优化版）',
             controls
         )
 
         // 奇点核心
         const singularity = createSingularity(scene)
 
-        // 量子泡沫（50000粒子）
+        // 量子泡沫（25000粒子 - 终极优化）
         const quantumFoam = createQuantumFoam(scene, {
-            foamCount: 50000
+            foamCount: 25000
         })
 
-        // 物质凝聚（30000粒子）
+        // 物质凝聚（15000粒子 - 终极优化）
         const matterCondensation = createMatterCondensation(scene, {
-            condensationCount: 30000
+            condensationCount: 15000
         })
 
-        // 恒星诞生（25000恒星）
+        // 恒星诞生（12500恒星 - 终极优化）
         const stellarBirth = createStellarBirthGenesis(scene, {
-            starCount: 25000
+            starCount: 12500
         })
 
-        // 星系形成（20000粒子）
+        // 星系形成（10000粒子 - 终极优化）
         const galaxyFormation = createGalaxyFormation(scene, {
-            galaxyCount: 20000
+            galaxyCount: 10000
         })
 
-        // 生命萌芽（15000粒子）
+        // 生命萌芽（7500粒子 - 终极优化）
         const lifeSprouting = createLifeSprouting(scene, {
-            lifeCount: 15000
+            lifeCount: 7500
         })
 
-        // 时空涟漪（25000粒子）
+        // 时空涟漪（12500粒子 - 终极优化）
         const spacetimeRipples = createSpacetimeRipples(scene, {
-            rippleCount: 25000
+            rippleCount: 12500
         })
 
-        // 维度展开（30000粒子）
+        // 维度展开（15000粒子 - 终极优化）
         const dimensionExpansion = createDimensionExpansion(scene, {
-            expansionCount: 30000
+            expansionCount: 15000
         })
 
-        // 宇宙微波背景（35000粒子）
+        // 宇宙微波背景（17500粒子 - 终极优化）
         const cmb = createCosmicMicrowaveBackground(scene, {
-            cmbCount: 35000
+            cmbCount: 17500
         })
 
-        // 超新星爆发（18000粒子）
+        // 超新星爆发（9000粒子 - 终极优化）
         const supernova = createSupernovaExplosions(scene, {
-            supernovaCount: 18000
+            supernovaCount: 9000
         })
 
-        // 暗物质网络（22000粒子）
+        // 暗物质网络（11000粒子 - 终极优化）
         const darkMatter = createDarkMatterNetwork(scene, {
-            darkMatterCount: 22000
+            darkMatterCount: 11000
         })
 
         // 阶段1: 奇点爆发 - 从虚无到一切（持续2秒）
