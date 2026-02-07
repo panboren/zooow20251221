@@ -62,6 +62,13 @@ import animateHolographicPolyphonicMatrix from './holographic-polyphonic-matrix.
 import animateHolographicCrystallineFormation from './holographic-crystalline-formation.js'
 import animateHolographicSacredGeometry from './holographic-sacred-geometry.js'
 
+// 🌌 超越级全息特效（全新突破）
+import animateHolographicNexusRift from './holographic-nexus-rift.js'
+import animateHolographicNeuralNetwork from './holographic-neural-network.js'
+import animateHolographicQuantumFlux from './holographic-quantum-flux.js'
+import animateHolographicDimensionFold from './holographic-dimension-fold.js'
+import animateHolographicVoidCosmos from './holographic-void-cosmos.js'
+
 // 新增特效动画
 import animateCyberGridCity from './cyber-grid-city'
 import animateDNAHelix from './dna-helix'
@@ -269,7 +276,14 @@ export const animations = {
     'holographic-geometric-nexus': animateHolographicGeometricNexus,
     'holographic-polyphonic-matrix': animateHolographicPolyphonicMatrix,
     'holographic-crystalline-formation': animateHolographicCrystallineFormation,
-    'holographic-sacred-geometry': animateHolographicSacredGeometry
+    'holographic-sacred-geometry': animateHolographicSacredGeometry,
+
+    // 🌌 超越级全息特效（全新突破）
+    'holographic-nexus-rift': animateHolographicNexusRift,
+    'holographic-neural-network': animateHolographicNeuralNetwork,
+    'holographic-quantum-flux': animateHolographicQuantumFlux,
+    'holographic-dimension-fold': animateHolographicDimensionFold,
+    'holographic-void-cosmos': animateHolographicVoidCosmos
 
 }
 

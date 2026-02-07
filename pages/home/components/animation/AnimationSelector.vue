@@ -62,6 +62,13 @@ const animationOptions = [
   { value: 'holographic-crystalline-formation', label: '💎 全息晶体形成' },
   { value: 'holographic-sacred-geometry', label: '✨ 全息神圣几何' },
 
+  // 🌌 超越级全息特效（全新突破）
+  { value: 'holographic-nexus-rift', label: '🌌 全息时空裂缝' },
+  { value: 'holographic-neural-network', label: '🧠 全息神经网络' },
+  { value: 'holographic-quantum-flux', label: '⚛️ 全息量子涨落' },
+  { value: 'holographic-dimension-fold', label: '🔮 全息维度折叠' },
+  { value: 'holographic-void-cosmos', label: '🌌 全息虚空宇宙' },
+
 
   // ★★★ 超越级特效（全新突破）★★★
   { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝' },
