@@ -361,7 +361,7 @@ const handleWheel = (e) => {
   position: absolute;
   bottom: 10px;
   left: 50%;
-  width: 600px;
+  width: 60%;
   height: 100px;
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.6);
