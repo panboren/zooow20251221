@@ -52,6 +52,7 @@
 
     <!-- 控制提示 -->
     <ControlsHint   v-if="textureLoaded" />
+    <EchartsHint v-if="textureLoaded"></EchartsHint>
     <Beian   v-if="textureLoaded" />
   </div>
 </template>
@@ -73,6 +74,8 @@ import CinematicAnimations from './components/animation/CinematicAnimations.vue'
 import AnimationSelector from './components/animation/AnimationSelector.vue'
 import CameraControls from './components/animation/CameraControls.vue'
 import ControlsHint from './components/ui/ControlsHint.vue'
+import EchartsHint from './components/ui/EchartsHint.vue'
+
 import PanoramaSwitcher from './components/animation/panorama-switcher.vue'
 
 // 导入常量和配置

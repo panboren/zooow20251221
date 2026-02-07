@@ -438,8 +438,8 @@
             <span class="badge-icon">✨</span>
             <span class="badge-text">自研引擎</span>
           </div>
-          <h2 class="section-title">3D动画特效</h2>
-          <p class="section-subtitle">自研动画引擎打造震撼视觉体验</p>
+          <h2 class="section-title animated-3d" data-text="3D动画特效">3D动画特效</h2>
+          <p class="section-subtitle animated-neon">自研动画引擎打造震撼视觉体验</p>
         </div>
         <div class="about-content">
           <div class="about-text">
@@ -657,8 +657,8 @@
       <div class="panel services-panel">
         <section id="services-2" class="section services-section">
           <div class="container">
-            <h2 class="section-title">Echarts特效 (2/3)</h2>
-            <p class="section-subtitle">20+图表类型，满足各种数据展示需求</p>
+            <h2 class="section-title animated-glitch" data-text="Echarts特效 (2/3)">Echarts特效 (2/3)</h2>
+            <p class="section-subtitle animated-neon">20+图表类型，满足各种数据展示需求</p>
             <div class="services-grid">
               <div class="service-card">
                 <div class="service-icon icon-3">
@@ -1078,12 +1078,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, nextTick } from 'vue'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
+import { onMounted, onBeforeUnmount, nextTick } from 'vue'
 
 definePageMeta({
   layout: false
@@ -1097,170 +1092,320 @@ useHead({
   ]
 })
 
-// 防抖函数
-const createDebouncedFn = (fn: Function, delay: number, id: string) => {
-  let timer: any = null
-  return (...args: any[]) => {
-    if (timer) clearTimeout(timer)
-    timer = setTimeout(() => fn(...args), delay)
-  }
-}
-
-// 清理所有动画
-const killAllAnimation = ({ keepScrollPosition }: { keepScrollPosition?: boolean } = {}) => {
-  const scrollPos = keepScrollPosition ? window.pageYOffset : 0
-  gsap.killTweensOf('*')
-  ScrollTrigger.getAll().forEach(st => st.kill())
-  if (keepScrollPosition && scrollPos) {
-    window.scrollTo(0, scrollPos)
-  }
-}
-
-// 参考的垂直滚动动画模式
-const verticalAnimation = async (selector: string, runStyle: any) => {
-  try {
-    if (!selector || !runStyle) return
-
-    const toKey = runStyle.toKey || 'from'
-    delete runStyle.toKey
-
-    // 创建滚动触发动画
-    gsap[toKey](selector, {
-      ...runStyle,
-      scrollTrigger: {
-        trigger: selector,
-        scrub: 1,
-        markers: false,
-        start: 'top 100%',
-        end: 'bottom 100%'
-      }
-    })
-  } catch (error) {
-    console.error('纵向动画创建失败:', error)
-  }
-}
-
-// 单页无限滚动
-let pageScrollTriggerInstance: any = null
-let scrollPanelTriggers: any[] = []
-let clonedPanelNode: any = null
+// 在组件级别声明 GSAP 相关变量，以便在 onBeforeUnmount 中访问
+let gsap: any = null
+let ScrollTrigger: any = null
+let ScrollToPlugin: any = null
+let TextPlugin: any = null
 let onScrollResize: any = null
 let onWindowScroll: any = null
-let maxScrollValue: number = 0
+let killAllAnimation: any = null
 
-const infinitePanelScrollAnimation = (className = 'vertical') => {
-  ScrollTrigger.refresh()
-
-  let panels: any[] = []
-
-  const cleanup = () => {
-    // 移除事件监听器
-    if (onScrollResize) {
-      window.removeEventListener('resize', onScrollResize)
-    }
-    if (onWindowScroll) {
-      window.removeEventListener('scroll', onWindowScroll, { passive: false } as any)
-    }
-
-    // 清理页面级ScrollTrigger
-    pageScrollTriggerInstance?.kill?.()
-    pageScrollTriggerInstance = null
-
-    // 清理所有panel的ScrollTrigger
-    scrollPanelTriggers.forEach(st => {
-      try {
-        st?.kill?.()
-      } catch (e) {
-        console.warn('清理panel ScrollTrigger失败:', e)
-      }
-    })
-    scrollPanelTriggers = []
-
-    // 移除克隆的节点
-    if (clonedPanelNode && clonedPanelNode.parentNode) {
-      clonedPanelNode.parentNode.removeChild(clonedPanelNode)
-      clonedPanelNode = null
-    }
-
-    // 恢复panels的pin样式
-    panels.forEach(panel => {
-      try {
-        panel.style.position = ''
-        panel.style.transform = ''
-        panel.style.zIndex = ''
-      } catch (e) {
-        console.warn('恢复panel样式失败:', e)
-      }
-    })
-
-    killAllAnimation({ keepScrollPosition: true })
+// 组件卸载时清理所有动画和事件监听器
+onBeforeUnmount(() => {
+  if (!gsap) return
+  
+  console.log('🧹 清理GSAP动画和ScrollTrigger...')
+  
+  if (killAllAnimation) {
+    killAllAnimation()
   }
 
-  nextTick(() => {
-    panels = gsap.utils.toArray(`.${className}`) || []
-    if (panels.length <= 0) return
+  // 清理window事件
+  if (onScrollResize) {
+    window.removeEventListener('resize', onScrollResize)
+  }
+  if (onWindowScroll) {
+    window.removeEventListener('scroll', onWindowScroll)
+  }
 
-    // 过滤掉 vertical-wrap 中的 panel
-    panels = panels.filter(panel => {
-      const parent = panel.parentElement
-      return !parent || !parent.classList.contains('vertical-wrap')
-    })
-
-    if (panels.length <= 0) return
-
-    // 克隆第一个节点（用于无限滚动效果）
-    clonedPanelNode = panels[0].cloneNode(true)
-    clonedPanelNode.setAttribute('data-cloned', 'true')
-    panels[0].parentNode?.appendChild(clonedPanelNode)
-
-    // 为每个panel创建ScrollTrigger，固定每个面板
-    panels.forEach((panel) => {
-      const trigger = ScrollTrigger.create({
-        trigger: panel,
-        start: 'top top',
-        pin: true,
-        pinSpacing: false
+  // 清理所有ScrollTrigger
+  if (ScrollTrigger) {
+    try {
+      const allTriggers = ScrollTrigger.getAll()
+      allTriggers.forEach(trigger => {
+        try {
+          trigger.kill()
+        } catch (e) {
+          console.warn('清理ScrollTrigger失败:', e)
+        }
       })
-      scrollPanelTriggers.push(trigger)
-    })
+      
+      // 杀死所有tween
+      gsap.killTweensOf('*')
+    } catch (e) {
+      console.warn('清理GSAP动画失败:', e)
+    }
+  }
 
-    // 创建页面级别的snap ScrollTrigger
-    pageScrollTriggerInstance = ScrollTrigger.create({
-      snap(value: number) {
-        const snappedValue = gsap.utils.snap(1 / panels.length, value)
-        if (snappedValue <= 0) return 1.05 / maxScrollValue
-        if (snappedValue >= 1) return maxScrollValue / (maxScrollValue + 1.05)
-        return snappedValue
+  console.log('✓ GSAP动画和ScrollTrigger清理完成')
+})
+
+onMounted(async () => {
+  // 只在客户端加载 GSAP
+  const gsapModule = await import('gsap')
+  gsap = gsapModule.default || gsapModule
+  const scrollTriggerModule = await import('gsap/ScrollTrigger')
+  ScrollTrigger = scrollTriggerModule.ScrollTrigger
+  const scrollToPluginModule = await import('gsap/ScrollToPlugin')
+  ScrollToPlugin = scrollToPluginModule.ScrollToPlugin
+  const textPluginModule = await import('gsap/TextPlugin')
+  TextPlugin = textPluginModule.TextPlugin
+  
+  // 检查 registerPlugin 是否存在
+  if (gsap.registerPlugin) {
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, TextPlugin)
+  } else if (gsapModule.registerPlugin) {
+    gsapModule.registerPlugin(ScrollTrigger, ScrollToPlugin, TextPlugin)
+  } else {
+    console.warn('gsap.registerPlugin 不可用，尝试直接使用插件')
+    // 手动注册插件
+    try {
+      ScrollTrigger.register(gsap)
+      console.log('ScrollTrigger 手动注册成功')
+    } catch (e) {
+      console.warn('ScrollTrigger 注册失败:', e)
+    }
+  }
+
+  // 防抖函数
+  const createDebouncedFn = (fn: Function, delay: number, id: string) => {
+    let timer: any = null
+    return (...args: any[]) => {
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(() => fn(...args), delay)
+    }
+  }
+
+  // 安全创建ScrollTrigger
+  const createScrollTriggerSafe = (config: any) => {
+    try {
+      return ScrollTrigger.create(config)
+    } catch (error) {
+      console.error('ScrollTrigger创建失败:', config.trigger, error)
+      return null
+    }
+  }
+
+  // 清理所有动画
+  const killAllAnimation = ({ keepScrollPosition }: { keepScrollPosition?: boolean } = {}) => {
+    const scrollPos = keepScrollPosition ? window.pageYOffset : 0
+    gsap.killTweensOf('*')
+    ScrollTrigger.getAll().forEach(st => {
+      try {
+        st.kill()
+      } catch (e) {
+        console.warn('清理ScrollTrigger失败:', e)
+      }
+    })
+    if (keepScrollPosition && scrollPos) {
+      window.scrollTo(0, scrollPos)
+    }
+  }
+
+  // 垂直滚动动画 - 优化版
+  const verticalAnimation = async (selector: string, runStyle: any) => {
+    try {
+      if (!selector || !runStyle) return
+      const toKey = runStyle.toKey || 'from'
+      delete runStyle.toKey
+      
+      const elements = document.querySelectorAll(selector)
+      if (elements.length === 0) {
+        console.warn(`未找到元素: ${selector}`)
+        return
+      }
+
+      // 只对不在视口内的元素设置初始状态
+      elements.forEach((element) => {
+        const rect = element.getBoundingClientRect()
+        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0
+        
+        // 如果元素在视口内，不设置初始状态（让 GSAP 动画处理）
+        // 如果元素不在视口内，设置初始状态
+        if (!isInViewport) {
+          element.style.opacity = '0'
+          
+          if (runStyle.y !== undefined) {
+            element.style.transform = `translateY(${runStyle.y}px)`
+          }
+          if (runStyle.x !== undefined) {
+            element.style.transform = `${element.style.transform || ''} translateX(${runStyle.x}px)`
+          }
+          if (runStyle.scale !== undefined) {
+            element.style.transform = `${element.style.transform || ''} scale(${runStyle.scale})`
+          }
+          if (runStyle.rotationX !== undefined) {
+            element.style.transform = `${element.style.transform || ''} rotateX(${runStyle.rotationX}deg)`
+          }
+          if (runStyle.scaleY !== undefined) {
+            element.style.transform = `${element.style.transform || ''} scaleY(${runStyle.scaleY})`
+          }
+          if (runStyle.rotation !== undefined) {
+            element.style.transform = `${element.style.transform || ''} rotate(${runStyle.rotation}deg)`
+          }
+        }
+      })
+      
+      gsap[toKey](selector, {
+        ...runStyle,
+        scrollTrigger: {
+          trigger: selector,
+          start: 'top 85%',
+          end: 'bottom 15%',
+          toggleActions: 'play none none reverse',
+          markers: false,
+          once: true
+        }
+      })
+      console.log(`✓ 动画创建成功: ${selector} (${elements.length} 个元素)`)
+    } catch (error) {
+      console.error('纵向动画创建失败:', selector, error)
+    }
+  }
+
+  // 批量动画函数 - 为所有子元素添加动画
+  const createSectionAnimations = async (parentSelector: string, childSelector: string, options: any = {}) => {
+    const parent = document.querySelector(parentSelector)
+    if (!parent) return
+    
+    const children = parent.querySelectorAll(childSelector)
+    if (children.length === 0) return
+
+    // 设置初始状态
+    children.forEach((child) => {
+      child.style.opacity = '0'
+      if (options.y !== undefined) {
+        child.style.transform = `translateY(${options.y}px)`
       }
     })
 
-    // 防抖的resize处理
-    onScrollResize = createDebouncedFn(() => {
-      maxScrollValue = (ScrollTrigger as any).maxScroll(window) - 1
-    }, 100, 'infinite-resize')
-
-    // 滚动事件处理 - 实现无限循环
-    onWindowScroll = (e: Event) => {
-      const scroll = pageScrollTriggerInstance.scroll()
-      if (scroll > maxScrollValue) {
-        pageScrollTriggerInstance.scroll(1)
-        e.preventDefault()
-      } else if (scroll < 1) {
-        pageScrollTriggerInstance.scroll(maxScrollValue - 1)
-        e.preventDefault()
+    // 创建动画
+    gsap.fromTo(childSelector, 
+      { 
+        opacity: 0,
+        y: options.y || 30
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: options.duration || 0.6,
+        stagger: options.stagger || 0.1,
+        ease: options.ease || 'back.out(1.7)',
+        scrollTrigger: {
+          trigger: parentSelector,
+          start: 'top 80%',
+          end: 'bottom 20%',
+          toggleActions: 'play none none reverse',
+          once: true
+        }
       }
+    )
+  }
+
+  // 单页无限滚动
+  let pageScrollTriggerInstance: any = null
+  let scrollPanelTriggers: any[] = []
+  let clonedPanelNode: any = null
+  // onScrollResize 和 onWindowScroll 已在 onMounted 外部声明
+  let maxScrollValue: number = 0
+  let isAnimating: boolean = false
+
+  const infinitePanelScrollAnimation = (className = 'vertical') => {
+    ScrollTrigger.refresh()
+    let panels: any[] = []
+
+    const cleanup = () => {
+      if (onScrollResize) window.removeEventListener('resize', onScrollResize)
+      if (onWindowScroll) window.removeEventListener('scroll', onWindowScroll, { passive: false } as any)
+      pageScrollTriggerInstance?.kill?.()
+      pageScrollTriggerInstance = null
+      scrollPanelTriggers.forEach(st => { try { st?.kill?.() } catch (e) {} })
+      scrollPanelTriggers = []
+      if (clonedPanelNode && clonedPanelNode.parentNode) {
+        clonedPanelNode.parentNode.removeChild(clonedPanelNode)
+        clonedPanelNode = null
+      }
+      panels.forEach(panel => {
+        try {
+          panel.style.position = ''
+          panel.style.transform = ''
+          panel.style.zIndex = ''
+        } catch (e) {}
+      })
+      killAllAnimation({ keepScrollPosition: true })
+      isAnimating = false
     }
 
-    // 初始化
-    onScrollResize()
-    window.addEventListener('resize', onScrollResize)
-    window.addEventListener('scroll', onWindowScroll, { passive: false } as any)
-  })
+    nextTick(() => {
+      panels = gsap.utils.toArray(`.${className}`) || []
+      if (panels.length <= 0) return
+      panels = panels.filter(panel => {
+        const parent = panel.parentElement
+        return !parent || !parent.classList.contains('vertical-wrap')
+      })
+      if (panels.length <= 0) return
 
-  return cleanup
-}
+      clonedPanelNode = panels[0].cloneNode(true)
+      clonedPanelNode.setAttribute('data-cloned', 'true')
+      panels[0].parentNode?.appendChild(clonedPanelNode)
 
-onMounted(() => {
+      panels.forEach((panel, index) => {
+        const trigger = createScrollTriggerSafe({
+          trigger: panel,
+          start: 'top top',
+          pin: true,
+          pinSpacing: false,
+          anticipatePin: 1,
+          id: `panel-${index}`
+        })
+        if (trigger) scrollPanelTriggers.push(trigger)
+      })
+
+      pageScrollTriggerInstance = ScrollTrigger.create({
+        trigger: window,
+        start: 0,
+        end: 'max',
+        snap: {
+          snapTo: (progress: number) => {
+            const currentMaxScroll = (ScrollTrigger as any).maxScroll(window) - 1 || 1
+            const snappedValue = gsap.utils.snap(1 / panels.length, progress)
+            if (snappedValue <= 0) return Math.min(0.001, 1 / currentMaxScroll)
+            if (snappedValue >= 1) return Math.max(0.999, currentMaxScroll / (currentMaxScroll + 1))
+            return snappedValue
+          },
+          duration: 0.6,
+          delay: 0.2,
+          ease: 'power2.out',
+          inertia: false
+        }
+      })
+
+      onScrollResize = createDebouncedFn(() => {
+        maxScrollValue = (ScrollTrigger as any).maxScroll(window) - 1
+        ScrollTrigger.refresh()
+      }, 200, 'infinite-resize')
+
+      onWindowScroll = (e: Event) => {
+        if (isAnimating) return
+        const scroll = pageScrollTriggerInstance.scroll()
+        if (scroll > maxScrollValue) {
+          isAnimating = true
+          gsap.to(window, { scrollTo: { y: 1 }, duration: 0.1, ease: 'none', onComplete: () => { isAnimating = false } })
+        } else if (scroll < 1) {
+          isAnimating = true
+          gsap.to(window, { scrollTo: { y: maxScrollValue - 1 }, duration: 0.1, ease: 'none', onComplete: () => { isAnimating = false } })
+        }
+      }
+
+      onScrollResize()
+      window.addEventListener('resize', onScrollResize)
+      window.addEventListener('scroll', onWindowScroll, { passive: false } as any)
+    })
+
+    return cleanup
+  }
+
   // 初始化打字机效果
   const initTypewriter = () => {
     const text = '· 下一代智能体验 · 沉浸式3D动画 · 实时数据可视化'
@@ -1503,19 +1648,50 @@ onMounted(() => {
         trigger: container,
         pin: true,
         start: 'top top',
-        scrub: 1,
-        anticipatePin: 1,
+        scrub: 1,  // 平滑scrub
+        anticipatePin: 1,  // 防止快速滚动时的闪烁
+        pinSpacing: true,  // 确保间距正确
         snap: {
           snapTo: 1 / (panels.length - 1),
           inertia: false,
-          duration: { min: 0.1, max: 0.1 }
+          duration: 0.4,  // 平滑的snap动画
+          delay: 0.2,    // 滚动停止后200ms开始snap
+          ease: 'power2.out'
         },
-        end: () => '+=' + (container.offsetWidth - window.innerWidth)
+        end: () => '+=' + (container.offsetWidth - window.innerWidth),
+        onRefresh: () => {
+          console.log('水平滚动已刷新:', {
+            panelCount: panels.length,
+            distance: container.offsetWidth - window.innerWidth
+          })
+        }
       }
     })
   })
 
-  // 导航栏动画
+  // 等待 DOM 完全渲染后再创建 ScrollTrigger 动画
+  await nextTick()
+  ScrollTrigger.refresh()
+
+  // 确保 Hero section 立即可见
+  const heroSection = document.querySelector('.hero-section')
+  if (heroSection) {
+    heroSection.style.opacity = '1'
+    heroSection.style.visibility = 'visible'
+  }
+
+  // 先立即设置 Hero 元素的初始状态为可见，避免空白
+  gsap.set('.hero-bg', { opacity: 1, scale: 1 })
+  gsap.set('.hero-badge', { opacity: 1, y: 0 })
+  gsap.set('.title-char', { opacity: 1, y: 0, rotationX: 0 })
+  gsap.set('.hero-subtitle', { opacity: 1, y: 0 })
+  gsap.set('.hero-stat', { opacity: 1, y: 0 })
+  gsap.set('.hero-stat-divider', { opacity: 1, scaleY: 1 })
+  gsap.set('.hero-testimonial', { opacity: 1, y: 0 })
+  gsap.set('.hero-btn', { opacity: 1, y: 0 })
+  gsap.set('.feature-card', { opacity: 1, y: 0 })
+
+  // 导航栏动画 - 直接播放
   gsap.from('.navbar', {
     y: -100,
     opacity: 0,
@@ -1523,84 +1699,70 @@ onMounted(() => {
     ease: 'power3.out'
   })
 
-  // Hero 区域动画 - 使用垂直滚动动画
-  verticalAnimation('.hero-bg', {
-    scale: 1.2,
-    opacity: 0,
-    duration: 1.5,
-    toKey: 'from'
-  })
-
-  verticalAnimation('.hero-badge', {
-    y: 30,
-    opacity: 0,
-    duration: 0.6,
-    toKey: 'from'
-  })
-
-  verticalAnimation('.title-line', {
-    y: 80,
-    opacity: 0,
-    duration: 1,
-    stagger: 0.2,
-    toKey: 'from'
-  })
-
-  verticalAnimation('.hero-subtitle', {
-    y: 40,
-    opacity: 0,
-    duration: 0.8,
-    toKey: 'from'
-  })
-
-  verticalAnimation('.hero-stat', {
-    y: 30,
-    opacity: 0,
-    duration: 0.6,
-    stagger: 0.1,
-    toKey: 'from'
-  })
-
-  verticalAnimation('.hero-stat-divider', {
-    scaleY: 0,
-    opacity: 0,
-    duration: 0.4,
-    stagger: 0.1,
-    toKey: 'from'
-  })
-
-  verticalAnimation('.hero-testimonial', {
-    y: 50,
-    opacity: 0,
-    duration: 1,
-    toKey: 'from'
-  })
-
-  // 标题字符逐个动画
-  verticalAnimation('.title-char', {
-    y: 100,
-    opacity: 0,
-    rotationX: 90,
-    duration: 0.8,
-    stagger: 0.08,
-    toKey: 'from'
-  })
-
-  verticalAnimation('.hero-btn', {
-    y: 30,
-    opacity: 0,
-    duration: 0.6,
-    stagger: 0.15,
-    toKey: 'from'
-  })
-
-  verticalAnimation('.feature-card', {
-    y: 30,
-    opacity: 0,
-    duration: 0.5,
-    stagger: 0.1,
-    toKey: 'from'
-  })
+  // Hero 区域动画 - 添加入场动画效果（从不可见到可见）
+  const heroTimeline = gsap.timeline()
+  
+  heroTimeline
+    .from('.hero-bg', {
+      scale: 1.2,
+      opacity: 0,
+      duration: 1.5,
+      ease: 'power2.out'
+    })
+    .from('.hero-badge', {
+      y: 30,
+      opacity: 0,
+      duration: 0.6,
+      ease: 'back.out(1.7)'
+    }, '-=1.2')
+    .from('.title-char', {
+      y: 100,
+      opacity: 0,
+      rotationX: 90,
+      duration: 0.8,
+      stagger: 0.08,
+      ease: 'back.out(1.7)'
+    }, '-=0.4')
+    .from('.hero-subtitle', {
+      y: 40,
+      opacity: 0,
+      duration: 0.8,
+      ease: 'power2.out'
+    }, '-=0.3')
+    .from('.hero-stat', {
+      y: 30,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.1,
+      ease: 'back.out(1.7)'
+    }, '-=0.4')
+    .from('.hero-stat-divider', {
+      scaleY: 0,
+      opacity: 0,
+      duration: 0.4,
+      stagger: 0.1,
+      ease: 'power2.out'
+    }, '-=0.6')
+    .from('.hero-testimonial', {
+      y: 50,
+      opacity: 0,
+      duration: 1,
+      ease: 'power2.out'
+    }, '-=0.4')
+    .from('.hero-btn', {
+      y: 30,
+      opacity: 0,
+      duration: 0.6,
+      stagger: 0.15,
+      ease: 'back.out(1.7)'
+    }, '-=0.5')
+    .from('.feature-card', {
+      y: 30,
+      opacity: 0,
+      duration: 0.5,
+      stagger: 0.1,
+      ease: 'back.out(1.7)'
+    }, '-=0.4')
 
   // 装饰圆形动画
   verticalAnimation('.deco-circle', {
@@ -1608,6 +1770,15 @@ onMounted(() => {
     opacity: 0,
     duration: 1.2,
     stagger: 0.2,
+    toKey: 'from'
+  })
+
+  // 装饰圆形动画
+  verticalAnimation('.deco-circle', {
+    scale: 0,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.15,
     toKey: 'from'
   })
 
@@ -1620,20 +1791,32 @@ onMounted(() => {
     toKey: 'from'
   })
 
-  // 装饰圆形持续动画
+  // 装饰圆形持续动画（滚动到可见时开始）
   gsap.to('.circle-1', {
+    scrollTrigger: {
+      trigger: '.deco-circle',
+      start: 'top 80%'
+    },
     rotate: 360,
     duration: 20,
     repeat: -1,
     ease: 'none'
   })
   gsap.to('.circle-2', {
+    scrollTrigger: {
+      trigger: '.deco-circle',
+      start: 'top 80%'
+    },
     rotate: -360,
     duration: 25,
     repeat: -1,
     ease: 'none'
   })
   gsap.to('.circle-3', {
+    scrollTrigger: {
+      trigger: '.deco-circle',
+      start: 'top 80%'
+    },
     y: -30,
     duration: 2,
     repeat: -1,
@@ -1641,8 +1824,12 @@ onMounted(() => {
     ease: 'power1.inOut'
   })
 
-  // 浮动形状持续动画
+  // 浮动形状持续动画（滚动到可见时开始）
   gsap.to('.shape-1', {
+    scrollTrigger: {
+      trigger: '.floating-shape',
+      start: 'top 80%'
+    },
     y: -20,
     duration: 3,
     repeat: -1,
@@ -1650,6 +1837,10 @@ onMounted(() => {
     ease: 'power1.inOut'
   })
   gsap.to('.shape-2', {
+    scrollTrigger: {
+      trigger: '.floating-shape',
+      start: 'top 80%'
+    },
     y: -15,
     rotate: 180,
     duration: 4,
@@ -1658,6 +1849,10 @@ onMounted(() => {
     ease: 'power1.inOut'
   })
   gsap.to('.shape-3', {
+    scrollTrigger: {
+      trigger: '.floating-shape',
+      start: 'top 80%'
+    },
     y: -25,
     rotate: 360,
     duration: 5,
@@ -1708,57 +1903,83 @@ onMounted(() => {
     toKey: 'from'
   })
 
-  // Hero 数字增长动画
+  // Hero 数字增长动画 - 优化版（使用TextPlugin）
   const heroStatNumbers = document.querySelectorAll('.hero-stat-number')
   heroStatNumbers.forEach((stat, index) => {
-    const target = parseInt(stat.getAttribute('data-target') || '0')
+    const target = parseFloat(stat.getAttribute('data-target') || '0')
     const isDecimal = stat.getAttribute('data-target')?.includes('.')
+    const duration = isDecimal ? 2.5 : 2
 
     gsap.to(stat, {
       scrollTrigger: {
         trigger: '.hero-stats',
-        start: 'top 85%'
+        start: 'top 85%',
+        toggleActions: 'play none none reverse', // 向上滚动时反向
+        once: false  // 允许多次触发
       },
       innerText: target,
-      duration: 2.5,
+      duration: duration,
       ease: 'power2.out',
       snap: { innerText: 1 },
       delay: index * 0.15,
       onUpdate: function() {
-        const value = Math.ceil(this.targets()[0].innerText)
+        const el = this.targets()[0]
+        const value = el.innerText
+
         if (isDecimal && index === 1) {
-          // GSAP引擎显示为小数
+          // π 的显示 - 使用progress精确计算
           const progress = this.progress()
-          this.targets()[0].innerHTML = (0 + progress * 3.14).toFixed(2)
+          el.innerHTML = (0 + progress * 3.14).toFixed(2)
         } else if (index === 2) {
-          // 100% 添加百分号
-          this.targets()[0].innerHTML = value + '%'
+          // 百分比
+          const numValue = Math.ceil(parseFloat(value))
+          el.innerHTML = numValue + '%'
         } else if (index === 3) {
-          // 50K+ 添加单位
-          this.targets()[0].innerHTML = value + 'K+'
+          // K+ 单位
+          const numValue = Math.ceil(parseFloat(value))
+          el.innerHTML = numValue + 'K+'
         } else {
-          // 150+ 加号
-          this.targets()[0].innerHTML = value + '+'
+          // 普通数字 + 符号
+          const numValue = Math.ceil(parseFloat(value))
+          el.innerHTML = numValue + '+'
+        }
+      },
+      onComplete: function() {
+        // 确保动画结束时显示正确值
+        const el = this.targets()[0]
+        if (isDecimal && index === 1) {
+          el.innerHTML = '3.14'
+        } else if (index === 2) {
+          el.innerHTML = '100%'
+        } else if (index === 3) {
+          el.innerHTML = '50K+'
+        } else {
+          el.innerHTML = '150+'
         }
       }
     })
   })
 
-  // 数字增长动画
+  // 数字增长动画 - 优化版（使用TextPlugin）
   const statNumbers = document.querySelectorAll('.about-stats .stat-number')
-  statNumbers.forEach((stat) => {
+  statNumbers.forEach((stat, index) => {
     const target = parseInt(stat.getAttribute('data-target') || '0')
     gsap.to(stat, {
       scrollTrigger: {
         trigger: '.about-stats',
-        start: 'top 85%'
+        start: 'top 85%',
+        toggleActions: 'play none none reverse',
+        preventOverlaps: true  // 防止动画重叠
       },
       innerText: target,
       duration: 2,
       ease: 'power2.out',
       snap: { innerText: 1 },
+      delay: index * 0.1,
       onUpdate: function() {
-        this.targets()[0].innerHTML = Math.ceil(this.targets()[0].innerText)
+        const el = this.targets()[0]
+        const value = Math.ceil(parseFloat(el.innerText))
+        el.innerHTML = value
       }
     })
   })
@@ -1974,12 +2195,89 @@ onMounted(() => {
     })
   })
 
-  // 地图占位符动画
-  verticalAnimation('.map-placeholder', {
-    y: 40,
-    opacity: 0,
-    duration: 0.8,
-    toKey: 'from'
+  // 为所有 section 添加淡入动画（除了 Hero section）
+  document.querySelectorAll('section:not(.hero-section)').forEach((section) => {
+    section.style.opacity = '0'
+    section.style.transform = 'translateY(50px)'
+    
+    gsap.to(section, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 80%',
+        end: 'bottom 20%',
+        toggleActions: 'play none none reverse',
+        once: true,
+        onEnter: () => {
+          section.classList.add('visible')
+          console.log(`Section 进入视口: ${section.id || section.className}`)
+        }
+      }
+    })
+
+    // 为 section 内的标题和副标题添加动画
+    const title = section.querySelector('.section-title')
+    const subtitle = section.querySelector('.section-subtitle')
+    
+    if (title) {
+      gsap.fromTo(title,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          delay: 0.2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 75%',
+            once: true
+          }
+        }
+      )
+    }
+    
+    if (subtitle) {
+      gsap.fromTo(subtitle,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          delay: 0.4,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 75%',
+            once: true
+          }
+        }
+      )
+    }
+  })
+
+  // 为所有通用动画类元素添加观察器
+  const animateElements = document.querySelectorAll('.card-animate, .item-animate, .slide-left, .slide-right, .scale-animate')
+  animateElements.forEach((element) => {
+    gsap.to(element, {
+      opacity: 1,
+      y: 0,
+      x: 0,
+      scale: 1,
+      duration: 0.6,
+      scrollTrigger: {
+        trigger: element,
+        start: 'top 85%',
+        end: 'bottom 15%',
+        toggleActions: 'play none none reverse',
+        once: true,
+        onEnter: () => {
+          element.classList.add('visible')
+        }
+      }
+    })
   })
 
   // 服务卡片悬停效果
@@ -2003,7 +2301,14 @@ onMounted(() => {
         y: 0,
         boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
         duration: 0.3,
-        ease: 'power2.out'
+        ease: 'power2.out',
+        onComplete: function() {
+          // 修复类型问题
+          const target = this.targets()[0] as HTMLElement
+          if (target) {
+            target.style.boxShadow = '0 10px 30px rgba(0,0,0,0.1)'
+          }
+        }
       })
       gsap.to(card.querySelector('.service-icon'), {
         scale: 1,
@@ -2200,11 +2505,13 @@ onMounted(() => {
     })
   })
 
+
   // 推荐引用动画
   gsap.to('.testimonial-quote', {
     scrollTrigger: {
       trigger: '.hero-testimonial',
-      start: 'top 80%'
+      start: 'top 80%',
+      toggleActions: 'play none none reverse'
     },
     scale: 1,
     opacity: 1,
@@ -2230,6 +2537,177 @@ body {
   overflow: hidden;
   overflow-x: hidden;
 }
+
+// 滚动动画元素的初始状态
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.scroll-animate-left {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+
+.scroll-animate-right {
+  opacity: 0;
+  transform: translateX(100px);
+}
+
+.scroll-animate-scale {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+// Hero 区域元素的初始状态 - 已移除，让 GSAP 动画控制
+// .hero-bg { opacity: 0; }
+// .hero-badge { opacity: 0; }
+// .title-line { opacity: 0; }
+// .hero-subtitle { opacity: 0; }
+// .hero-stat { opacity: 0; }
+// .hero-stat-divider { opacity: 0; }
+// .hero-testimonial { opacity: 0; }
+// .title-char { opacity: 0; }
+// .hero-btn { opacity: 0; }
+// .feature-card { opacity: 0; }
+
+// 装饰元素初始状态
+.deco-circle {
+  opacity: 0;
+}
+
+.floating-shape {
+  opacity: 0;
+}
+
+// 关于我们区域
+.about-text {
+  opacity: 0;
+}
+
+.about-image {
+  opacity: 0;
+}
+
+.advantage-item {
+  opacity: 0;
+}
+
+.stat-item {
+  opacity: 0;
+}
+
+.image-box {
+  opacity: 0;
+}
+
+// 服务卡片
+.service-card {
+  opacity: 0;
+}
+
+.portfolio-item {
+  opacity: 0;
+}
+
+.portfolio-icon {
+  opacity: 0;
+}
+
+.portfolio-title {
+  opacity: 0;
+}
+
+.portfolio-desc {
+  opacity: 0;
+}
+
+.feature-tag {
+  opacity: 0;
+}
+
+.showcase-types {
+  opacity: 0;
+}
+
+.type-card {
+  opacity: 0;
+}
+
+// 联系我们区域
+.contact-header {
+  opacity: 0;
+}
+
+.contact-info {
+  opacity: 0;
+}
+
+.contact-form {
+  opacity: 0;
+}
+
+.info-card {
+  opacity: 0;
+}
+
+.form-header {
+  opacity: 0;
+}
+
+.form-group {
+  opacity: 0;
+}
+
+.map-placeholder {
+  opacity: 0;
+}
+
+// 通用卡片和项目动画
+.card-animate,
+.item-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.card-animate.visible,
+.item-animate.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+// 左右滑入动画
+.slide-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: all 0.8s ease;
+}
+
+.slide-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: all 0.8s ease;
+}
+
+.slide-left.visible,
+.slide-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+// 缩放动画
+.scale-animate {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.6s ease;
+}
+
+.scale-animate.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
 
 .website-container {
   width: 100%;
@@ -2438,6 +2916,85 @@ body {
   }
 }
 
+// 3D 文字动画
+@keyframes text3DPulse {
+  0%, 100% {
+    transform: translateY(0) rotateX(0deg);
+    text-shadow: 
+      1px 1px 0 #667eea,
+      2px 2px 0 #764ba2,
+      3px 3px 10px rgba(102, 126, 234, 0.5);
+  }
+  50% {
+    transform: translateY(-5px) rotateX(5deg);
+    text-shadow: 
+      1px 1px 0 #764ba2,
+      2px 2px 0 #667eea,
+      3px 3px 15px rgba(118, 75, 162, 0.6);
+  }
+}
+
+@keyframes textGlitch {
+  0%, 90%, 100% {
+    transform: translate(0);
+    text-shadow: 
+      1px 1px 0 #667eea,
+      -1px -1px 0 #764ba2;
+  }
+  92% {
+    transform: translate(-2px, 1px);
+    text-shadow: 
+      2px -1px 0 #764ba2,
+      -2px 1px 0 #667eea;
+  }
+  94% {
+    transform: translate(2px, -1px);
+    text-shadow: 
+      -1px 2px 0 #764ba2,
+      1px -2px 0 #667eea;
+  }
+  96% {
+    transform: translate(-1px, 2px);
+    text-shadow: 
+      2px 1px 0 #764ba2,
+      -1px -2px 0 #667eea;
+  }
+  98% {
+    transform: translate(1px, -2px);
+    text-shadow: 
+      -1px -1px 0 #764ba2,
+      2px 1px 0 #667eea;
+  }
+}
+
+@keyframes textNeon {
+  0%, 100% {
+    text-shadow: 
+      0 0 5px #667eea,
+      0 0 10px #667eea,
+      0 0 20px #667eea,
+      0 0 40px #764ba2;
+  }
+  50% {
+    text-shadow: 
+      0 0 10px #667eea,
+      0 0 20px #667eea,
+      0 0 40px #667eea,
+      0 0 80px #764ba2,
+      0 0 120px #764ba2;
+  }
+}
+
+@keyframes typewriter {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1 }
+  50% { opacity: 0 }
+}
+
 // 通用容器
 .container {
   max-width: 1400px;
@@ -2450,6 +3007,14 @@ body {
   min-height: 100vh;
   padding: 100px 0;
   position: relative;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .section-title {
@@ -2460,12 +3025,74 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  opacity: 0;
+  transform: translateY(30px);
+  position: relative;
+  
+  // 3D 文字效果
+  text-shadow: 
+    1px 1px 0 #667eea,
+    2px 2px 0 #764ba2,
+    3px 3px 0 #667eea,
+    4px 4px 0 #764ba2,
+    5px 5px 10px rgba(102, 126, 234, 0.5);
+  
+  &::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transform: translateX(2px) translateY(2px);
+    opacity: 0.5;
+    filter: blur(2px);
+  }
+  
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -2;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transform: translateX(4px) translateY(4px);
+    opacity: 0.3;
+    filter: blur(4px);
+  }
+}
+
+// 文字动画类
+.section-title.animated-3d {
+  animation: text3DPulse 3s ease-in-out infinite;
+}
+
+.section-title.animated-glitch {
+  animation: textGlitch 2s ease-in-out infinite;
+}
+
+.section-title.animated-neon {
+  animation: textNeon 1.5s ease-in-out infinite;
 }
 
 .section-subtitle {
   font-size: 20px;
   color: #a0aec0;
   margin-bottom: 60px;
+  opacity: 0;
+  transform: translateY(20px);
+  position: relative;
+  
+  // 立体文字效果
+  text-shadow: 
+    1px 1px 2px rgba(102, 126, 234, 0.3),
+    2px 2px 4px rgba(118, 75, 162, 0.2);
 }
 
 // 首屏 Hero
@@ -3114,12 +3741,13 @@ body {
     font-weight: 700;
     position: relative;
     display: inline-block;
+    opacity: 0;
     background: linear-gradient(135deg, #667eea 0%, #f093fb 40%, #764ba2 70%, #f5576c 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     background-size: 200% auto;
-    animation: gradientShift 4s linear infinite;
+    animation: gradientShift 4s linear infinite, highlightPop 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 
     &.highlight-1 { animation-delay: 1s, 1s; }
     &.highlight-2 { animation-delay: 1.15s, 1.15s; }
@@ -3215,7 +3843,12 @@ body {
     background-clip: text;
     font-weight: 800;
     background-size: 200% auto;
-    animation: gradientShift 4s linear infinite;
+    animation: gradientShift 4s linear infinite, highlightPop 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
+
+    &.highlight-5 {
+      animation-delay: 1.6s, 1.6s;
+    }
   }
 }
 

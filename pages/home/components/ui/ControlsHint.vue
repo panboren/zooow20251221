@@ -2,7 +2,7 @@
   <div class="controls-hint">
     <p>🖱️ 左键拖拽旋转 | 🔍 滚轮缩放 | 📱 触摸手势控制</p>
     <p>🔄 双击切换自动旋转 | 🎯 使用视角按钮快速定位</p>
-  </div>
+     </div>
 </template>
 
 <script setup>
