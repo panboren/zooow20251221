@@ -107,6 +107,13 @@ import animateQuantumDreamWeaver from './quantum-dream-weaver.js'
 import animateEternalReturn from './eternal-return.js'
 import animateAuroraFantasy from './aurora-fantasy.js'
 
+// 全新维度创世交响曲特效（超越级）
+import animateDimensionGenesis from './dimension-genesis-symphony.js'
+
+// 全新数字生命绽放特效（独特概念）
+import animateDigitalLifeBloom from './digital-life-bloom.js'
+
+
 // 太极-Taichi.js + Three.js 融合特效
 import animateTaichiThree from '../taichi-three-animation/taichi-shuimo-effect.js'
 import animateTaichiYouth from '../taichi-three-animation/taichi-youth.js'
@@ -219,6 +226,13 @@ export const animations = {
     'quantum-dream-weaver': animateQuantumDreamWeaver,
     'eternal-return': animateEternalReturn,
     'aurora-fantasy': animateAuroraFantasy,
+
+    // 全新维度创世交响曲特效（超越级）
+    'dimension-genesis': animateDimensionGenesis,
+
+    // 全新数字生命绽放特效（独特概念）
+    'digital-life-bloom': animateDigitalLifeBloom,
+
 
     // 太极-Taichi.js + Three.js 融合特效
     [ANIMATION_CONFIG.TAICHI_THREE]: animateTaichiThree,

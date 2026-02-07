@@ -30,11 +30,11 @@ let goTo = () => {
   position: absolute;
   top: 80px;
   left: 20px;
-  background: rgba(0, 0, 0, 0.8);
+  background: linear-gradient(45deg, rgba(11, 47, 66, 0.6), rgba(3, 38, 56, 0.7), rgba(5, 17, 73, 0.7));
   padding: 12px 16px;
   border-radius: 8px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(252, 232, 164, 0.2);
   //pointer-events: none;
   transition: opacity 0.3s ease;
   width: 100px;

@@ -54,6 +54,8 @@ const animationOptions = [
   { value: 'quantum-dream-weaver', label: '🔮 量子梦境编织' },
   { value: 'eternal-return', label: '⏳ 永恒轮回之轮' },
   { value: 'aurora-fantasy', label: '🌌 极光幻境' },
+  { value: 'dimension-genesis', label: '🚀 维度创世交响曲' },
+  { value: 'digital-life-bloom', label: '🌸 数字生命绽放' },
 
   { value: 'orbital-rotation', label: '🛰️ 轨道环绕' },
   { value: 'wind-flower-snow-moon', label: '🌸 风花雪月' },
