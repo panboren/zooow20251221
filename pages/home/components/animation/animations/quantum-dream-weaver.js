@@ -1,8 +1,8 @@
 /**
- * 量子梦境编织 - 超越量子纠缠的艺术杰作
+ * 量子梦境编织 - 优化版
  * 融合量子叠加态、薛定谔猫、量子隧穿、纠缠对、波函数坍缩等量子力学概念
  * 技术突破：
- * - 量子态可视化粒子系统（30000+粒子）
+ * - 量子态可视化粒子系统（15000粒子，减少50%）
  * - 波函数动态模拟
  * - 量子纠缠线实时渲染
  * - 叠加态分裂效果
@@ -12,16 +12,24 @@
  * - 量子泡沫背景
  * - 概率云渲染
  * - 干涉条纹动态效果
+ * - 使用ParticleFactory统一创建
+ * - 使用PerformanceMonitor性能监控
  * 动画时长：22秒
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { ParticleFactory } from '~/utils/ParticleFactory.js'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateQuantumDreamWeaver(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     // 初始设置 - 量子场视角
@@ -32,30 +40,32 @@ export default function animateQuantumDreamWeaver(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'quantum-dream-weaver' })
       },
       onError,
-      '量子梦境编织',
+      '量子梦境编织 (优化版)',
       controls
     )
 
     // ==================== 创建系统 ====================
 
-    // 1. 量子态粒子系统（30000粒子）
+    // 1. 量子态粒子系统（15000粒子，减少50%）
     const quantumStates = createQuantumStates(scene, {
-      particleCount: 30000,
+      particleCount: 15000,  // 30000 → 15000
       superpositionLevels: 3
     })
 
-    // 2. 波函数云
+    // 2. 波函数云 - 减少粒子
     const waveFunctionCloud = createWaveFunctionCloud(scene, {
-      cloudCount: 5000,
+      cloudCount: 2500,      // 5000 → 2500
       radius: 80
     })
 
-    // 3. 量子纠缠线
+    // 3. 量子纠缠线 - 减少纠缠对
     const entanglementLines = createEntanglementLines(scene, {
-      pairCount: 1000,
+      pairCount: 500,        // 1000 → 500
       lineWidth: 2
     })
 

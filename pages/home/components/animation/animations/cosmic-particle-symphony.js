@@ -1,16 +1,23 @@
 /**
- * 宇宙粒子交响曲动画
+ * 宇宙粒子交响曲动画 - 优化版
  * 使用宇宙粒子交响曲特效
+ * - 粒子数减少50%
+ * - 使用PerformanceMonitor性能监控
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
 import { createCosmicParticleSymphony } from './effects/cosmic-particle-symphony'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateCosmicParticleSymphony(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     setupInitialCamera(camera, new THREE.Vector3(0, 30, 100), 140, controls)
@@ -20,16 +27,18 @@ export default function animateCosmicParticleSymphony(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'cosmic-particle-symphony' })
       },
       onError,
-      '宇宙粒子交响曲',
+      '宇宙粒子交响曲 (优化版)',
       controls
     )
 
-    // 创建宇宙粒子交响曲
+    // 创建宇宙粒子交响曲（减少50%）
     const particleSymphony = createCosmicParticleSymphony(scene, {
-      particleCount: 20000,
+      particleCount: 10000,  // 20000 → 10000
       waveLayers: 5
     })
 

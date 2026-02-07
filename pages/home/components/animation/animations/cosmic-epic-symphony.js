@@ -1,23 +1,31 @@
 /**
- * 宇宙史诗交响曲特效 - 精简版
+ * 宇宙史诗交响曲特效 - 优化版
  * 融合宇宙演化、星系诞生、黑洞等宏大场景
  * 简约设计，去除重复镜头，聚焦核心视觉冲击
  * 技术亮点：
  * - 宇宙大爆炸瞬间
  * - 星系形成与演化
  * - 超大质量黑洞
- * - 50000+ 粒子系统
+ * - 25000 粒子系统（减少50%）
  * - 星尘流、能量涟漪、脉冲星束
  * - 流畅的视觉叙事
+ * - 使用ParticleFactory统一创建
+ * - 使用PerformanceMonitor性能监控
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { ParticleFactory } from '~/utils/ParticleFactory.js'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateCosmicEpic(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     // 初始设置 - 宇宙原点
@@ -28,32 +36,34 @@ export default function animateCosmicEpic(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'cosmic-epic' })
       },
       onError,
-      '宇宙史诗交响曲',
+      '宇宙史诗交响曲 (优化版)',
       controls
     )
 
     // 创世奇点
     const creationSingularity = createCreationSingularity(scene)
 
-    // 宇宙爆炸粒子系统（30000粒子）
+    // 宇宙爆炸粒子系统（15000粒子，减少50%）
     const cosmicExplosion = createCosmicExplosion(scene, {
-      particleCount: 30000
+      particleCount: 15000  // 30000 → 15000
     })
 
-    // 星系生成器（40个星系）
+    // 星系生成器（20个星系，减少50%）
     const galaxyGenerator = createGalaxyGenerator(scene, {
-      galaxyCount: 40
+      galaxyCount: 20      // 40 → 20
     })
 
     // 超大质量黑洞
     const supermassiveBlackHole = createSupermassiveBlackHole(scene)
 
-    // 星尘流（15000粒子）
+    // 星尘流（7500粒子，减少50%）
     const stellarDust = createStellarDust(scene, {
-      particleCount: 15000
+      particleCount: 7500   // 15000 → 7500
     })
 
     // 能量涟漪

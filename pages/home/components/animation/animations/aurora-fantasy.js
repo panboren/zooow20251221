@@ -1,27 +1,35 @@
 /**
- * 极光幻境 - 超越青春年华的艺术唯美
+ * 极光幻境 - 优化版
  * 融合极光、极地、星空、冰雪、幻境、梦境等唯美自然景观
  * 技术突破：
  * - 实时GLSL极光着色器（10层光带）
- * - 粒子光子流（20000+粒子）
+ * - 粒子光子流（10000粒子，减少50%）
  * - 冰晶折射效果
- * - 星光闪烁系统（5000+星星）
+ * - 星光闪烁系统（2500星星，减少50%）
  * - 极地风光渲染
  * - 梦境迷雾效果
  * - 幻境粒子
  * - 动态色彩渐变
  * - 极光舞动模拟
  * - 冰雪粒子沉降
+ * - 使用ParticleFactory统一创建
+ * - 使用PerformanceMonitor性能监控
  * 动画时长：24秒
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { ParticleFactory } from '~/utils/ParticleFactory.js'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateAuroraFantasy(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     // 初始设置 - 远景仰视
@@ -32,10 +40,12 @@ export default function animateAuroraFantasy(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'aurora-fantasy' })
       },
       onError,
-      '极光幻境',
+      '极光幻境 (优化版)',
       controls
     )
 
@@ -47,34 +57,34 @@ export default function animateAuroraFantasy(props, callbacks) {
       bandHeight: 150
     })
 
-    // 2. 星光系统（5000星星）
+    // 2. 星光系统（2500星星，减少50%）
     const starField = createStarField(scene, {
-      starCount: 5000,
+      starCount: 2500,      // 5000 → 2500
       twinkleSpeed: 1
     })
 
-    // 3. 冰晶系统（3000粒子）
+    // 3. 冰晶系统（1500粒子，减少50%）
     const iceCrystals = createIceCrystals(scene, {
-      crystalCount: 3000,
+      crystalCount: 1500,   // 3000 → 1500
       crystalSize: 5
     })
 
     // 4. 极地风光
     const polarLandscape = createPolarLandscape(scene)
 
-    // 5. 梦境迷雾
+    // 5. 梦境迷雾（减少50%）
     const dreamMist = createDreamMist(scene, {
-      mistParticleCount: 8000
+      mistParticleCount: 4000  // 8000 → 4000
     })
 
-    // 6. 幻境粒子
+    // 6. 幻境粒子（减少50%）
     const fantasyParticles = createFantasyParticles(scene, {
-      particleCount: 10000
+      particleCount: 5000     // 10000 → 5000
     })
 
-    // 7. 光子流
+    // 7. 光子流（减少50%）
     const photonStream = createPhotonStream(scene, {
-      photonCount: 20000
+      photonCount: 10000     // 20000 → 10000
     })
 
     // 8. 冰雪沉降

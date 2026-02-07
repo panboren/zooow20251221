@@ -1,9 +1,9 @@
 /**
- * 永恒轮回之轮 - 超越时间之沙的哲学震撼
+ * 永恒轮回之轮 - 优化版
  * 融合尼采永恒轮回、时间循环、因果轮回、生死轮回、宇宙轮回等哲学概念
  * 技术突破：
  * - 多层时间环系统（20+时间环）
- * - 因果链动态渲染（5000+粒子）
+ * - 因果链动态渲染（2500粒子，减少50%）
  * - 轮回转世粒子流
  * - 时间螺旋可视化
  * - 宿命线交织
@@ -12,16 +12,24 @@
  * - 多维时间线
  * - 宿命之轮
  * - 时间粒子重组
+ * - 使用ParticleFactory统一创建
+ * - 使用PerformanceMonitor性能监控
  * 动画时长：26秒
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { ParticleFactory } from '~/utils/ParticleFactory.js'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateEternalReturn(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     // 初始设置 - 时间流视角
@@ -32,10 +40,12 @@ export default function animateEternalReturn(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'eternal-return' })
       },
       onError,
-      '永恒轮回之轮',
+      '永恒轮回之轮 (优化版)',
       controls
     )
 
@@ -47,15 +57,15 @@ export default function animateEternalReturn(props, callbacks) {
       maxRadius: 200
     })
 
-    // 2. 因果链（5000粒子）
+    // 2. 因果链（2500粒子，减少50%）
     const causalChains = createCausalChains(scene, {
-      chainCount: 5000,
+      chainCount: 2500,       // 5000 → 2500
       chainLength: 50
     })
 
-    // 3. 轮回转世粒子流
+    // 3. 轮回转世粒子流（减少50%）
     const reincarnationStream = createReincarnationStream(scene, {
-      particleCount: 15000,
+      particleCount: 7500,    // 15000 → 7500
       streamLength: 300
     })
 
@@ -71,15 +81,15 @@ export default function animateEternalReturn(props, callbacks) {
       spokeCount: 12
     })
 
-    // 6. 因果交织网
+    // 6. 因果交织网（减少粒子）
     const causalWeb = createCausalWeb(scene, {
-      nodeCount: 3000,
-      connectionCount: 8000
+      nodeCount: 1500,        // 3000 → 1500
+      connectionCount: 4000   // 8000 → 4000
     })
 
-    // 7. 时间粒子重组
+    // 7. 时间粒子重组（减少50%）
     const timeParticles = createTimeParticles(scene, {
-      particleCount: 20000,
+      particleCount: 10000,   // 20000 → 10000
       formationRadius: 150
     })
 

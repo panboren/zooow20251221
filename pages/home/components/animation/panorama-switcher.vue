@@ -62,6 +62,11 @@
 <script setup>
 
 let config={
+  3:{
+    num: 41,
+    pre: 'h-v3',
+    imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjing-v3/'
+  },
   1:{
     num: 17,
     pre: 'h-v2',
@@ -72,6 +77,7 @@ let config={
     pre: 'h',
     imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjingtu/'
   },
+
 }
 
 // 使用外部图片路径（不打包）

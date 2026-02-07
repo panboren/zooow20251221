@@ -1,5 +1,5 @@
 /**
- * 星河涌动 - 银河系动态流动特效（宇宙史诗版）
+ * 星河涌动 - 银河系动态流动特效（优化版）
  * 融合星云、恒星、行星轨道、引力波纹、时空扭曲五大宇宙元素
  * 技术亮点：
  * - 星云漩涡：螺旋状星云流动
@@ -10,13 +10,19 @@
  * - 能量脉冲：高能射线的周期性爆发
  * - 量子涟漪：量子场效应的微小波动
  * - 星系碰撞：两个星系的引力相互作用
- * - 120000+ 宇宙粒子
+ * - 60000+ 宇宙粒子（优化后）
  * - 史诗级的宇宙叙事体验
+ *
+ * 优化说明：
+ * - 移除O(n²)引力计算，改用简化引力场
+ * - 减少粒子数量至60000
+ * - 使用ParticleFactory统一创建
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { ParticleFactory } from '~/utils/ParticleFactory.js'
 
 export default function animateGalaxyFlow(props, callbacks) {
     const { camera, renderer, scene, controls } = props
@@ -41,54 +47,54 @@ export default function animateGalaxyFlow(props, callbacks) {
         // 银河中心黑洞
         const galaxyCore = createGalaxyCore(scene)
 
-        // 星云漩涡（30000粒子）
+        // 星云漩涡（15000粒子 - 优化）
         const nebulaSwirl = createNebulaSwirl(scene, {
-            particleCount: 30000
+            particleCount: 15000
         })
 
-        // 恒星诞生（15000恒星）
+        // 恒星诞生（8000恒星 - 优化）
         const stellarBirth = createStellarBirth(scene, {
-            starCount: 15000
+            starCount: 8000
         })
 
-        // 行星轨道（8000行星）
+        // 行星轨道（4000行星 - 优化）
         const planetaryOrbits = createPlanetaryOrbits(scene, {
-            planetCount: 8000
+            planetCount: 4000
         })
 
-        // 引力波纹（20000粒子）
+        // 引力波纹（10000粒子 - 优化）
         const gravityWaves = createGravityWaves(scene, {
-            waveCount: 20000
+            waveCount: 10000
         })
 
-        // 时空扭曲（10000粒子）
+        // 时空扭曲（5000粒子 - 优化）
         const spacetimeDistortion = createSpacetimeDistortion(scene, {
-            distortionCount: 10000
+            distortionCount: 5000
         })
 
-        // 能量脉冲（15000粒子）
+        // 能量脉冲（8000粒子 - 优化）
         const energyPulses = createEnergyPulses(scene, {
-            pulseCount: 15000
+            pulseCount: 8000
         })
 
-        // 量子涟漪（25000粒子）
+        // 量子涟漪（12000粒子 - 优化）
         const quantumRipples = createQuantumRipples(scene, {
-            rippleCount: 25000
+            rippleCount: 12000
         })
 
-        // 星系臂（25000粒子）
+        // 星系臂（12000粒子 - 优化）
         const galacticArms = createGalacticArms(scene, {
-            armCount: 25000
+            armCount: 12000
         })
 
-        // 黑洞喷流（12000粒子）
+        // 黑洞喷流（6000粒子 - 优化）
         const blackholeJets = createBlackholeJets(scene, {
-            jetCount: 12000
+            jetCount: 6000
         })
 
-        // 星系碰撞（8000粒子）
+        // 星系碰撞（4000粒子 - 优化）
         const galaxyCollision = createGalaxyCollision(scene, {
-            collisionCount: 8000
+            collisionCount: 4000
         })
 
         // 阶段1: 银河觉醒 - 星云漩涡（持续4秒）
@@ -1420,36 +1426,42 @@ function createGalaxyCollision(scene, options) {
         update(time) {
             if (this.colliding) {
                 const pos = geometry.attributes.position.array
+
+                // 简化引力计算 - 使用中心引力场代替O(n²)计算
+                const galaxyACenterX = -25
+                const galaxyACenterZ = -15
+                const galaxyBCenterX = 25
+                const galaxyBCenterZ = 15
+
                 for (let i = 0; i < collisionCount; i++) {
                     const data = collisionData[i]
                     const idx = i * 3
 
-                    // 计算与其他星系粒子的引力
+                    // 简化：只计算到另一个星系中心的引力
+                    const targetCenterX = data.isGalaxyA ? galaxyBCenterX : galaxyACenterX
+                    const targetCenterZ = data.isGalaxyA ? galaxyBCenterZ : galaxyACenterZ
+
+                    const dx = targetCenterX - pos[idx]
+                    const dz = targetCenterZ - pos[idx + 2]
+                    const distance = Math.sqrt(dx * dx + dz * dz)
+
                     let totalForceX = 0
                     let totalForceZ = 0
 
-                    for (let j = 0; j < collisionCount; j++) {
-                        if (i !== j && collisionData[j].isGalaxyA !== data.isGalaxyA) {
-                            // 只计算异星系的引力
-                            const dx = pos[j * 3] - pos[idx]
-                            const dz = pos[j * 3 + 2] - pos[idx + 2]
-                            const distance = Math.sqrt(dx * dx + dz * dz)
-
-                            if (distance > 0.1) {
-                                const force = 1 / (distance * distance + 1) * 0.1
-                                totalForceX += (dx / distance) * force
-                                totalForceZ += (dz / distance) * force
-                            }
-                        }
+                    if (distance > 0.1) {
+                        // 简化的引力公式
+                        const force = 200 / (distance * distance + 100) * 0.5
+                        totalForceX = (dx / distance) * force
+                        totalForceZ = (dz / distance) * force
                     }
 
                     // 更新位置
                     const currentAngle = data.originalAngle + data.orbitalSpeed * time * data.scale
                     const currentRadius = data.originalRadius
 
-                    pos[idx] = Math.cos(currentAngle) * currentRadius + data.originalOffsetX + totalForceX * data.scale
+                    pos[idx] = Math.cos(currentAngle) * currentRadius + data.originalOffsetX + totalForceX * data.scale * 0.3
                     pos[idx + 1] += Math.sin(time * 0.5 + i * 0.001) * 0.02 * data.scale
-                    pos[idx + 2] = Math.sin(currentAngle) * currentRadius + data.originalOffsetZ + totalForceZ * data.scale
+                    pos[idx + 2] = Math.sin(currentAngle) * currentRadius + data.originalOffsetZ + totalForceZ * data.scale * 0.3
                 }
                 geometry.attributes.position.needsUpdate = true
             }

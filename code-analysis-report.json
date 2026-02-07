@@ -1,0 +1,2417 @@
+{
+  "stats": {
+    "totalFiles": 116,
+    "totalLines": 44882,
+    "totalParticles": 755913,
+    "avgComplexity": 13,
+    "filesUsingBaseEffect": 3,
+    "filesWithCleanup": 64,
+    "filesWithON2Loops": 0
+  },
+  "priorityList": {
+    "P0": [],
+    "P1": [
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\ancient-lightning-awakening.js",
+        "fileName": "ancient-lightning-awakening.js",
+        "lines": 186,
+        "particleCount": 12,
+        "complexity": 15,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\ancient-ruins.js",
+        "fileName": "ancient-ruins.js",
+        "lines": 93,
+        "particleCount": 12,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\aurora-fluid.js",
+        "fileName": "aurora-fluid.js",
+        "lines": 149,
+        "particleCount": 15,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\big-bang-genesis-optimized.js",
+        "fileName": "big-bang-genesis-optimized.js",
+        "lines": 349,
+        "particleCount": 235000,
+        "complexity": 1,
+        "usesBaseEffect": true,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\butterfly-nebula-dance.js",
+        "fileName": "butterfly-nebula-dance.js",
+        "lines": 259,
+        "particleCount": 6000,
+        "complexity": 20,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\butterfly-swarm.js",
+        "fileName": "butterfly-swarm.js",
+        "lines": 137,
+        "particleCount": 300,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\cherry-blossom.js",
+        "fileName": "cherry-blossom.js",
+        "lines": 145,
+        "particleCount": 3000,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\cosmic-particle-symphony.js",
+        "fileName": "cosmic-particle-symphony.js",
+        "lines": 93,
+        "particleCount": 20000,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\cosmic-rainfall.js",
+        "fileName": "cosmic-rainfall.js",
+        "lines": 150,
+        "particleCount": 12000,
+        "complexity": 11,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\crystal-aurora-dream.js",
+        "fileName": "crystal-aurora-dream.js",
+        "lines": 174,
+        "particleCount": 8,
+        "complexity": 15,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\crystal-pyramid.js",
+        "fileName": "crystal-pyramid.js",
+        "lines": 95,
+        "particleCount": 3000,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\crystal-shards.js",
+        "fileName": "crystal-shards.js",
+        "lines": 125,
+        "particleCount": 150,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\cyber-energy-explosion.js",
+        "fileName": "cyber-energy-explosion.js",
+        "lines": 184,
+        "particleCount": 80,
+        "complexity": 14,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\cyber-grid-city.js",
+        "fileName": "cyber-grid-city.js",
+        "lines": 94,
+        "particleCount": 100,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\dimension-fold.js",
+        "fileName": "dimension-fold.js",
+        "lines": 147,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\dimensional-portal.js",
+        "fileName": "dimensional-portal.js",
+        "lines": 223,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\dizzy-cam.js",
+        "fileName": "dizzy-cam.js",
+        "lines": 167,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\dna-quantum-evolution.js",
+        "fileName": "dna-quantum-evolution.js",
+        "lines": 197,
+        "particleCount": 2,
+        "complexity": 19,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\post-processing.js",
+        "fileName": "post-processing.js",
+        "lines": 189,
+        "particleCount": 0,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\quantum-rainbow.js",
+        "fileName": "quantum-rainbow.js",
+        "lines": 59,
+        "particleCount": 8,
+        "complexity": 3,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\energy-sphere.js",
+        "fileName": "energy-sphere.js",
+        "lines": 95,
+        "particleCount": 6,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\energy-wave.js",
+        "fileName": "energy-wave.js",
+        "lines": 141,
+        "particleCount": 0,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\enhanced\\quantum-consciousness-field-enhanced.js",
+        "fileName": "quantum-consciousness-field-enhanced.js",
+        "lines": 104,
+        "particleCount": 8000,
+        "complexity": 2,
+        "usesBaseEffect": true,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\epic-dive.js",
+        "fileName": "epic-dive.js",
+        "lines": 113,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\galaxy-time-portal.js",
+        "fileName": "galaxy-time-portal.js",
+        "lines": 202,
+        "particleCount": 10000,
+        "complexity": 14,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\galaxy-vortex.js",
+        "fileName": "galaxy-vortex.js",
+        "lines": 150,
+        "particleCount": 25000,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\glitch-effect.js",
+        "fileName": "glitch-effect.js",
+        "lines": 137,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\holographic\\holographic-core.js",
+        "fileName": "holographic-core.js",
+        "lines": 424,
+        "particleCount": 50,
+        "complexity": 1,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\holographic\\holographic-factory.js",
+        "fileName": "holographic-factory.js",
+        "lines": 357,
+        "particleCount": 1000,
+        "complexity": 19,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\hyperspace-portal.js",
+        "fileName": "hyperspace-portal.js",
+        "lines": 157,
+        "particleCount": 8000,
+        "complexity": 11,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\hyperspace-warp-drive.js",
+        "fileName": "hyperspace-warp-drive.js",
+        "lines": 89,
+        "particleCount": 10000,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\hyperspace.js",
+        "fileName": "hyperspace.js",
+        "lines": 155,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\index.js",
+        "fileName": "index.js",
+        "lines": 271,
+        "particleCount": 0,
+        "complexity": 0,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\light-wings.js",
+        "fileName": "light-wings.js",
+        "lines": 120,
+        "particleCount": 8,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\lightning-chain.js",
+        "fileName": "lightning-chain.js",
+        "lines": 143,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\nebula-vortex.js",
+        "fileName": "nebula-vortex.js",
+        "lines": 137,
+        "particleCount": 5,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\ocean-aurora.js",
+        "fileName": "ocean-aurora.js",
+        "lines": 150,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\orbital-rotation.js",
+        "fileName": "orbital-rotation.js",
+        "lines": 137,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\particle-explosion.js",
+        "fileName": "particle-explosion.js",
+        "lines": 111,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\planet-explosion.js",
+        "fileName": "planet-explosion.js",
+        "lines": 206,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\portal-gate.js",
+        "fileName": "portal-gate.js",
+        "lines": 95,
+        "particleCount": 8,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\quantum-dimension-break.js",
+        "fileName": "quantum-dimension-break.js",
+        "lines": 95,
+        "particleCount": 12,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\quantum-fire-storm.js",
+        "fileName": "quantum-fire-storm.js",
+        "lines": 183,
+        "particleCount": 3000,
+        "complexity": 15,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\quantum-rainbow-tunnel.js",
+        "fileName": "quantum-rainbow-tunnel.js",
+        "lines": 120,
+        "particleCount": 8,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\quantum-shift.js",
+        "fileName": "quantum-shift.js",
+        "lines": 166,
+        "particleCount": 0,
+        "complexity": 9,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\scene-roaming.js",
+        "fileName": "scene-roaming.js",
+        "lines": 119,
+        "particleCount": 0,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\space-warp.js",
+        "fileName": "space-warp.js",
+        "lines": 218,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\time-rewind.js",
+        "fileName": "time-rewind.js",
+        "lines": 265,
+        "particleCount": 0,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\time-rift.js",
+        "fileName": "time-rift.js",
+        "lines": 204,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\time-shards.js",
+        "fileName": "time-shards.js",
+        "lines": 93,
+        "particleCount": 3000,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\time-travel.js",
+        "fileName": "time-travel.js",
+        "lines": 214,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\utils.js",
+        "fileName": "utils.js",
+        "lines": 189,
+        "particleCount": 50,
+        "complexity": 8,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\virtual-reality.js",
+        "fileName": "virtual-reality.js",
+        "lines": 196,
+        "particleCount": 0,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": false,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "memory",
+            "severity": "error",
+            "message": "缺少cleanup逻辑，可能导致内存泄漏"
+          }
+        ],
+        "priority": "P1"
+      }
+    ],
+    "P2": [
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\aurora-fantasy.js",
+        "fileName": "aurora-fantasy.js",
+        "lines": 1004,
+        "particleCount": 10,
+        "complexity": 34,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\base\\BaseEffect.js",
+        "fileName": "BaseEffect.js",
+        "lines": 294,
+        "particleCount": 0,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\base\\OptimizedBaseEffect.js",
+        "fileName": "OptimizedBaseEffect.js",
+        "lines": 317,
+        "particleCount": 0,
+        "complexity": 7,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\big-bang-genesis.js",
+        "fileName": "big-bang-genesis.js",
+        "lines": 1753,
+        "particleCount": 50000,
+        "complexity": 59,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "maintainability",
+            "severity": "warning",
+            "message": "文件过于复杂，建议拆分"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\cosmic-epic-symphony.js",
+        "fileName": "cosmic-epic-symphony.js",
+        "lines": 1030,
+        "particleCount": 30000,
+        "complexity": 32,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\cosmic-supernova.js",
+        "fileName": "cosmic-supernova.js",
+        "lines": 631,
+        "particleCount": 8000,
+        "complexity": 21,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\cyber-space-rift.js",
+        "fileName": "cyber-space-rift.js",
+        "lines": 925,
+        "particleCount": 200,
+        "complexity": 31,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\digital-life-bloom.js",
+        "fileName": "digital-life-bloom.js",
+        "lines": 490,
+        "particleCount": 8000,
+        "complexity": 12,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\digital-rain.js",
+        "fileName": "digital-rain.js",
+        "lines": 424,
+        "particleCount": 400,
+        "complexity": 22,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\dimension-genesis-symphony.js",
+        "fileName": "dimension-genesis-symphony.js",
+        "lines": 374,
+        "particleCount": 12000,
+        "complexity": 10,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\dimensional-resonance-symphony.js",
+        "fileName": "dimensional-resonance-symphony.js",
+        "lines": 1114,
+        "particleCount": 11,
+        "complexity": 22,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\dna-helix.js",
+        "fileName": "dna-helix.js",
+        "lines": 532,
+        "particleCount": 15000,
+        "complexity": 20,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\ancient-ruins.js",
+        "fileName": "ancient-ruins.js",
+        "lines": 298,
+        "particleCount": 12,
+        "complexity": 11,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\aurora-fluid.js",
+        "fileName": "aurora-fluid.js",
+        "lines": 220,
+        "particleCount": 12,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\butterfly-swarm.js",
+        "fileName": "butterfly-swarm.js",
+        "lines": 247,
+        "particleCount": 300,
+        "complexity": 17,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\cherry-blossom.js",
+        "fileName": "cherry-blossom.js",
+        "lines": 243,
+        "particleCount": 2000,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\cosmic-particle-symphony.js",
+        "fileName": "cosmic-particle-symphony.js",
+        "lines": 381,
+        "particleCount": 20000,
+        "complexity": 9,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\cosmic-supernova.js",
+        "fileName": "cosmic-supernova.js",
+        "lines": 330,
+        "particleCount": 15000,
+        "complexity": 21,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\crystal-pyramid.js",
+        "fileName": "crystal-pyramid.js",
+        "lines": 351,
+        "particleCount": 3000,
+        "complexity": 8,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\crystal-shards.js",
+        "fileName": "crystal-shards.js",
+        "lines": 336,
+        "particleCount": 100,
+        "complexity": 23,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\crystalline-forest.js",
+        "fileName": "crystalline-forest.js",
+        "lines": 238,
+        "particleCount": 30,
+        "complexity": 2,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\cyber-grid-city.js",
+        "fileName": "cyber-grid-city.js",
+        "lines": 286,
+        "particleCount": 100,
+        "complexity": 8,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\digital-rain.js",
+        "fileName": "digital-rain.js",
+        "lines": 308,
+        "particleCount": 200,
+        "complexity": 10,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\dna-helix.js",
+        "fileName": "dna-helix.js",
+        "lines": 288,
+        "particleCount": 50,
+        "complexity": 6,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\energy-pulse-ring.js",
+        "fileName": "energy-pulse-ring.js",
+        "lines": 352,
+        "particleCount": 6,
+        "complexity": 6,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\energy-sphere.js",
+        "fileName": "energy-sphere.js",
+        "lines": 315,
+        "particleCount": 6,
+        "complexity": 9,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\energy-wave.js",
+        "fileName": "energy-wave.js",
+        "lines": 184,
+        "particleCount": 0,
+        "complexity": 2,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\ethereal-aurora.js",
+        "fileName": "ethereal-aurora.js",
+        "lines": 207,
+        "particleCount": 8,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\fire-storm.js",
+        "fileName": "fire-storm.js",
+        "lines": 265,
+        "particleCount": 5000,
+        "complexity": 6,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\galaxy-vortex.js",
+        "fileName": "galaxy-vortex.js",
+        "lines": 347,
+        "particleCount": 8,
+        "complexity": 6,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\hyperspace-warp-drive.js",
+        "fileName": "hyperspace-warp-drive.js",
+        "lines": 373,
+        "particleCount": 5000,
+        "complexity": 7,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\light-wings.js",
+        "fileName": "light-wings.js",
+        "lines": 270,
+        "particleCount": 8,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\lightning-chain.js",
+        "fileName": "lightning-chain.js",
+        "lines": 180,
+        "particleCount": 0,
+        "complexity": 6,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\liquid-metal.js",
+        "fileName": "liquid-metal.js",
+        "lines": 235,
+        "particleCount": 5,
+        "complexity": 10,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\nebula-vortex.js",
+        "fileName": "nebula-vortex.js",
+        "lines": 248,
+        "particleCount": 5,
+        "complexity": 5,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\ocean-aurora.js",
+        "fileName": "ocean-aurora.js",
+        "lines": 234,
+        "particleCount": 8,
+        "complexity": 3,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\particle-system.js",
+        "fileName": "particle-system.js",
+        "lines": 175,
+        "particleCount": 3000,
+        "complexity": 8,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\portal-gate.js",
+        "fileName": "portal-gate.js",
+        "lines": 302,
+        "particleCount": 8,
+        "complexity": 10,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\quantum-dimension-break.js",
+        "fileName": "quantum-dimension-break.js",
+        "lines": 315,
+        "particleCount": 12,
+        "complexity": 7,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\quantum-rainbow-tunnel.js",
+        "fileName": "quantum-rainbow-tunnel.js",
+        "lines": 242,
+        "particleCount": 8,
+        "complexity": 4,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\time-shards.js",
+        "fileName": "time-shards.js",
+        "lines": 406,
+        "particleCount": 3000,
+        "complexity": 7,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\effects\\tunnel-effect.js",
+        "fileName": "tunnel-effect.js",
+        "lines": 195,
+        "particleCount": 10,
+        "complexity": 2,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\eternal-return-optimized.js",
+        "fileName": "eternal-return-optimized.js",
+        "lines": 855,
+        "particleCount": 0,
+        "complexity": 24,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\eternal-return.js",
+        "fileName": "eternal-return.js",
+        "lines": 1082,
+        "particleCount": 20,
+        "complexity": 33,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\fireworks-fading.js",
+        "fileName": "fireworks-fading.js",
+        "lines": 1076,
+        "particleCount": 12000,
+        "complexity": 67,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          },
+          {
+            "type": "maintainability",
+            "severity": "warning",
+            "message": "文件过于复杂，建议拆分"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\fireworks-moon-night.js",
+        "fileName": "fireworks-moon-night.js",
+        "lines": 870,
+        "particleCount": 10000,
+        "complexity": 45,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\galactic-vortex.js",
+        "fileName": "galactic-vortex.js",
+        "lines": 399,
+        "particleCount": 1500,
+        "complexity": 19,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\galaxy-flow.js",
+        "fileName": "galaxy-flow.js",
+        "lines": 1469,
+        "particleCount": 30000,
+        "complexity": 41,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\holographic\\holographic-animations-enhanced.js",
+        "fileName": "holographic-animations-enhanced.js",
+        "lines": 915,
+        "particleCount": 20,
+        "complexity": 33,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\interstellar-supernova.js",
+        "fileName": "interstellar-supernova.js",
+        "lines": 1098,
+        "particleCount": 50000,
+        "complexity": 36,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\nebula-vortex-open.js",
+        "fileName": "nebula-vortex-open.js",
+        "lines": 735,
+        "particleCount": 6,
+        "complexity": 14,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\quantum-dream-weaver.js",
+        "fileName": "quantum-dream-weaver.js",
+        "lines": 1112,
+        "particleCount": 30000,
+        "complexity": 39,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\quantum-entanglement-symphony.js",
+        "fileName": "quantum-entanglement-symphony.js",
+        "lines": 1160,
+        "particleCount": 10000,
+        "complexity": 31,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\quantum-leap.js",
+        "fileName": "quantum-leap.js",
+        "lines": 410,
+        "particleCount": 2000,
+        "complexity": 18,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\quantum-matrix.js",
+        "fileName": "quantum-matrix.js",
+        "lines": 369,
+        "particleCount": 2000,
+        "complexity": 17,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\quantum-rainbow-foam.js",
+        "fileName": "quantum-rainbow-foam.js",
+        "lines": 809,
+        "particleCount": 12,
+        "complexity": 13,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\stellar-whisperer.js",
+        "fileName": "stellar-whisperer.js",
+        "lines": 620,
+        "particleCount": 2000,
+        "complexity": 36,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\time-sand.js",
+        "fileName": "time-sand.js",
+        "lines": 1325,
+        "particleCount": 25000,
+        "complexity": 43,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\time-weaver.js",
+        "fileName": "time-weaver.js",
+        "lines": 426,
+        "particleCount": 4,
+        "complexity": 15,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\void-creation-symphony.js",
+        "fileName": "void-creation-symphony.js",
+        "lines": 1256,
+        "particleCount": 3000,
+        "complexity": 26,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\wind-flower-snow-moon.js",
+        "fileName": "wind-flower-snow-moon.js",
+        "lines": 1634,
+        "particleCount": 15000,
+        "complexity": 46,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      },
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\youthful-years.js",
+        "fileName": "youthful-years.js",
+        "lines": 1012,
+        "particleCount": 35000,
+        "complexity": 24,
+        "usesBaseEffect": false,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [
+          {
+            "type": "architecture",
+            "severity": "warning",
+            "message": "未使用BaseEffect基类，可能导致代码重复"
+          }
+        ],
+        "priority": "P2"
+      }
+    ],
+    "P3": [
+      {
+        "filePath": "e:\\my-work2025\\zooow-20260110\\zooow20251221\\pages\\home\\components\\animation\\animations\\base\\EnhancedBaseEffect.js",
+        "fileName": "EnhancedBaseEffect.js",
+        "lines": 220,
+        "particleCount": 0,
+        "complexity": 3,
+        "usesBaseEffect": true,
+        "hasCleanup": true,
+        "hasON2Loops": [],
+        "issues": [],
+        "priority": "P3"
+      }
+    ]
+  },
+  "topIssues": [
+    {
+      "type": "memory",
+      "severity": "error",
+      "message": "缺少cleanup逻辑，可能导致内存泄漏"
+    },
+    {
+      "type": "memory",
+      "severity": "error",
+      "message": "缺少cleanup逻辑，可能导致内存泄漏"
+    },
+    {
+      "type": "memory",
+      "severity": "error",
+      "message": "缺少cleanup逻辑，可能导致内存泄漏"
+    },
+    {
+      "type": "memory",
+      "severity": "error",
+      "message": "缺少cleanup逻辑，可能导致内存泄漏"
+    },
+    {
+      "type": "memory",
+      "severity": "error",
+      "message": "缺少cleanup逻辑，可能导致内存泄漏"
+    },
+    {
+      "type": "memory",
+      "severity": "error",
+      "message": "缺少cleanup逻辑，可能导致内存泄漏"
+    },
+    {
+      "type": "memory",
+      "severity": "error",
+      "message": "缺少cleanup逻辑，可能导致内存泄漏"
+    },
+    {
+      "type": "memory",
+      "severity": "error",
+      "message": "缺少cleanup逻辑，可能导致内存泄漏"
+    },
+    {
+      "type": "memory",
+      "severity": "error",
+      "message": "缺少cleanup逻辑，可能导致内存泄漏"
+    },
+    {
+      "type": "memory",
+      "severity": "error",
+      "message": "缺少cleanup逻辑，可能导致内存泄漏"
+    }
+  ],
+  "recommendations": [
+    "52 个文件缺少cleanup逻辑，需要补充",
+    "113 个文件未使用BaseEffect，建议重构"
+  ]
+}

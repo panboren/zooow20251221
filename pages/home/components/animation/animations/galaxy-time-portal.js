@@ -1,7 +1,9 @@
 /**
- * 银河时光传送门动画
+ * 银河时光传送门动画 - 优化版
  * 组合特效：银河漩涡 + 时光碎片 + 传送门
  * 创意：时光碎片在银河中旋转，形成传送门穿越时空
+ * - 粒子数减少50%
+ * - 使用PerformanceMonitor性能监控
  */
 
 // 延迟导入，避免 SSR 问题
@@ -21,6 +23,7 @@ export default function animateGalaxyTimePortal(props, callbacks) {
         const galaxyModule = await import('./effects/galaxy-vortex')
         const timeShardsModule = await import('./effects/time-shards')
         const portalModule = await import('./effects/portal-gate')
+        const perfMonitorModule = await import('~/utils/PerformanceMonitor.js')
 
         const THREE = threeModule.default || threeModule
         const gsap = gsapModule.gsap || gsapModule
@@ -28,9 +31,14 @@ export default function animateGalaxyTimePortal(props, callbacks) {
         const { createGalaxyVortex } = galaxyModule
         const { createTimeShards } = timeShardsModule
         const { createPortalGate } = portalModule
+        const { PerformanceMonitor } = perfMonitorModule
 
         const { camera, renderer, scene, controls } = props
         const { onComplete, onError } = callbacks || {}
+
+        // 创建性能监控器
+        const perfMonitor = new PerformanceMonitor()
+        perfMonitor.start()
 
         setupInitialCamera(camera, new THREE.Vector3(0, 40, 110), 140, controls)
         camera.lookAt(0, 0, 0)
@@ -39,26 +47,28 @@ export default function animateGalaxyTimePortal(props, callbacks) {
 
         const tl = createTimeline(
           () => {
+            perfMonitor.stop()
+            perfMonitor.logReport()
             if (onComplete) onComplete({ type: 'galaxy-time-portal' })
           },
           onError,
-          '银河时光传送门',
+          '银河时光传送门 (优化版)',
           controls
         )
 
         const galaxyVortex = createGalaxyVortex(scene, {
-          particleCount: 10000,
+          particleCount: 5000,   // 10000 → 5000
           spiralCount: 5
         })
 
         const timeShards = createTimeShards(scene, {
-          shardCount: 500,
-          fragmentCount: 3000
+          shardCount: 250,     // 500 → 250
+          fragmentCount: 1500   // 3000 → 1500
         })
 
         const portalGate = createPortalGate(scene, {
           ringCount: 4,
-          particleCount: 2500
+          particleCount: 1250    // 2500 → 1250
         })
 
         // 阶段1: 银河漩涡启动

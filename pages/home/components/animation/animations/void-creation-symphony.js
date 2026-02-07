@@ -1,5 +1,5 @@
 /**
- * 虚空创世交响曲特效
+ * 虚空创世交响曲特效 - 优化版
  * 全新炸裂特效 - 融合宇宙起源与大爆炸理论
  * 实现奇点大爆炸、宇宙暴涨、星系形成、黑洞蒸发、热寂等宇宙演化全过程
  * 技术亮点：
@@ -8,7 +8,9 @@
  * - 暗物质与暗能量分布
  * - 多重宇宙气泡模型
  * - 熵增与热寂
- * - 15000+ 大规模粒子系统
+ * - 7500 优化粒子系统 (减少50%)
+ * - 使用ParticleFactory统一创建
+ * - 使用PerformanceMonitor性能监控
  * - 分形宇宙结构生成
  * - 实时宇宙年龄演化模拟
  */
@@ -16,10 +18,16 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { ParticleFactory } from '~/utils/ParticleFactory.js'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateVoidCreation(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     // 初始设置 - 虚空视角
@@ -30,50 +38,52 @@ export default function animateVoidCreation(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'void-creation' })
       },
       onError,
-      '虚空创世交响曲',
+      '虚空创世交响曲 (优化版)',
       controls
     )
 
-    // 创建普朗克尺度奇点
+    // 创建普朗克尺度奇点 - 使用ParticleFactory，减少50%粒子
     const planckSingularity = createPlanckSingularity(scene, {
       singularityRadius: 0.1,
-      quantumFluctuationCount: 3000
+      quantumFluctuationCount: 1500  // 3000 → 1500
     })
 
-    // 创建暴胀场
+    // 创建暴胀场 - 减少50%粒子
     const inflationField = createInflationField(scene, {
       fieldStrength: 100,
-      quantumTunnelingCount: 5000
+      quantumTunnelingCount: 2500  // 5000 → 2500
     })
 
-    // 创建宇宙物质系统
+    // 创建宇宙物质系统 - 减少50%粒子
     const cosmicMatter = createCosmicMatterSystem(scene, {
-      particleCount: 15000,
+      particleCount: 7500,  // 15000 → 7500
       darkMatterRatio: 0.27,
       darkEnergyRatio: 0.68
     })
 
-    // 创建宇宙结构形成
+    // 创建宇宙结构形成 - 减少星系数量
     const cosmicStructure = createCosmicStructure(scene, {
-      galaxyCount: 8,
-      clusterCount: 12,
+      galaxyCount: 4,        // 8 → 4
+      clusterCount: 6,       // 12 → 6
       superclusterScale: 200
     })
 
-    // 创建黑洞系统
+    // 创建黑洞系统 - 减少黑洞数量
     const blackHoleSystem = createBlackHoleSystem(scene, {
-      blackHoleCount: 5,
+      blackHoleCount: 3,    // 5 → 3
       eventHorizonScale: 15
     })
 
-    // 创建热寂系统
+    // 创建热寂系统 - 减少50%粒子
     const heatDeath = createHeatDeathSystem(scene, {
       entropyLevel: 0,
       maxEntropy: 1000,
-      particleDissipationCount: 8000
+      particleDissipationCount: 4000  // 8000 → 4000
     })
 
     // 阶段1: 虚空 - 普朗克尺度量子涨落

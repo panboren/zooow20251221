@@ -1,16 +1,24 @@
 /**
- * 星云能量爆发动画
+ * 星云能量爆发动画 - 优化版
  * 全新炸裂特效 - 青春洋溢、活力四射
  * 实现能量积累、星云爆发、能量冲浪、时空漩涡等震撼效果
+ * - 粒子数减少50%
+ * - 使用PerformanceMonitor性能监控
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { ParticleFactory } from '~/utils/ParticleFactory.js'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateNebulaEnergyBurst(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     // 初始设置 - 远景视角
@@ -21,10 +29,12 @@ export default function animateNebulaEnergyBurst(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'nebula-energy-burst' })
       },
       onError,
-      '星云能量爆发',
+      '星云能量爆发 (优化版)',
       controls
     )
 
@@ -40,9 +50,9 @@ export default function animateNebulaEnergyBurst(props, callbacks) {
       maxRadius: 120
     })
 
-    // 创建能量粒子风暴 - 青春色彩
+    // 创建能量粒子风暴 - 青春色彩（减少50%）
     const particleStorm = createParticleStorm(scene, {
-      particleCount: 10000,
+      particleCount: 5000,   // 10000 → 5000
       stormRadius: 150
     })
 

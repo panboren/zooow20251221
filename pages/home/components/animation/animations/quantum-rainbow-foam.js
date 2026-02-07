@@ -1,17 +1,24 @@
 /**
- * 彩虹量子泡沫动画
+ * 彩虹量子泡沫动画 - 优化版
  * 全新创新特效 - 量子泡沫理论 + 彩虹元素
  * 实现量子涨落、泡沫浮现、彩虹波纹、概率云等超现实效果
  * 基于量子力学中的"时空泡沫"理论
+ * - 粒子数减少50%
+ * - 使用PerformanceMonitor性能监控
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateRainbowQuantumFoam(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     // 初始设置 - 量子视角
@@ -22,10 +29,12 @@ export default function animateRainbowQuantumFoam(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'rainbow-quantum-foam' })
       },
       onError,
-      '彩虹量子泡沫',
+      '彩虹量子泡沫 (优化版)',
       controls
     )
 
@@ -41,10 +50,10 @@ export default function animateRainbowQuantumFoam(props, callbacks) {
       maxRadius: 140
     })
 
-    // 创建概率云 - 彩虹色彩
+    // 创建概率云 - 彩虹色彩（减少50%）
     const probabilityClouds = createProbabilityClouds(scene, {
       cloudCount: 15,
-      particleCount: 8000
+      particleCount: 4000    // 8000 → 4000
     })
 
     // 创建时空泡沫 - 彩虹色彩

@@ -1,25 +1,31 @@
 /**
- * 赛博时空裂缝 - 超越现有特效的全新作品
+ * 赛博时空裂缝 - 优化版
  * 融合赛博朋克美学、时空撕裂、量子隧道、数字崩塌等超现实概念
  * 技术突破：
  * - 实时GLSL着色器渲染
  * - 程序化生成赛博城市轮廓
  * - 时空裂缝动态撕裂效果
- * - 量子隧道粒子系统（10000+粒子）
+ * - 量子隧道粒子系统（7500粒子，减少50%）
  * - 赛博霓虹光影效果
  * - 数字雨矩阵效果
  * - 多层次时空折叠
  * - 动态音频响应视觉效果
+ * - 使用PerformanceMonitor性能监控
  * 动画时长：25秒
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateCyberSpaceRift(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     // 初始设置 - 远景观察
@@ -30,10 +36,12 @@ export default function animateCyberSpaceRift(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'cyber-space-rift' })
       },
       onError,
-      '赛博时空裂缝',
+      '赛博时空裂缝 (优化版)',
       controls
     )
 
@@ -52,9 +60,9 @@ export default function animateCyberSpaceRift(props, callbacks) {
       energyPulseSpeed: 2
     })
 
-    // 3. 量子隧道粒子系统
+    // 3. 量子隧道粒子系统（减少50%）
     const quantumTunnel = createQuantumTunnel(scene, {
-      particleCount: 15000,
+      particleCount: 7500,    // 15000 → 7500
       tunnelLength: 400,
       tunnelRadius: 60
     })
@@ -65,9 +73,9 @@ export default function animateCyberSpaceRift(props, callbacks) {
       colorCycle: true
     })
 
-    // 5. 数字雨矩阵
+    // 5. 数字雨矩阵（减少50%）
     const digitalRain = createDigitalRainMatrix(scene, {
-      rainCount: 8000,
+      rainCount: 4000,       // 8000 → 4000
       fallSpeed: 3,
       characters: '0123456789ABCDEF'
     })

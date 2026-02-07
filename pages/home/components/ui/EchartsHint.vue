@@ -1,12 +1,15 @@
 <template>
-  <div class="echarts-hint" title="Go ECharts 3D" @click="goTo">
-    <span class="echarts-3d letter-animate letter-e" style="animation-delay: 0s">E</span>
-    <span class="echarts-3d letter-animate letter-c" style="animation-delay: 0.1s">c</span>
-    <span class="echarts-3d letter-animate letter-h" style="animation-delay: 0.2s">h</span>
-    <span class="echarts-3d letter-animate letter-a" style="animation-delay: 0.3s">a</span>
-    <span class="echarts-3d letter-animate letter-r" style="animation-delay: 0.4s">r</span>
-    <span class="echarts-3d letter-animate letter-t" style="animation-delay: 0.5s">t</span>
-    <span class="echarts-3d letter-animate letter-s" style="animation-delay: 0.6s">s</span>
+  <div class="echarts-hint" title="Go ECharts" @click="goTo">
+    <div class="echarts-hint-title">数据可视化</div>
+    <div class="echarts-hint-abc">
+      <span class="echarts-3d letter-animate letter-e" style="animation-delay: 0s">E</span>
+      <span class="echarts-3d letter-animate letter-c" style="animation-delay: 0.1s">c</span>
+      <span class="echarts-3d letter-animate letter-h" style="animation-delay: 0.2s">h</span>
+      <span class="echarts-3d letter-animate letter-a" style="animation-delay: 0.3s">a</span>
+      <span class="echarts-3d letter-animate letter-r" style="animation-delay: 0.4s">r</span>
+      <span class="echarts-3d letter-animate letter-t" style="animation-delay: 0.5s">t</span>
+      <span class="echarts-3d letter-animate letter-s" style="animation-delay: 0.6s">s</span>
+    </div>
   </div>
 </template>
 
@@ -31,7 +34,7 @@ let goTo = () => {
   top: 80px;
   left: 20px;
   background: linear-gradient(45deg, rgba(11, 47, 66, 0.6), rgba(3, 38, 56, 0.7), rgba(5, 17, 73, 0.7));
-  padding: 12px 16px;
+  padding: 12px 5px;
   border-radius: 8px;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(252, 232, 164, 0.2);
@@ -42,9 +45,16 @@ let goTo = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   box-sizing: border-box;
   opacity: 0.8;
   cursor: pointer;
+
+  .echarts-hint-abc{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   &:hover {
     box-sizing: border-box;
@@ -118,6 +128,12 @@ let goTo = () => {
   //}
 }
 
+.echarts-hint-title{
+  font-size: 14px;
+  color: #fff;
+  padding: 10px 0;
+  text-wrap: nowrap;
+}
 // 字母独立动画类
 .letter-animate {
   display: inline-block;
@@ -267,6 +283,9 @@ let goTo = () => {
     
     animation: gradientShift 4s ease-in-out infinite alternate;
   }
+  .echarts-hint-title{
+    font-size: 12px;
+  }
   
   .letter-animate {
     animation: bounceIn 2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
@@ -297,7 +316,9 @@ let goTo = () => {
       0 1px 0 #444,
       0 2px 0 #333;
   }
-  
+  .echarts-hint-title{
+    font-size: 9px;
+  }
   .letter-animate {
     animation: bounceIn 2.5s ease-in-out infinite alternate;
     
@@ -323,7 +344,9 @@ let goTo = () => {
     // 触摸设备上减少动画复杂度
     animation: gradientShift 6s ease-in-out infinite alternate;
   }
-  
+  .echarts-hint-title{
+    font-size: 10px;
+  }
   .letter-animate {
     animation: bounceIn 3s ease-in-out infinite alternate;
   }

@@ -1,9 +1,9 @@
 /**
- * 时间之沙 - 时空粒子流特效（增强版）
+ * 时间之沙 - 优化版
  * 融合沙漏、时光倒流、粒子流动的唯美视觉效果
  * 技术亮点：
  * - 沙漏形态变换
- * - 80000+ 流动粒子
+ * - 40000 流动粒子（减少50%）
  * - 时空涟漪效应
  * - 黄金粒子流
  * - 时间冻结与倒流
@@ -12,15 +12,23 @@
  * - 时间碎片
  * - 能量脉冲
  * - 螺旋时光隧道
+ * - 使用ParticleFactory统一创建
+ * - 使用PerformanceMonitor性能监控
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { ParticleFactory } from '~/utils/ParticleFactory.js'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateTimeSand(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     // 初始设置 - 远距离俯视视角
@@ -31,45 +39,47 @@ export default function animateTimeSand(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'time-sand' })
       },
       onError,
-      '时间之沙',
+      '时间之沙 (优化版)',
       controls
     )
 
-    // 沙漏框架（增强版）
+    // 沙漏框架
     const hourglassFrame = createHourglassFrame(scene)
 
-    // 黄金时间沙（25000粒子）
+    // 黄金时间沙（12500粒子，减少50%）
     const goldenSand = createGoldenSand(scene, {
-      particleCount: 25000
+      particleCount: 12500  // 25000 → 12500
     })
 
-    // 银河星尘（15000粒子）
+    // 银河星尘（7500粒子，减少50%）
     const galaxyStardust = createGalaxyStardust(scene, {
-      particleCount: 15000
+      particleCount: 7500   // 15000 → 7500
     })
 
     // 时空涟漪
     const timeRipples = createTimeRipples(scene)
 
-    // 倒流粒子（15000粒子）
+    // 倒流粒子（7500粒子，减少50%）
     const reversedParticles = createReversedParticles(scene, {
-      particleCount: 15000
+      particleCount: 7500   // 15000 → 7500
     })
 
     // 时间漩涡
     const timeVortex = createTimeVortex(scene)
 
-    // 光之轨迹（5000粒子）
+    // 光之轨迹（2500粒子，减少50%）
     const lightTrails = createLightTrails(scene, {
-      particleCount: 5000
+      particleCount: 2500   // 5000 → 2500
     })
 
-    // 时间碎片（3000粒子）
+    // 时间碎片（1500粒子，减少50%）
     const timeShards = createTimeShards(scene, {
-      shardCount: 3000
+      shardCount: 1500     // 3000 → 1500
     })
 
     // 能量脉冲

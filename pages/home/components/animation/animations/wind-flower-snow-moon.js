@@ -1,5 +1,5 @@
 /**
- * 风花雪月 - 诗意自然特效（唯美增强版）
+ * 风花雪月 - 诗意自然特效（优化版）
  * 融合风、花、雪、月四大自然元素的唯美诗意视觉效果
  * 技术亮点：
  * - 风之絮语：流动的风粒子
@@ -11,11 +11,17 @@
  * - 梦幻光晕：柔和光晕效果
  * - 羽毛飘落：轻盈羽毛
  * - 彩虹涟漪：七彩涟漪
- * - 100000+ 自然粒子
+ * - 50000+ 自然粒子（优化后）
  * - 极度唯美的视觉叙事
+ *
+ * 优化说明：
+ * - 粒子数量从100000+减少到50000
+ * - 保留视觉效果的同时大幅提升性能
  */
 
 import * as THREE from 'three'
+import { ParticleFactory } from '~/utils/ParticleFactory.js'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
 
@@ -24,6 +30,10 @@ export default function animateWindFlowerSnowMoon(props, callbacks) {
   const { onComplete, onError } = callbacks || {}
 
   try {
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
+
     // 初始设置 - 远景俯视
     setupInitialCamera(camera, new THREE.Vector3(0, 70, 0), 100, controls)
     camera.lookAt(0, 0, 0)
@@ -42,53 +52,53 @@ export default function animateWindFlowerSnowMoon(props, callbacks) {
     // 月亮盈亏（唯美版）
     const moonPhase = createMoonPhase(scene)
 
-    // 风之絮语（15000粒子）
+    // 风之絮语（8000粒子 - 优化）
     const windWhispers = createWindWhispers(scene, {
-      particleCount: 15000
+      particleCount: 8000
     })
 
-    // 花之绽放（20000花瓣）
+    // 花之绽放（10000花瓣 - 优化）
     const flowerBloom = createFlowerBloom(scene, {
-      petalCount: 20000
+      petalCount: 10000
     })
 
-    // 樱花飘舞（12000樱花）
+    // 樱花飘舞（6000樱花 - 优化）
     const cherryBlossom = createCherryBlossom(scene, {
-      blossomCount: 12000
+      blossomCount: 6000
     })
 
-    // 雪之飘零（20000雪花）
+    // 雪之飘零（10000雪花 - 优化）
     const snowDrift = createSnowDrift(scene, {
-      snowflakeCount: 20000
+      snowflakeCount: 10000
     })
 
     // 花之涟漪
     const flowerRipples = createFlowerRipples(scene)
 
-    // 风之轨迹（10000粒子）
+    // 风之轨迹（5000粒子 - 优化）
     const windTrails = createWindTrails(scene, {
-      trailCount: 10000
+      trailCount: 5000
     })
 
     // 月光晕染
     const moonGlow = createMoonGlow(scene)
 
-    // 花语星尘（10000粒子）
+    // 花语星尘（5000粒子 - 优化）
     const flowerStardust = createFlowerStardust(scene, {
-      stardustCount: 10000
+      stardustCount: 5000
     })
 
-    // 星空闪烁（8000星星）
+    // 星空闪烁（4000星星 - 优化）
     const starField = createStarField(scene, {
-      starCount: 8000
+      starCount: 4000
     })
 
     // 梦幻光晕
     const dreamHalo = createDreamHalo(scene)
 
-    // 羽毛飘落（5000羽毛）
+    // 羽毛飘落（2500羽毛 - 优化）
     const featherFall = createFeatherFall(scene, {
-      featherCount: 5000
+      featherCount: 2500
     })
 
     // 彩虹涟漪

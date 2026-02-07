@@ -1,5 +1,5 @@
 /**
- * 量子纠缠时空交响曲特效 - 重制版
+ * 量子纠缠时空交响曲特效 - 优化版
  * 融合量子纠缠、蝴蝶效应、贝尔不等式等概念
  * 使用点云、光束、能量场等震撼视觉效果
  * 技术亮点：
@@ -10,16 +10,24 @@
  * - 贝尔不等式违反演示
  * - 量子隧穿与概率云
  * - 平行宇宙分支
- * - 20000+ 超大规模粒子系统
+ * - 10000 优化粒子系统（减少50%）
+ * - 使用ParticleFactory统一创建
+ * - 使用PerformanceMonitor性能监控
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { ParticleFactory } from '~/utils/ParticleFactory.js'
+import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export default function animateQuantumEntanglement(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 创建性能监控器
+  const perfMonitor = new PerformanceMonitor()
+  perfMonitor.start()
 
   try {
     // 初始设置 - 深空量子视角
@@ -30,24 +38,26 @@ export default function animateQuantumEntanglement(props, callbacks) {
 
     const tl = createTimeline(
       () => {
+        perfMonitor.stop()
+        perfMonitor.logReport()
         if (onComplete) onComplete({ type: 'quantum-entanglement' })
       },
       onError,
-      '量子纠缠时空交响曲',
+      '量子纠缠时空交响曲 (优化版)',
       controls
     )
 
     // 创建量子纠缠核心（中心能量场）
     const entanglementCore = createQuantumCore(scene)
 
-    // 创建纠缠粒子云系统（10000粒子）
+    // 创建纠缠粒子云系统（5000粒子，减少50%）
     const entanglementCloud = createEntanglementCloud(scene, {
-      particleCount: 10000
+      particleCount: 5000     // 10000 → 5000
     })
 
-    // 创建量子光束网络（500条光束）
+    // 创建量子光束网络（250条光束，减少50%）
     const quantumBeams = createQuantumBeams(scene, {
-      beamCount: 500
+      beamCount: 250          // 500 → 250
     })
 
     // 创建时空涟漪系统
