@@ -55,6 +55,13 @@ import {
   animateHolographicGlitch
 } from './holographic/holographic-animations-enhanced.js'
 
+// 🎭 专业级全息多边形特效（全新电影级VFX）
+import animateHolographicPolygonPrism from './holographic-polygon-prism.js'
+import animateHolographicGeometricNexus from './holographic-geometric-nexus.js'
+import animateHolographicPolyphonicMatrix from './holographic-polyphonic-matrix.js'
+import animateHolographicCrystallineFormation from './holographic-crystalline-formation.js'
+import animateHolographicSacredGeometry from './holographic-sacred-geometry.js'
+
 // 新增特效动画
 import animateCyberGridCity from './cyber-grid-city'
 import animateDNAHelix from './dna-helix'
@@ -255,7 +262,14 @@ export const animations = {
     'holographic-ring-array': animateHolographicRingArray,
     'holographic-spiral': animateHolographicSpiral,
     'holographic-sphere-array': animateHolographicSphereArray,
-    'holographic-glitch': animateHolographicGlitch
+    'holographic-glitch': animateHolographicGlitch,
+
+    // 🎭 专业级全息多边形特效（全新电影级VFX）
+    'holographic-polygon-prism': animateHolographicPolygonPrism,
+    'holographic-geometric-nexus': animateHolographicGeometricNexus,
+    'holographic-polyphonic-matrix': animateHolographicPolyphonicMatrix,
+    'holographic-crystalline-formation': animateHolographicCrystallineFormation,
+    'holographic-sacred-geometry': animateHolographicSacredGeometry
 
 }
 

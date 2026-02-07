@@ -599,6 +599,9 @@ export function animateHolographicSphereArray(props, callbacks = {}) {
       uColor: { value: new THREE.Color(0x00ffff) }
     },
     vertexShader: `
+      precision highp float;
+      precision highp int;
+
       varying vec2 vUv;
       void main() {
         vUv = uv;
@@ -606,6 +609,9 @@ export function animateHolographicSphereArray(props, callbacks = {}) {
       }
     `,
     fragmentShader: `
+      precision highp float;
+      precision highp int;
+
       uniform float uTime;
       uniform vec3 uColor;
       varying vec2 vUv;

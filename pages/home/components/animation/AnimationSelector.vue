@@ -55,6 +55,13 @@ const animationOptions = [
   { value: 'holographic-sphere-array', label: '⚪ 全息球体阵列' },
   { value: 'holographic-glitch', label: '📺 全息故障艺术' },
 
+  // 🎭 专业级全息多边形特效（全新电影级VFX）
+  { value: 'holographic-polygon-prism', label: '🎭 全息多边形棱镜' },
+  { value: 'holographic-geometric-nexus', label: '🔮 全息几何核心' },
+  { value: 'holographic-polyphonic-matrix', label: '🎹 全息多声部矩阵' },
+  { value: 'holographic-crystalline-formation', label: '💎 全息晶体形成' },
+  { value: 'holographic-sacred-geometry', label: '✨ 全息神圣几何' },
+
 
   // ★★★ 超越级特效（全新突破）★★★
   { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝' },
