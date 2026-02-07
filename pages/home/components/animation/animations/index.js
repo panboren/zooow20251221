@@ -113,7 +113,7 @@ import animateBigBangGenesis from './big-bang-genesis.js'
 import animateCyberSpaceRift from './cyber-space-rift.js'
 import animateInterstellarSupernova from './interstellar-supernova.js'
 import animateQuantumDreamWeaver from './quantum-dream-weaver.js'
-import animateEternalReturn from './eternal-return.js'
+import animateEternalReturn from './eternal-return-optimized.js'
 import animateAuroraFantasy from './aurora-fantasy.js'
 
 // 全新维度创世交响曲特效（超越级）

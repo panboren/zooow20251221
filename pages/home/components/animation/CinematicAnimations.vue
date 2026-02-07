@@ -244,24 +244,20 @@ const props = defineProps({
     default: true
   },
   scene: {
-    type: Object,
-    required: true,
-    validator: (value) => value && typeof value.isScene === 'function'
+    type: [Object, null],
+    default: null
   },
   camera: {
-    type: Object,
-    required: true,
-    validator: (value) => value && typeof value.isCamera === 'function'
+    type: [Object, null],
+    default: null
   },
   renderer: {
-    type: Object,
-    required: true,
-    validator: (value) => value && typeof value.isWebGLRenderer === 'function'
+    type: [Object, null],
+    default: null
   },
   controls: {
-    type: Object,
-    required: true,
-    validator: (value) => value && typeof value.update === 'function'
+    type: [Object, null],
+    default: null
   },
   animationType: {
     type: String,
@@ -361,6 +357,12 @@ const onAnimationError = (error) => {
  * 启动动画
  */
 const startAnimation = () => {
+  // 检查必需的 props 是否存在
+  if (!props.scene || !props.camera || !props.renderer) {
+    console.warn('[CinematicAnimations] Required props are not available yet, skipping animation')
+    return
+  }
+
   // 重置完成状态
   animationComplete.value = false
 

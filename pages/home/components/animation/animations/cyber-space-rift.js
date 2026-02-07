@@ -883,7 +883,7 @@ function createEnergyBurst(scene, options = {}) {
         burst.time += 0.016
         const positions = burst.points.geometry.attributes.position.array
 
-        for (let i = 0; i < velocities.length; i++) {
+        for (let i = 0; i < burst.velocities.length; i++) {
           positions[i * 3] += burst.velocities[i].x
           positions[i * 3 + 1] += burst.velocities[i].y
           positions[i * 3 + 2] += burst.velocities[i].z

@@ -171,8 +171,8 @@ export default function animateDigitalLifeBloom(props, callbacks) {
     const linePositions = new Float32Array(neuralCount * 2 * 3)
     const lineColors = new Float32Array(neuralCount * 2 * 3)
 
-    neuralGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3))
-    neuralGeometry.setAttribute('color', new THREE.BufferAttribute(lineColors, 3))
+    neuralLineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3))
+    neuralLineGeometry.setAttribute('color', new THREE.BufferAttribute(lineColors, 3))
 
     const neuralLineMaterial = new THREE.LineBasicMaterial({
       vertexColors: true,
