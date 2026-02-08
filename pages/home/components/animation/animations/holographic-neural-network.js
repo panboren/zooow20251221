@@ -155,13 +155,13 @@ function createSynapseConnection(start, end, color) {
         float signal = exp(-pow(vProgress - uSignalPos, 2.0) * 50.0);
 
         // 活跃状态
-        float active = uActive * signal * 2.0;
+        float isActive = uActive * signal * 2.0;
 
         // 能量流动
         float energy = smoothstep(0.3, 0.7, sin(uTime * 10.0 + vProgress * 10.0));
 
-        vec3 color = uColor * (baseLine + signal + active + energy * 0.3);
-        float alpha = (baseLine + signal * 0.8 + active + energy * 0.2) * uOpacity;
+        vec3 color = uColor * (baseLine + signal + isActive + energy * 0.3);
+        float alpha = (baseLine + signal * 0.8 + isActive + energy * 0.2) * uOpacity;
 
         gl_FragColor = vec4(color, alpha);
       }

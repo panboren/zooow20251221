@@ -375,9 +375,6 @@ export default function animateHolographicDimensionFold(props, callbacks) {
     // 创建超立方体
     const tesseractData = createTesseract(25, 0x9400d3)
     scene.add(tesseractData.group)
-    tesseractData.materials.forEach(mat => {
-      scene.add(mat)
-    })
 
     // 创建莫比乌斯带
     const mobiusStrips = []

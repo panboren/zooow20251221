@@ -129,7 +129,9 @@ function createAccretionDisk(innerRadius, outerRadius, segments, color) {
       uTime: { value: 0 },
       uColor: { value: new THREE.Color(color) },
       uOpacity: { value: 0 },
-      uRotation: { value: 0 }
+      uRotation: { value: 0 },
+      uInnerRadius: { value: innerRadius },
+      uOuterRadius: { value: outerRadius }
     },
     vertexShader: `
       precision highp float;
@@ -160,6 +162,8 @@ function createAccretionDisk(innerRadius, outerRadius, segments, color) {
       uniform vec3 uColor;
       uniform float uOpacity;
       uniform float uRotation;
+      uniform float uInnerRadius;
+      uniform float uOuterRadius;
 
       varying vec2 vUv;
       varying vec3 vPosition;
@@ -176,7 +180,7 @@ function createAccretionDisk(innerRadius, outerRadius, segments, color) {
         float density = sin(angle * 8.0) * sin(angle * 12.0) * 0.5 + 0.5;
 
         // 温度(内圈热外圈冷)
-        float temperature = smoothstep(outerRadius, innerRadius, dist);
+        float temperature = smoothstep(uOuterRadius, uInnerRadius, dist);
 
         // 多普勒效应
         float doppler = sin(angle) * 0.5 + 0.5;
