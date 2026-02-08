@@ -76,6 +76,14 @@ const animationOptions = [
   { value: 'holographic-phoenix-rebirth', label: '🔥 全息凤凰重生' },
   { value: 'holographic-ethereal-garden', label: '🌸 全息灵空花园' },
 
+  // 🌟 神话级全息特效（传说超越）
+  { value: 'holographic-creation', label: '🌟 全息宇宙创世' },
+  { value: 'holographic-dragon-awakening', label: '🐲 全息神龙觉醒' },
+
+  // ✨ 至高级全息特效（终极追求）
+  { value: 'holographic-universe-consciousness', label: '🌌 全息宇宙意识' },
+  { value: 'holographic-eternity-zenith', label: '🏔️ 全息永恒之巅' },
+
 
   // ★★★ 超越级特效（全新突破）★★★
   { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝' },

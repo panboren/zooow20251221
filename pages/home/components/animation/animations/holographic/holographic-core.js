@@ -12,17 +12,20 @@ import * as THREE from 'three'
 export class HolographicMaterial extends THREE.ShaderMaterial {
   constructor(options = {}) {
     const {
-      color = new THREE.Color(0x00ffff),
+      color = 0x00ffff,
       scanlineSpeed = 0.5,
       scanlineIntensity = 0.3,
       glitchIntensity = 0.0,
       glowIntensity = 1.0
     } = options
 
+    // 确保 color 是 THREE.Color 对象
+    const colorObj = color instanceof THREE.Color ? color : new THREE.Color(color)
+
     super({
       uniforms: {
         uTime: { value: 0 },
-        uColor: { value: color },
+        uColor: { value: colorObj },
         uScanlineSpeed: { value: scanlineSpeed },
         uScanlineIntensity: { value: scanlineIntensity },
         uGlitchIntensity: { value: glitchIntensity },
@@ -450,4 +453,43 @@ export class HolographicBeamMaterial extends THREE.ShaderMaterial {
   update(time) {
     this.uniforms.uTime.value = time
   }
+}
+
+/**
+ * 创建全息网格
+ * @param {THREE.BufferGeometry} geometry - 几何体
+ * @param {Object} options - 材质选项
+ * @returns {THREE.Mesh} 全息网格
+ */
+export function createHolographicMesh(geometry, options = {}) {
+  const material = new HolographicMaterial(options)
+  return new THREE.Mesh(geometry, material)
+}
+
+/**
+ * 创建全息粒子系统
+ * @param {number} count - 粒子数量
+ * @param {Object} options - 材质选项
+ * @returns {THREE.Points} 粒子系统
+ */
+export function createHolographicParticles(count, options = {}) {
+  const geometry = new THREE.BufferGeometry()
+  const positions = new Float32Array(count * 3)
+  const colors = new Float32Array(count * 3)
+
+  for (let i = 0; i < count; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 100
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 100
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 100
+
+    colors[i * 3] = Math.random()
+    colors[i * 3 + 1] = Math.random()
+    colors[i * 3 + 2] = Math.random()
+  }
+
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+
+  const material = new HolographicParticleMaterial(options)
+  return new THREE.Points(geometry, material)
 }

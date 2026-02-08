@@ -10,18 +10,10 @@ import {
   HolographicParticleMaterial,
   HolographicGridMaterial,
   HolographicGlitchMaterial,
-  HolographicBeamMaterial
+  HolographicBeamMaterial,
+  createHolographicMesh,
+  createHolographicParticles
 } from './holographic-core.js'
-
-/**
- * 创建全息几何体
- */
-export function createHolographicMesh(geometry, options = {}) {
-  const material = new HolographicMaterial(options)
-  const mesh = new THREE.Mesh(geometry, material)
-  mesh.userData.isHolographic = true
-  return mesh
-}
 
 /**
  * 创建全息扫描线平面
@@ -39,9 +31,9 @@ export function createHolographicScanlines(size = 100, options = {}) {
 }
 
 /**
- * 创建全息粒子系统
+ * 创建全息粒子系统（球体分布）
  */
-export function createHolographicParticles(count = 1000, options = {}) {
+export function createHolographicSphereParticles(count = 1000, options = {}) {
   const {
     size = 2,
     color = 0x00ffff,

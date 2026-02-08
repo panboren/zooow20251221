@@ -76,6 +76,14 @@ import animateHolographicCrystalCathedral from './holographic-crystal-cathedral.
 import animateHolographicPhoenixRebirth from './holographic-phoenix-rebirth.js'
 import animateHolographicEtherealGarden from './holographic-ethereal-garden.js'
 
+// 🌟 神话级全息特效（传说超越）
+import animateHolographicCreation from './holographic-creation.js'
+import animateHolographicDragonAwakening from './holographic-dragon-awakening.js'
+
+// ✨ 至高级全息特效（终极追求）
+import animateHolographicUniverseConsciousness from './holographic-universe-consciousness.js'
+import animateHolographicEternityZenith from './holographic-eternity-zenith.js'
+
 // 新增特效动画
 import animateCyberGridCity from './cyber-grid-city'
 import animateDNAHelix from './dna-helix'
@@ -134,7 +142,7 @@ import animateBigBangGenesis from './big-bang-genesis.js'
 import animateCyberSpaceRift from './cyber-space-rift.js'
 import animateInterstellarSupernova from './interstellar-supernova.js'
 import animateQuantumDreamWeaver from './quantum-dream-weaver.js'
-import animateEternalReturn from './eternal-return-optimized.js'
+import animateEternalReturn from './eternal-return.js'
 import animateAuroraFantasy from './aurora-fantasy.js'
 
 // 全新维度创世交响曲特效（超越级）
@@ -297,7 +305,15 @@ export const animations = {
     'holographic-bioluminescence': animateHolographicBioluminescence,
     'holographic-crystal-cathedral': animateHolographicCrystalCathedral,
     'holographic-phoenix-rebirth': animateHolographicPhoenixRebirth,
-    'holographic-ethereal-garden': animateHolographicEtherealGarden
+    'holographic-ethereal-garden': animateHolographicEtherealGarden,
+
+    // 🌟 神话级全息特效（传说超越）
+    'holographic-creation': animateHolographicCreation,
+    'holographic-dragon-awakening': animateHolographicDragonAwakening,
+
+    // ✨ 至高级全息特效（终极追求）
+    'holographic-universe-consciousness': animateHolographicUniverseConsciousness,
+    'holographic-eternity-zenith': animateHolographicEternityZenith
 
 }
 
