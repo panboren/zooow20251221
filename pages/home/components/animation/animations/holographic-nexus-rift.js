@@ -261,7 +261,7 @@ function createRiftParticles(count, radius) {
         float dist = length(gl_PointCoord - vec2(0.5));
 
         // 闪烁效果
-        float flicker = sin(uOpacity * 10.0 + vLifetime * 50.0) * 0.3 + 0.7;
+        float flicker = sin(uTime * 10.0 + vLifetime * 50.0) * 0.3 + 0.7;
 
         float alpha = smoothstep(0.5, 0.0, dist) * uOpacity * flicker;
         gl_FragColor = vec4(vColor * 1.5, alpha);

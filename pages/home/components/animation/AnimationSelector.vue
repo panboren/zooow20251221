@@ -69,6 +69,13 @@ const animationOptions = [
   { value: 'holographic-dimension-fold', label: '🔮 全息维度折叠' },
   { value: 'holographic-void-cosmos', label: '🌌 全息虚空宇宙' },
 
+  // ✨ 传说级全息特效（奇迹重现）
+  { value: 'holographic-aurora-borealis', label: '🌌 全息极光' },
+  { value: 'holographic-bioluminescence', label: '🌊 全息生物发光' },
+  { value: 'holographic-crystal-cathedral', label: '💎 全息水晶大教堂' },
+  { value: 'holographic-phoenix-rebirth', label: '🔥 全息凤凰重生' },
+  { value: 'holographic-ethereal-garden', label: '🌸 全息灵空花园' },
+
 
   // ★★★ 超越级特效（全新突破）★★★
   { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝' },

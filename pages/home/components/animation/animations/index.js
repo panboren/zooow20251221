@@ -69,6 +69,13 @@ import animateHolographicQuantumFlux from './holographic-quantum-flux.js'
 import animateHolographicDimensionFold from './holographic-dimension-fold.js'
 import animateHolographicVoidCosmos from './holographic-void-cosmos.js'
 
+// ✨ 传说级全息特效（奇迹重现）
+import animateHolographicAuroraBorealis from './holographic-aurora-borealis.js'
+import animateHolographicBioluminescence from './holographic-bioluminescence.js'
+import animateHolographicCrystalCathedral from './holographic-crystal-cathedral.js'
+import animateHolographicPhoenixRebirth from './holographic-phoenix-rebirth.js'
+import animateHolographicEtherealGarden from './holographic-ethereal-garden.js'
+
 // 新增特效动画
 import animateCyberGridCity from './cyber-grid-city'
 import animateDNAHelix from './dna-helix'
@@ -283,7 +290,14 @@ export const animations = {
     'holographic-neural-network': animateHolographicNeuralNetwork,
     'holographic-quantum-flux': animateHolographicQuantumFlux,
     'holographic-dimension-fold': animateHolographicDimensionFold,
-    'holographic-void-cosmos': animateHolographicVoidCosmos
+    'holographic-void-cosmos': animateHolographicVoidCosmos,
+
+    // ✨ 传说级全息特效（奇迹重现）
+    'holographic-aurora-borealis': animateHolographicAuroraBorealis,
+    'holographic-bioluminescence': animateHolographicBioluminescence,
+    'holographic-crystal-cathedral': animateHolographicCrystalCathedral,
+    'holographic-phoenix-rebirth': animateHolographicPhoenixRebirth,
+    'holographic-ethereal-garden': animateHolographicEtherealGarden
 
 }
 
