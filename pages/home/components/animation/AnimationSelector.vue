@@ -48,23 +48,9 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
-  // 🔮 全息投影特效系统（全新技术栈）
-  { value: 'holographic-data-stream', label: '🔮 全息数据流' },
-  { value: 'holographic-ring-array', label: '💫 全息环形阵列' },
-  { value: 'holographic-spiral', label: '🌀 全息螺旋' },
-  { value: 'holographic-sphere-array', label: '⚪ 全息球体阵列' },
-  { value: 'holographic-glitch', label: '📺 全息故障艺术' },
-
-  // 🎭 专业级全息多边形特效（全新电影级VFX）
-  { value: 'holographic-polygon-prism', label: '🎭 全息多边形棱镜' },
-  { value: 'holographic-geometric-nexus', label: '🔮 全息几何核心' },
-  { value: 'holographic-polyphonic-matrix', label: '🎹 全息多声部矩阵' },
-  { value: 'holographic-crystalline-formation', label: '💎 全息晶体形成' },
-  { value: 'holographic-sacred-geometry', label: '✨ 全息神圣几何' },
-
   // 🌌 超越级全息特效（全新突破）
-  { value: 'holographic-nexus-rift', label: '🌌 全息时空裂缝' },
   { value: 'holographic-neural-network', label: '🧠 全息神经网络' },
+  { value: 'holographic-nexus-rift', label: '🌌 全息时空裂缝' },
   { value: 'holographic-quantum-flux', label: '⚛️ 全息量子涨落' },
   { value: 'holographic-dimension-fold', label: '🔮 全息维度折叠' },
   { value: 'holographic-void-cosmos', label: '🌌 全息虚空宇宙' },
@@ -83,7 +69,6 @@ const animationOptions = [
   // 🧘 禅意全息特效（东方美学）
   { value: 'holographic-zenith-mandala', label: '🧘 全息禅意曼陀罗' },
 
-
   // ★★★ 超越级特效（全新突破）★★★
   { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝 (优化版)' },
   { value: 'interstellar-supernova', label: '💥 星际超新星爆发 (优化版)' },
@@ -92,6 +77,21 @@ const animationOptions = [
   { value: 'aurora-fantasy', label: '🌌 极光幻境' },
   { value: 'dimension-genesis', label: '🚀 维度创世交响曲' },
   { value: 'digital-life-bloom', label: '🌸 数字生命绽放' },
+  // 🔮 全息投影特效系统（全新技术栈）
+  { value: 'holographic-data-stream', label: '🔮 全息数据流' },
+  { value: 'holographic-ring-array', label: '💫 全息环形阵列' },
+  { value: 'holographic-spiral', label: '🌀 全息螺旋' },
+  { value: 'holographic-sphere-array', label: '⚪ 全息球体阵列' },
+  { value: 'holographic-glitch', label: '📺 全息故障艺术' },
+
+  // 🎭 专业级全息多边形特效（全新电影级VFX）
+  { value: 'holographic-polygon-prism', label: '🎭 全息多边形棱镜' },
+  { value: 'holographic-geometric-nexus', label: '🔮 全息几何核心' },
+  { value: 'holographic-polyphonic-matrix', label: '🎹 全息多声部矩阵' },
+  { value: 'holographic-crystalline-formation', label: '💎 全息晶体形成' },
+  { value: 'holographic-sacred-geometry', label: '✨ 全息神圣几何' },
+
+
 
   { value: 'orbital-rotation', label: '🛰️ 轨道环绕' },
   { value: 'wind-flower-snow-moon', label: '🌸 风花雪月' },
