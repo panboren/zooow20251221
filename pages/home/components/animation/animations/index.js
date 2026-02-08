@@ -84,6 +84,9 @@ import animateHolographicDragonAwakening from './holographic-dragon-awakening.js
 import animateHolographicUniverseConsciousness from './holographic-universe-consciousness.js'
 import animateHolographicEternityZenith from './holographic-eternity-zenith.js'
 
+// 🧘 全新禅意全息特效（东方美学）
+import animateHolographicZenithMandala from './holographic-zenith-mandala.js'
+
 // 新增特效动画
 import animateCyberGridCity from './cyber-grid-city'
 import animateDNAHelix from './dna-helix'
@@ -313,7 +316,10 @@ export const animations = {
 
     // ✨ 至高级全息特效（终极追求）
     'holographic-universe-consciousness': animateHolographicUniverseConsciousness,
-    'holographic-eternity-zenith': animateHolographicEternityZenith
+    'holographic-eternity-zenith': animateHolographicEternityZenith,
+
+    // 🧘 禅意全息特效（东方美学）
+    'holographic-zenith-mandala': animateHolographicZenithMandala
 
 }
 

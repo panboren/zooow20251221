@@ -84,6 +84,9 @@ const animationOptions = [
   { value: 'holographic-universe-consciousness', label: '🌌 全息宇宙意识' },
   { value: 'holographic-eternity-zenith', label: '🏔️ 全息永恒之巅' },
 
+  // 🧘 禅意全息特效（东方美学）
+  { value: 'holographic-zenith-mandala', label: '🧘 全息禅意曼陀罗' },
+
 
   // ★★★ 超越级特效（全新突破）★★★
   { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝' },
