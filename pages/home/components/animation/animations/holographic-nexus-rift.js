@@ -252,6 +252,7 @@ function createRiftParticles(count, radius) {
       precision highp float;
       precision highp int;
 
+      uniform float uTime;
       uniform float uOpacity;
 
       varying vec3 vColor;

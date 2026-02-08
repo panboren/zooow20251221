@@ -269,10 +269,7 @@ const props = defineProps({
 /**
  * Emits定义
  */
-const emit = defineEmits({
-  'animation-complete': (payload) => payload !== undefined,
-  'animation-error': (error) => error instanceof Error
-})
+const emit = defineEmits(['animation-complete', 'animation-error'])
 
 /**
  * 响应式状态

@@ -16,7 +16,8 @@ export function animateHolographicDataStream(props, callbacks = {}) {
   const tl = gsap.timeline({
     onComplete: () => {
       cancelAnimationFrame(animId)
-      onComplete?.()
+      const payload = { success: true, animationType: 'holographic-glitch' }
+      onComplete?.(payload)
     },
     onError: (err) => onError?.(err)
   })
@@ -166,7 +167,8 @@ export function animateHolographicRingArray(props, callbacks = {}) {
   const tl = gsap.timeline({
     onComplete: () => {
       cancelAnimationFrame(animId)
-      onComplete?.()
+      const payload = { success: true, animationType: 'holographic-glitch' }
+      onComplete?.(payload)
     },
     onError: (err) => onError?.(err)
   })
@@ -352,7 +354,8 @@ export function animateHolographicSpiral(props, callbacks = {}) {
   const tl = gsap.timeline({
     onComplete: () => {
       cancelAnimationFrame(animId)
-      onComplete?.()
+      const payload = { success: true, animationType: 'holographic-glitch' }
+      onComplete?.(payload)
     },
     onError: (err) => onError?.(err)
   })
@@ -548,7 +551,8 @@ export function animateHolographicSphereArray(props, callbacks = {}) {
   const tl = gsap.timeline({
     onComplete: () => {
       cancelAnimationFrame(animId)
-      onComplete?.()
+      const payload = { success: true, animationType: 'holographic-glitch' }
+      onComplete?.(payload)
     },
     onError: (err) => onError?.(err)
   })
@@ -720,7 +724,8 @@ export function animateHolographicGlitch(props, callbacks = {}) {
   const tl = gsap.timeline({
     onComplete: () => {
       cancelAnimationFrame(animId)
-      onComplete?.()
+      const payload = { success: true, animationType: 'holographic-glitch' }
+      onComplete?.(payload)
     },
     onError: (err) => onError?.(err)
   })

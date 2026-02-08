@@ -192,7 +192,8 @@ export class OptimizedBaseEffect {
       onComplete: () => {
         console.log('动画完成，开始清理...')
         this.cleanup()
-        options.onComplete?.()
+        const payload = { success: true, animationId: this.animationId }
+        options.onComplete?.(payload)
       },
       onInterrupt: () => {
         console.warn('动画被中断，开始清理...')

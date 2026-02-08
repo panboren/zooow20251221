@@ -80,19 +80,15 @@ const animationOptions = [
   { value: 'holographic-creation', label: '🌟 全息宇宙创世' },
   { value: 'holographic-dragon-awakening', label: '🐲 全息神龙觉醒' },
 
-  // ✨ 至高级全息特效（终极追求）
-  { value: 'holographic-universe-consciousness', label: '🌌 全息宇宙意识' },
-  { value: 'holographic-eternity-zenith', label: '🏔️ 全息永恒之巅' },
-
   // 🧘 禅意全息特效（东方美学）
   { value: 'holographic-zenith-mandala', label: '🧘 全息禅意曼陀罗' },
 
 
   // ★★★ 超越级特效（全新突破）★★★
-  { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝' },
-  { value: 'interstellar-supernova', label: '💥 星际超新星爆发' },
+  { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝 (优化版)' },
+  { value: 'interstellar-supernova', label: '💥 星际超新星爆发 (优化版)' },
   { value: 'quantum-dream-weaver', label: '🔮 量子梦境编织' },
-  { value: 'eternal-return', label: '⏳ 永恒轮回之轮' },
+  { value: 'eternal-return', label: '⏳ 永恒轮回之轮 (优化版)' },
   { value: 'aurora-fantasy', label: '🌌 极光幻境' },
   { value: 'dimension-genesis', label: '🚀 维度创世交响曲' },
   { value: 'digital-life-bloom', label: '🌸 数字生命绽放' },
@@ -102,14 +98,14 @@ const animationOptions = [
 
 
 
-  { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲' },
-  { value: 'void-creation', label: '🌌 虚空创世交响曲' },
-  { value: 'quantum-entanglement', label: '🔮 量子纠缠交响曲' },
-  { value: 'cosmic-epic', label: '🌟 宇宙史诗交响曲' },
+  { value: 'dimensional-resonance', label: '🎼 维度共鸣交响曲 (优化版)' },
+  { value: 'void-creation', label: '🌌 虚空创世交响曲 (优化版)' },
+  { value: 'quantum-entanglement', label: '🔮 量子纠缠交响曲 (优化版)' },
+  { value: 'cosmic-epic', label: '🌟 宇宙史诗交响曲 (优化版)' },
   { value: 'time-sand', label: '⏳ 时间之沙' },
 
   { value: 'fireworks-moon-night', label: '🎆 烟花月夜' },
-  { value: 'youthful-years', label: '💕 青春年华' },
+
   // 组合动画 (创新特效组合)
   { value: 'cosmic-rainfall', label: '🌌 宇宙雨落' },
   { value: 'hyperspace-portal', label: '🚪 超空间传送门' },
@@ -171,8 +167,8 @@ const animationOptions = [
   { value: 'portal-gate', label: '🚪 传送门' },
   { value: 'energy-sphere', label: '⚡ 能量球' },
   { value: 'crystal-pyramid', label: '🔮 水晶金字塔' },
-  { value: 'galaxy-flow', label: '🌌 星河涌动 ' },
-  { value: 'big-bang-genesis', label: '🧨 宇宙大爆炸 ' },
+
+  { value: 'big-bang-genesis', label: '🧨 宇宙大爆炸 (优化版)' },
   { value: 'taichi-three', label: '☯️ 太极融合特效' },
   { value: 'taichi-youth', label: '💕 青春绚丽' },
   { value: 'dewdrop-lens-prairie', label: '💧 露珠透镜草原' },
@@ -223,7 +219,7 @@ const selectRandomAnimation = () => {
     'ancient-lightning-awakening',
     'dna-quantum-evolution'*/
     /* 'taichi-three',*/
-
+      'holographic-neural-network',
       'wind-flower-snow-moon',
       "orbital-rotation",
   ]

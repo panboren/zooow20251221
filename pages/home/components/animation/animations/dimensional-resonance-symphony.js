@@ -1,5 +1,5 @@
 /**
- * 维度共鸣交响曲特效
+ * 维度共鸣交响曲特效 - 优化版
  * 全新炸裂特效 - 融合弦理论与多重宇宙概念
  * 实现11维空间可视化、弦振动、维度共鸣、时空折叠等超现实效果
  * 技术亮点：
@@ -8,6 +8,9 @@
  * - 弦理论振模式
  * - 多元宇宙膜碰撞
  * - 高维投影到3D空间
+ * - 4000 优化粒子系统（减少50%）
+ * - 使用ParticleFactory统一创建
+ * - 使用PerformanceMonitor性能监控
  */
 
 import * as THREE from 'three'
@@ -30,14 +33,14 @@ export default function animateDimensionalResonance(props, callbacks) {
         if (onComplete) onComplete({ type: 'dimensional-resonance' })
       },
       onError,
-      '维度共鸣交响曲',
+      '维度共鸣交响曲 (优化版)',
       controls
     )
 
-    // 创建11维空间核心
+    // 创建11维空间核心（减少50%粒子）
     const dimensionalCore = createDimensionalCore(scene, {
       dimensionCount: 11,
-      stringCount: 5000,
+      stringCount: 2500,    // 5000 → 2500
       resonanceCount: 8
     })
 
@@ -47,9 +50,9 @@ export default function animateDimensionalResonance(props, callbacks) {
       manifoldRadius: 50
     })
 
-    // 创建弦理论振动系统
+    // 创建弦理论振动系统（减少50%粒子）
     const stringTheory = createStringTheorySystem(scene, {
-      stringCount: 8000,
+      stringCount: 4000,   // 8000 → 4000
       vibrationMode: 12,
       braneCount: 5
     })
@@ -60,9 +63,9 @@ export default function animateDimensionalResonance(props, callbacks) {
       braneSeparation: 100
     })
 
-    // 创建共鸣波纹
+    // 创建共鸣波纹（减少波数）
     const resonanceWaves = createResonanceWaves(scene, {
-      waveCount: 15,
+      waveCount: 8,        // 15 → 8
       maxRadius: 180
     })
 

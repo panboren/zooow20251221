@@ -80,10 +80,6 @@ import animateHolographicEtherealGarden from './holographic-ethereal-garden.js'
 import animateHolographicCreation from './holographic-creation.js'
 import animateHolographicDragonAwakening from './holographic-dragon-awakening.js'
 
-// ✨ 至高级全息特效（终极追求）
-import animateHolographicUniverseConsciousness from './holographic-universe-consciousness.js'
-import animateHolographicEternityZenith from './holographic-eternity-zenith.js'
-
 // 🧘 全新禅意全息特效（东方美学）
 import animateHolographicZenithMandala from './holographic-zenith-mandala.js'
 
@@ -124,7 +120,7 @@ import animateWindFlowerSnowMoon from './wind-flower-snow-moon.js'
 import animateFireworksMoonNight from './fireworks-moon-night.js'
 
 // 全新青春年华特效
-import animateYouthfulYears from './youthful-years.js'
+
 
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
@@ -138,14 +134,14 @@ import animateButterflyNebulaDance from './butterfly-nebula-dance.js'
 import animateAncientLightningAwakening from './ancient-lightning-awakening.js'
 import animateDNAQuantumEvolution from './dna-quantum-evolution.js'
 
-import animateGalaxyFlow from './galaxy-flow.js'
-import animateBigBangGenesis from './big-bang-genesis.js'
+
+import animateBigBangGenesis from './big-bang-genesis-optimized.js'
 
 // 全新超越级特效
 import animateCyberSpaceRift from './cyber-space-rift.js'
 import animateInterstellarSupernova from './interstellar-supernova.js'
 import animateQuantumDreamWeaver from './quantum-dream-weaver.js'
-import animateEternalReturn from './eternal-return.js'
+import animateEternalReturn from './eternal-return-optimized.js'
 import animateAuroraFantasy from './aurora-fantasy.js'
 
 // 全新维度创世交响曲特效（超越级）
@@ -241,8 +237,7 @@ export const animations = {
    // 全新烟花月夜特效
    'fireworks-moon-night': animateFireworksMoonNight,
 
-   // 全新青春年华特效
-   'youthful-years': animateYouthfulYears,
+
 
    // 组合动画
    'cosmic-rainfall': animateCosmicRainfall,
@@ -257,8 +252,7 @@ export const animations = {
    'dna-quantum-evolution': animateDNAQuantumEvolution,
 
 
-//     星河涌动 - 银河系动态流动特效（宇宙史诗版）
-    'galaxy-flow': animateGalaxyFlow,
+
     'big-bang-genesis': animateBigBangGenesis,
 
     // 全新超越级特效
@@ -313,10 +307,6 @@ export const animations = {
     // 🌟 神话级全息特效（传说超越）
     'holographic-creation': animateHolographicCreation,
     'holographic-dragon-awakening': animateHolographicDragonAwakening,
-
-    // ✨ 至高级全息特效（终极追求）
-    'holographic-universe-consciousness': animateHolographicUniverseConsciousness,
-    'holographic-eternity-zenith': animateHolographicEternityZenith,
 
     // 🧘 禅意全息特效（东方美学）
     'holographic-zenith-mandala': animateHolographicZenithMandala

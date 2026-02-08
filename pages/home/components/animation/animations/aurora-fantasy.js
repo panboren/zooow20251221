@@ -1,11 +1,12 @@
 /**
- * 极光幻境 - 优化版
+ * 极光幻境 - 优化重构版
  * 融合极光、极地、星空、冰雪、幻境、梦境等唯美自然景观
  * 技术突破：
- * - 实时GLSL极光着色器（10层光带）
- * - 粒子光子流（10000粒子，减少50%）
+ * - 使用统一极光着色器模块
+ * - 使用统一星空系统模块
+ * - 使用粒子配置管理模块
+ * - 粒子光子流（自适应粒子数量）
  * - 冰晶折射效果
- * - 星光闪烁系统（2500星星，减少50%）
  * - 极地风光渲染
  * - 梦境迷雾效果
  * - 幻境粒子
@@ -19,7 +20,10 @@
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
-import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils.js'
+import { createMultiLayerAurora } from './effects/unified-aurora-shader.js'
+import { createStarField } from './effects/unified-star-field.js'
+import { getAdaptiveParticleCount, performanceMonitor } from './effects/particle-config.js'
 import { ParticleFactory } from '~/utils/ParticleFactory.js'
 import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
@@ -30,6 +34,10 @@ export default function animateAuroraFantasy(props, callbacks) {
   // 创建性能监控器
   const perfMonitor = new PerformanceMonitor()
   perfMonitor.start()
+
+  // 检测设备性能等级 - 使用 particle-config.js 的 performanceMonitor
+  performanceMonitor.update()
+  const deviceTier = performanceMonitor.getCurrentTier()
 
   try {
     // 初始设置 - 远景仰视
@@ -45,51 +53,63 @@ export default function animateAuroraFantasy(props, callbacks) {
         if (onComplete) onComplete({ type: 'aurora-fantasy' })
       },
       onError,
-      '极光幻境 (优化版)',
+      '极光幻境 (优化重构版)',
       controls
     )
 
     // ==================== 创建系统 ====================
 
-    // 1. 极光系统（10层光带）
-    const aurora = createAuroraSystem(scene, {
-      bandCount: 10,
-      bandHeight: 150
+    // 1. 统一极光系统（使用统一模块）
+    const auroraLayerCount = deviceTier === 'HIGH' ? 10 : deviceTier === 'MEDIUM' ? 7 : 5
+    const aurora = createMultiLayerAurora(scene, {
+      layerCount: auroraLayerCount,
+      colors: [0x00ff00, 0x00ffff, 0xff00ff, 0xffff00],
+      opacity: 0.6,
+      height: 150,
+      intensity: 1.0
     })
 
-    // 2. 星光系统（2500星星，减少50%）
+    // 2. 统一星空系统（使用统一模块）
+    const starCount = getAdaptiveParticleCount('star', deviceTier)
     const starField = createStarField(scene, {
-      starCount: 2500,      // 5000 → 2500
-      twinkleSpeed: 1
+      count: starCount,
+      radius: 400,
+      color: 0x88ccff,
+      twinkleSpeed: 1.0
     })
 
-    // 3. 冰晶系统（1500粒子，减少50%）
+    // 3. 冰晶系统（使用自适应粒子数量）
+    const crystalCount = getAdaptiveParticleCount('crystal', deviceTier)
     const iceCrystals = createIceCrystals(scene, {
-      crystalCount: 1500,   // 3000 → 1500
+      crystalCount: crystalCount,
       crystalSize: 5
     })
 
     // 4. 极地风光
     const polarLandscape = createPolarLandscape(scene)
 
-    // 5. 梦境迷雾（减少50%）
+    // 5. 梦境迷雾（使用自适应粒子数量）
+    const mistCount = getAdaptiveParticleCount('mist', deviceTier)
     const dreamMist = createDreamMist(scene, {
-      mistParticleCount: 4000  // 8000 → 4000
+      mistParticleCount: mistCount
     })
 
-    // 6. 幻境粒子（减少50%）
+    // 6. 幻境粒子（使用自适应粒子数量）
+    const fantasyCount = getAdaptiveParticleCount('fantasy', deviceTier)
     const fantasyParticles = createFantasyParticles(scene, {
-      particleCount: 5000     // 10000 → 5000
+      particleCount: fantasyCount
     })
 
-    // 7. 光子流（减少50%）
+    // 7. 光子流（使用自适应粒子数量）
+    const photonCount = getAdaptiveParticleCount('photon', deviceTier)
     const photonStream = createPhotonStream(scene, {
-      photonCount: 10000     // 20000 → 10000
+      photonCount: photonCount
     })
 
-    // 8. 冰雪沉降
+    // 8. 冰雪沉降（使用自适应粒子数量）
+    const snowCount = getAdaptiveParticleCount('snow', deviceTier)
     const snowfall = createSnowfall(scene, {
-      snowflakeCount: 15000
+      snowflakeCount: snowCount
     })
 
     // ==================== 动画序列 ====================
@@ -108,8 +128,8 @@ export default function animateAuroraFantasy(props, callbacks) {
     }, 0)
 
     tl.call(() => {
-      starField.appear()
-      dreamMist.materialize()
+      starField.appear(0.9, 3)
+      dreamMist.materialize(0.3, 3)
     }, null, 0.5)
 
     tl.to(camera, {
@@ -136,7 +156,11 @@ export default function animateAuroraFantasy(props, callbacks) {
     }, 6)
 
     tl.call(() => {
-      aurora.glow('green')
+      // 设置所有层的颜色
+      aurora.layers.forEach(layer => {
+        layer.curtain.setColor(0x00ff00)
+      })
+      aurora.appear(0.6, 2)
       iceCrystals.form()
       photonStream.flow()
     }, null, 6.5)
@@ -165,7 +189,7 @@ export default function animateAuroraFantasy(props, callbacks) {
     }, 12)
 
     tl.call(() => {
-      aurora.dance()
+      aurora.startColorCycle()
       fantasyParticles.scatter()
     }, null, 12.5)
 
@@ -194,7 +218,7 @@ export default function animateAuroraFantasy(props, callbacks) {
 
     tl.call(() => {
       snowfall.fall()
-      aurora.fade()
+      aurora.fade(0, 4)
     }, null, 19.5)
 
     tl.to(camera, {
@@ -246,283 +270,6 @@ export default function animateAuroraFantasy(props, callbacks) {
 }
 
 // ==================== 系统创建函数 ====================
-
-/**
- * 创建极光系统
- */
-function createAuroraSystem(scene, options = {}) {
-  const {
-    bandCount = 10,
-    bandHeight = 150
-  } = options
-
-  const auroraGroup = new THREE.Group()
-  const bands = []
-
-  for (let i = 0; i < bandCount; i++) {
-    // 创建波浪形极光带
-    const points = []
-    const segments = 100
-
-    for (let j = 0; j <= segments; j++) {
-      const t = j / segments
-      const x = (t - 0.5) * 400
-      const z = (Math.random() - 0.5) * 100
-      const baseY = 100 + i * 10
-
-      // 波浪效果
-      const wave = Math.sin(t * Math.PI * 4) * 30
-      const y = baseY + wave
-
-      points.push(new THREE.Vector3(x, y, z))
-    }
-
-    const curve = new THREE.CatmullRomCurve3(points)
-
-    // 使用管状几何体
-    const tubeGeometry = new THREE.TubeGeometry(curve, 100, 8, 8, false)
-
-    // 使用自定义着色器材质
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        time: { value: 0 },
-        color1: { value: new THREE.Color(0x00ff00) },
-        color2: { value: new THREE.Color(0x00ffff) }
-      },
-      vertexShader: `
-        varying vec2 vUv;
-        uniform float time;
-
-        void main() {
-          vUv = uv;
-          vec3 pos = position;
-
-          // 极光舞动效果
-          pos.y += sin(pos.x * 0.01 + time) * 5.0;
-          pos.z += cos(pos.x * 0.01 + time * 0.5) * 3.0;
-
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-        }
-      `,
-      fragmentShader: `
-        varying vec2 vUv;
-        uniform vec3 color1;
-        uniform vec3 color2;
-        uniform float time;
-
-        void main() {
-          // 渐变效果
-          vec3 color = mix(color1, color2, vUv.x);
-
-          // 脉冲效果
-          float pulse = 0.5 + 0.5 * sin(time * 2.0 + vUv.x * 10.0);
-
-          // 边缘发光
-          float glow = 1.0 - abs(vUv.x - 0.5) * 2.0;
-
-          gl_FragColor = vec4(color * glow * pulse, 0.6 * glow);
-        }
-      `,
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      side: THREE.DoubleSide,
-      depthWrite: false
-    })
-
-    const tube = new THREE.Mesh(tubeGeometry, material)
-
-    bands.push({
-      mesh: tube,
-      material,
-      phase: i * 0.5,
-      color: 'green'
-    })
-
-    auroraGroup.add(tube)
-  }
-
-  scene.add(auroraGroup)
-
-  let glowing = false
-  let dancing = false
-  let fading = false
-  let time = 0
-
-  const update = () => {
-    time += 0.016
-
-    bands.forEach((band, i) => {
-      if (glowing || dancing) {
-        band.material.uniforms.time.value = time + band.phase
-      }
-
-      if (dancing) {
-        // 颜色变幻
-        const hue = (time * 0.1 + i * 0.1) % 1
-        const color = new THREE.Color().setHSL(hue, 1, 0.5)
-        band.material.uniforms.color1.value = color
-
-        const color2 = new THREE.Color().setHSL((hue + 0.2) % 1, 1, 0.5)
-        band.material.uniforms.color2.value = color2
-      }
-
-      if (fading) {
-        band.material.uniforms.color1.value.multiplyScalar(0.995)
-        band.material.uniforms.color2.value.multiplyScalar(0.995)
-      }
-    })
-
-    auroraGroup.rotation.y += 0.001
-  }
-
-  const animationId = requestAnimationFrame(function animate() {
-    update()
-    requestAnimationFrame(animate)
-  })
-
-  return {
-    glow(color) {
-      glowing = true
-
-      const colorMap = {
-        green: 0x00ff00,
-        purple: 0xff00ff,
-        blue: 0x0066ff,
-        pink: 0xff69b4
-      }
-
-      bands.forEach((band, i) => {
-        setTimeout(() => {
-          const baseColor = new THREE.Color(colorMap[color] || 0x00ff00)
-          band.material.uniforms.color1.value = baseColor
-          band.material.uniforms.color2.value = baseColor.clone().offsetHSL(0.1, 0, 0)
-
-          band.material.opacity = 0
-          gsap.to(band.material, {
-            opacity: 0.6,
-            duration: 1.5
-          })
-        }, i * 100)
-      })
-    },
-    dance() {
-      dancing = true
-    },
-    fade() {
-      fading = true
-      bands.forEach(band => {
-        gsap.to(band.material, {
-          opacity: 0,
-          duration: 4
-        })
-      })
-    },
-    dispose() {
-      cancelAnimationFrame(animationId)
-      scene.remove(auroraGroup)
-      bands.forEach(band => {
-        band.mesh.geometry.dispose()
-        band.material.dispose()
-      })
-    }
-  }
-}
-
-/**
- * 创建星光系统
- */
-function createStarField(scene, options = {}) {
-  const {
-    starCount = 5000,
-    twinkleSpeed = 1
-  } = options
-
-  const geometry = new THREE.BufferGeometry()
-  const positions = new Float32Array(starCount * 3)
-  const colors = new Float32Array(starCount * 3)
-  const sizes = new Float32Array(starCount)
-  const twinklePhases = new Float32Array(starCount)
-
-  for (let i = 0; i < starCount; i++) {
-    const theta = Math.random() * Math.PI * 2
-    const phi = Math.random() * Math.PI
-    const radius = 400 + Math.random() * 200
-
-    positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
-    positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta) + 200
-    positions[i * 3 + 2] = radius * Math.cos(phi)
-
-    const brightness = 0.7 + Math.random() * 0.3
-    const hue = 0.55 + Math.random() * 0.1
-    const color = new THREE.Color().setHSL(hue, 0.4, brightness)
-    colors[i * 3] = color.r
-    colors[i * 3 + 1] = color.g
-    colors[i * 3 + 2] = color.b
-
-    sizes[i] = 1 + Math.random() * 3
-    twinklePhases[i] = Math.random() * Math.PI * 2
-  }
-
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
-  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-  geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1))
-
-  const material = new THREE.PointsMaterial({
-    size: 2,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0,
-    blending: THREE.AdditiveBlending
-  })
-
-  const points = new THREE.Points(geometry, material)
-  scene.add(points)
-
-  let appearing = false
-  let time = 0
-
-  const update = () => {
-    time += 0.016 * twinkleSpeed
-
-    if (appearing) {
-      const colors = points.geometry.attributes.color.array
-
-      for (let i = 0; i < starCount; i++) {
-        const twinkle = 0.5 + 0.5 * Math.sin(time + twinklePhases[i])
-        const baseColor = new THREE.Color()
-        baseColor.setRGB(colors[i * 3], colors[i * 3 + 1], colors[i * 3 + 2])
-        baseColor.multiplyScalar(0.8 + twinkle * 0.4)
-
-        colors[i * 3] = baseColor.r
-        colors[i * 3 + 1] = baseColor.g
-        colors[i * 3 + 2] = baseColor.b
-      }
-
-      points.geometry.attributes.color.needsUpdate = true
-    }
-  }
-
-  const animationId = requestAnimationFrame(function animate() {
-    update()
-    requestAnimationFrame(animate)
-  })
-
-  return {
-    appear() {
-      appearing = true
-      gsap.to(material, {
-        opacity: 0.9,
-        duration: 3
-      })
-    },
-    dispose() {
-      cancelAnimationFrame(animationId)
-      scene.remove(points)
-      geometry.dispose()
-      material.dispose()
-    }
-  }
-}
 
 /**
  * 创建冰晶系统
@@ -734,11 +481,11 @@ function createDreamMist(scene, options = {}) {
   })
 
   return {
-    materialize() {
+    materialize(targetOpacity = 0.3, duration = 3) {
       materialized = true
       gsap.to(material, {
-        opacity: 0.3,
-        duration: 3
+        opacity: targetOpacity,
+        duration: duration
       })
     },
     dispose() {
