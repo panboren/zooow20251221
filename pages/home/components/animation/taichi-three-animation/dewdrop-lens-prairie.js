@@ -718,7 +718,7 @@ function createMorningSun(scene) {
 
             void main() {
                 vec3 normal = normalize(vNormal);
-                float fresnel = pow(1.0 - abs(dot(normal, vec3(0, 0, 1))), 2.0);
+                float fresnel = pow(1.0 - abs(dot(normal, vec3(0, 0, 1)), 2.0);
 
                 vec3 sunColor = vec3(1.0, 0.85, 0.6);
                 vec3 haloColor = vec3(1.0, 0.95, 0.8);

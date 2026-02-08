@@ -72,7 +72,7 @@ export function createCosmicSupernova(scene, options = {}) {
       varying vec3 vPos;
 
       void main() {
-        float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.0);
+        float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
         float pulse = sin(uTime * 20.0) * 0.3 + 0.7;
         float turbulence = sin(vPos.x * 5.0 + uTime * 15.0) * sin(vPos.y * 5.0 + uTime * 12.0) * 0.5 + 0.5;
         vec3 color = uColor * (1.0 + turbulence * 0.5);

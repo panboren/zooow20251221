@@ -189,7 +189,7 @@ export default function animateAuroraFantasy(props, callbacks) {
     }, 12)
 
     tl.call(() => {
-      aurora.startColorCycle()
+      aurora.animateColors(10) // 开始10秒的颜色循环
       fantasyParticles.scatter()
     }, null, 12.5)
 
@@ -483,8 +483,8 @@ function createDreamMist(scene, options = {}) {
   return {
     materialize(targetOpacity = 0.3, duration = 3) {
       materialized = true
-      gsap.to(material, {
-        opacity: targetOpacity,
+      gsap.to(material.uniforms.uOpacity, {
+        value: targetOpacity,
         duration: duration
       })
     },

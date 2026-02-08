@@ -558,7 +558,7 @@ function createMoon(scene) {
                 float brightness = 0.9 + crater * 0.1;
 
                 // 月晕
-                float fresnel = pow(1.0 - abs(dot(normal, vec3(0, 0, 1))), 3.0);
+                float fresnel = pow(1.0 - abs(dot(normal, vec3(0, 0, 1)), 3.0);
 
                 vec3 moonColor = vec3(0.95, 0.95, 0.95) * brightness;
                 vec3 glowColor = vec3(0.8, 0.85, 1.0);
@@ -604,7 +604,7 @@ function createMoon(scene) {
 
             void main() {
                 vec3 normal = normalize(vNormal);
-                float fresnel = pow(1.0 - abs(dot(normal, vec3(0, 0, 1))), 4.0);
+                float fresnel = pow(1.0 - abs(dot(normal, vec3(0, 0, 1)), 4.0);
 
                 vec3 haloColor = vec3(0.7, 0.75, 0.9);
                 float alpha = fresnel * uIntensity * 0.5;

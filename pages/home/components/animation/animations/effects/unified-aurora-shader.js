@@ -188,7 +188,14 @@ export function createAuroraCurtain(scene, options = {}) {
     material.uniforms.uTime.value = time
   }
 
-  const startAnimation = () => {
+  const _stopInternalAnimation = () => {
+    if (animationId) {
+      cancelAnimationFrame(animationId)
+      animationId = null
+    }
+  }
+
+  const _startInternalAnimation = () => {
     if (animationId) return
     const animate = () => {
       update()
@@ -247,24 +254,21 @@ export function createAuroraCurtain(scene, options = {}) {
      * 开始动画
      */
     startAnimation() {
-      startAnimation()
+      _startInternalAnimation()
     },
 
     /**
      * 停止动画
      */
     stopAnimation() {
-      if (animationId) {
-        cancelAnimationFrame(animationId)
-        animationId = null
-      }
+      _stopInternalAnimation()
     },
 
     /**
      * 释放资源
      */
     dispose() {
-      stopAnimation()
+      _stopInternalAnimation()
       scene.remove(mesh)
       geometry.dispose()
       material.dispose()

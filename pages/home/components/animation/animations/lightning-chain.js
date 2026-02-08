@@ -71,8 +71,7 @@ export default function animateLightningChain(props, callbacks) {
     }, 1.5)
 
     // 阶段4: 相机环绕
-    tl.to(camera.position, {
-      angle: Math.PI * 2,
+    tl.to({}, {
       duration: 3,
       ease: 'none',
       onUpdate: function() {

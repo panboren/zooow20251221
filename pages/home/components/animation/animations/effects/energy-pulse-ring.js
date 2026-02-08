@@ -78,7 +78,7 @@ export function createEnergyPulseRing(scene, options = {}) {
           float flow = sin(vUv.x * 20.0 - uTime * 4.0) * 0.5 + 0.5;
 
           // 菲涅尔效应
-          float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.0);
+          float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
 
           // 颜色混合
           vec3 color = mix(uColor1, uColor2, flow + uRingIndex * 0.15);
@@ -155,7 +155,7 @@ export function createEnergyPulseRing(scene, options = {}) {
           float wave = sin(vRipple * 3.0) * 0.5 + 0.5;
 
           // 边缘发光
-          float edge = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0), 3.0);
+          float edge = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
 
           // 能量强度
           float intensity = wave * edge;

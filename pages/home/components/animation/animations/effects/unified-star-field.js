@@ -92,7 +92,7 @@ export function createStarField(scene, options = {}) {
     points.geometry.attributes.color.needsUpdate = true
   }
 
-  const startAnimation = () => {
+  const _startInternalAnimation = () => {
     if (animationId) return
     const animate = () => {
       update()
@@ -152,7 +152,7 @@ export function createStarField(scene, options = {}) {
      * 开始动画
      */
     startAnimation() {
-      startAnimation()
+      _startInternalAnimation()
     },
 
     /**
@@ -169,7 +169,7 @@ export function createStarField(scene, options = {}) {
      * 释放资源
      */
     dispose() {
-      stopAnimation()
+      this.stopAnimation()
       scene.remove(points)
       geometry.dispose()
       material.dispose()
@@ -290,7 +290,7 @@ export function createShaderStarField(scene, options = {}) {
     points.rotation.y += 0.0002
   }
 
-  const startAnimation = () => {
+  const _startInternalAnimation = () => {
     if (animationId) return
     const animate = () => {
       update()
@@ -336,7 +336,7 @@ export function createShaderStarField(scene, options = {}) {
      * 开始动画
      */
     startAnimation() {
-      startAnimation()
+      _startInternalAnimation()
     },
 
     /**
@@ -353,7 +353,7 @@ export function createShaderStarField(scene, options = {}) {
      * 释放资源
      */
     dispose() {
-      stopAnimation()
+      this.stopAnimation()
       scene.remove(points)
       geometry.dispose()
       material.dispose()

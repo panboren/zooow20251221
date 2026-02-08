@@ -175,7 +175,7 @@ export function createCosmicParticleSymphony(scene, options = {}) {
       varying vec3 vPos;
 
       void main() {
-        float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0), 3.0);
+        float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
         float pulse = sin(uTime * 10.0) * 0.3 + 0.7;
 
         // 多彩渐变

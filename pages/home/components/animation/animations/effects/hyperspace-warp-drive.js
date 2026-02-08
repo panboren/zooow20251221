@@ -160,7 +160,7 @@ export function createHyperspaceWarpDrive(scene, options = {}) {
 
       void main() {
         // 菲涅尔效果
-        float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.0);
+        float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
 
         // 脉冲效果
         float pulse = sin(uTime * 5.0) * 0.3 + 0.7;

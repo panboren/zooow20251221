@@ -66,8 +66,7 @@ export default function animateGalaxyVortex(props, callbacks) {
     }, 4)
 
     // 阶段4: 相机穿越漩涡
-    tl.to(camera.position, {
-      angle: Math.PI * 2,
+    tl.to({}, {
       duration: 3,
       ease: 'none',
       onUpdate: function() {

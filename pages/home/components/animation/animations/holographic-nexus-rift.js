@@ -404,7 +404,7 @@ export default function animateHolographicNexusRift(props, callbacks) {
           varying vec3 vPosition;
 
           void main() {
-            float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
+            float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);
             vec3 color = uColor * fresnel;
             float alpha = fresnel * uOpacity * 0.5;
             gl_FragColor = vec4(color, alpha);

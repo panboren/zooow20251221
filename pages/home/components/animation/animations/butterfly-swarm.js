@@ -34,8 +34,7 @@ export default function animateButterflySwarm(props, callbacks) {
     })
 
     // 阶段1: 相机环绕观察
-    tl.to(camera.position, {
-      angle: Math.PI * 2,
+    tl.to({}, {
       duration: 3,
       ease: 'none',
       onUpdate: function() {
