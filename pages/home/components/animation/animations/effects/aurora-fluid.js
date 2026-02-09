@@ -43,6 +43,9 @@ export function createAuroraFluid(scene, options = {}) {
         uBandIndex: { value: i }
       },
       vertexShader: `
+        precision highp float;
+        precision highp int;
+
         uniform float uTime;
         uniform float uBandIndex;
         varying vec2 vUv;
@@ -76,6 +79,9 @@ export function createAuroraFluid(scene, options = {}) {
         }
       `,
       fragmentShader: `
+        precision highp float;
+        precision highp int;
+
         uniform vec3 uColor;
         uniform float uTime;
         varying vec2 vUv;

@@ -50,6 +50,9 @@ export function createCosmicSupernova(scene, options = {}) {
       uIntensity: { value: 1 }
     },
     vertexShader: `
+      precision highp float;
+      precision highp int;
+
       uniform float uTime;
       uniform float uIntensity;
       varying vec3 vNormal;
@@ -65,6 +68,9 @@ export function createCosmicSupernova(scene, options = {}) {
       }
     `,
     fragmentShader: `
+      precision highp float;
+      precision highp int;
+
       uniform float uTime;
       uniform vec3 uColor;
       uniform float uIntensity;

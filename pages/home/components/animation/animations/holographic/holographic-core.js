@@ -35,6 +35,7 @@ export class HolographicMaterial extends THREE.ShaderMaterial {
 
       vertexShader: `
         precision highp float;
+        precision highp int;
 
         varying vec2 vUv;
         varying vec3 vNormal;
@@ -50,6 +51,7 @@ export class HolographicMaterial extends THREE.ShaderMaterial {
 
       fragmentShader: `
         precision highp float;
+        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;
@@ -132,6 +134,7 @@ export class HolographicScanlineMaterial extends THREE.ShaderMaterial {
 
       vertexShader: `
         precision highp float;
+        precision highp int;
 
         varying vec2 vUv;
 
@@ -143,6 +146,7 @@ export class HolographicScanlineMaterial extends THREE.ShaderMaterial {
 
       fragmentShader: `
         precision highp float;
+        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;
@@ -224,6 +228,7 @@ export class HolographicGridMaterial extends THREE.ShaderMaterial {
 
       vertexShader: `
         precision highp float;
+        precision highp int;
 
         varying vec2 vUv;
         varying vec3 vPosition;
@@ -237,6 +242,7 @@ export class HolographicGridMaterial extends THREE.ShaderMaterial {
 
       fragmentShader: `
         precision highp float;
+        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;
@@ -300,6 +306,7 @@ export class HolographicGlitchMaterial extends THREE.ShaderMaterial {
 
       vertexShader: `
         precision highp float;
+        precision highp int;
 
         uniform float uTime;
         uniform float uGlitchAmount;
@@ -321,6 +328,7 @@ export class HolographicGlitchMaterial extends THREE.ShaderMaterial {
 
       fragmentShader: `
         precision highp float;
+        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;
@@ -390,6 +398,7 @@ export class HolographicBeamMaterial extends THREE.ShaderMaterial {
 
       vertexShader: `
         precision highp float;
+        precision highp int;
 
         varying vec2 vUv;
         varying vec3 vPosition;
@@ -403,6 +412,7 @@ export class HolographicBeamMaterial extends THREE.ShaderMaterial {
 
       fragmentShader: `
         precision highp float;
+        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;
