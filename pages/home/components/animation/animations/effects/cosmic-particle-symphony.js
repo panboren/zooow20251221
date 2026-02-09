@@ -93,6 +93,9 @@ export function createCosmicParticleSymphony(scene, options = {}) {
         uLayer: { value: layer }
       },
       vertexShader: `
+        precision highp float;
+        precision highp int;
+
         uniform float uTime;
         uniform float uLayer;
         varying vec2 vUv;
@@ -112,6 +115,9 @@ export function createCosmicParticleSymphony(scene, options = {}) {
         }
       `,
       fragmentShader: `
+        precision highp float;
+        precision highp int;
+
         uniform float uTime;
         uniform float uLayer;
         uniform vec3 uColor;
@@ -153,6 +159,9 @@ export function createCosmicParticleSymphony(scene, options = {}) {
       uColor: { value: new THREE.Color(0xffffff) }
     },
     vertexShader: `
+      precision highp float;
+      precision highp int;
+
       uniform float uTime;
       varying vec3 vNormal;
       varying vec3 vPos;
@@ -169,6 +178,9 @@ export function createCosmicParticleSymphony(scene, options = {}) {
       }
     `,
     fragmentShader: `
+      precision highp float;
+      precision highp int;
+
       uniform float uTime;
       uniform vec3 uColor;
       varying vec3 vNormal;

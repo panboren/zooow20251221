@@ -22,10 +22,16 @@ import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
 import { ParticleFactory } from '~/utils/ParticleFactory.js'
 import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
+import { getAdaptiveParticleCount, getDeviceTier } from './device-detection.js'
+import { logger } from './logger.js'
 
 export default function animateQuantumDreamWeaver(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 检测设备性能
+  const deviceTier = getDeviceTier()
+  const adaptiveParticleCount = getAdaptiveParticleCount('quantum', deviceTier)
 
   // 创建性能监控器
   const perfMonitor = new PerformanceMonitor()
@@ -51,21 +57,21 @@ export default function animateQuantumDreamWeaver(props, callbacks) {
 
     // ==================== 创建系统 ====================
 
-    // 1. 量子态粒子系统（15000粒子，减少50%）
+    // 1. 量子态粒子系统（设备自适应）
     const quantumStates = createQuantumStates(scene, {
-      particleCount: 15000,  // 30000 → 15000
-      superpositionLevels: 3
+      particleCount: adaptiveParticleCount,  // 根据设备自适应
+      superpositionLevels: deviceTier === 'LOW' ? 2 : 3
     })
 
-    // 2. 波函数云 - 减少粒子
+    // 2. 波函数云 - 设备自适应
     const waveFunctionCloud = createWaveFunctionCloud(scene, {
-      cloudCount: 2500,      // 5000 → 2500
+      cloudCount: deviceTier === 'LOW' ? 1000 : 2500,
       radius: 80
     })
 
-    // 3. 量子纠缠线 - 减少纠缠对
+    // 3. 量子纠缠线 - 设备自适应
     const entanglementLines = createEntanglementLines(scene, {
-      pairCount: 500,        // 1000 → 500
+      pairCount: deviceTier === 'LOW' ? 200 : 500,
       lineWidth: 2
     })
 
@@ -84,9 +90,9 @@ export default function animateQuantumDreamWeaver(props, callbacks) {
     // 6. 薛定谔猫
     const schrodingerCat = createSchrodingerCat(scene)
 
-    // 7. 量子泡沫背景
+    // 7. 量子泡沫背景 - 设备自适应
     const quantumFoam = createQuantumFoam(scene, {
-      bubbleCount: 8000,
+      bubbleCount: deviceTier === 'LOW' ? 3000 : 8000,
       foamRadius: 350
     })
 

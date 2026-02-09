@@ -12,6 +12,8 @@
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { createTimeline, setupInitialCamera, safeCameraTransform } from '../animations/utils.js';
+import { getAdaptiveParticleCount, getDeviceTier } from '../animations/device-detection.js';
+import { logger } from '../animations/logger.js';
 
 /**
  * 银河蝴蝶特效主函数
@@ -20,27 +22,11 @@ export default async function animateGalaxyButterfly(props, callbacks) {
     const { camera, renderer, scene, controls } = props;
     const { onComplete, onError } = callbacks || {};
 
-    console.log('🦋 启动银河蝴蝶-Taichi.js 特效');
+    logger.log('🦋 启动银河蝴蝶-Taichi.js 特效');
 
-    // Taichi.js 相关
-    let ti = null;
-    let useTaichi = false;
-
-    // Taichi 字段
-    let particleField = null;
-    let velocityField = null;
-    let colorField = null;
-    let intensityField = null;
-    let freezeField = null;
-    let rippleField = null;
-
-    // Taichi kernels
-    let initKernel = null;
-    let updateKernel = null;
-    let rippleKernel = null;
-
-    // 粒子数量
-    const PARTICLE_COUNT = 50000;
+    // 检测设备性能
+    const deviceTier = getDeviceTier();
+    const PARTICLE_COUNT = getAdaptiveParticleCount('butterfly', deviceTier);
     const RIPPLE_RADIUS = 15;
     const RIPPLE_STRENGTH = 0.8;
 
@@ -50,28 +36,39 @@ export default async function animateGalaxyButterfly(props, callbacks) {
     let lastRippleTime = 0;
     const RIPPLE_COOLDOWN = 300; // ms
 
+    // Taichi.js 相关
+    let ti = null;
+    let useTaichi = false;
+    let particleField = null;
+    let velocityField = null;
+    let colorField = null;
+    let intensityField = null;
+    let freezeField = null;
+    let rippleField = null;
+    let initKernel = null;
+    let updateKernel = null;
+    let rippleKernel = null;
+
     try {
         // ========== 步骤1: 加载和初始化 Taichi.js ==========
         console.log('📦 步骤 1/5: 加载 Taichi.js...');
 
-        const { $loadTaichi, $initTaichi } = useNuxtApp();
+        // 从全局 window 对象获取 Taichi 工具
+        const taichiUtils = typeof window !== 'undefined' ? window.__TAICHI_UTILS__ : null;
 
-        try {
-            ti = await $loadTaichi();
-            console.log('✅ Taichi.js 加载成功');
-
-            await $initTaichi(ti);
-            console.log('✅ Taichi.js 初始化成功');
-
-            if (!ti || typeof ti.Vector !== 'object') {
-                console.warn('⚠️ Taichi.js 实例无效，使用 JavaScript 模拟');
-                useTaichi = false;
-            } else {
-                useTaichi = true;
-            }
-        } catch (error) {
-            console.warn('⚠️ Taichi.js 加载或初始化失败，使用 JavaScript 模拟:', error.message);
+        if (!taichiUtils || !taichiUtils.isReady || !taichiUtils.isReady()) {
+            console.warn('⚠️ Taichi.js 未初始化，使用 JavaScript 模拟');
             useTaichi = false;
+        } else {
+            try {
+                ti = taichiUtils.getModule();
+                console.log('✅ Taichi.js 加载成功');
+
+                useTaichi = true;
+            } catch (error) {
+                console.warn('⚠️ Taichi.js 获取失败，使用 JavaScript 模拟:', error.message);
+                useTaichi = false;
+            }
         }
 
         // ========== 步骤2: 创建 Taichi 字段和 Kernels（银河蝴蝶物理）==========

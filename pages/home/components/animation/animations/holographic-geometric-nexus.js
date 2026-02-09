@@ -38,7 +38,6 @@ function createGeometricCore(radius, detail, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       varying vec3 vNormal;
       varying vec3 vPosition;
@@ -53,7 +52,6 @@ function createGeometricCore(radius, detail, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -103,7 +101,6 @@ function createOrbitRing(radius, segments, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       varying vec2 vUv;
       varying vec3 vPosition;
@@ -116,7 +113,6 @@ function createOrbitRing(radius, segments, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;

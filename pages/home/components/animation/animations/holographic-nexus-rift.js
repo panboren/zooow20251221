@@ -39,7 +39,6 @@ function createNexusCore(radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uDistortion;
@@ -51,7 +50,7 @@ function createNexusCore(radius, color) {
       void main() {
         vNormal = normalize(normalMatrix * normal);
         vPosition = position;
-        vViewDir = normalize(cameraPosition - position);
+        vViewDir = normalize(cameraPosition - (modelMatrix * vec4(position, 1.0)).xyz);
 
         vec3 pos = position;
         float distortion = sin(pos.x * 2.0 + uTime * 3.0) *
@@ -64,7 +63,6 @@ function createNexusCore(radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -87,7 +85,7 @@ function createNexusCore(radius, color) {
 
         // 维度光谱
         vec3 spectrum;
-        spectrum.r = sin(uTime * 2.0 + 0.0) * 0.5 + 0.5;
+        spectrum.r = sin(uTime * 2.0) * 0.5 + 0.5;
         spectrum.g = sin(uTime * 2.0 + 2.094) * 0.5 + 0.5;
         spectrum.b = sin(uTime * 2.0 + 4.188) * 0.5 + 0.5;
 
@@ -127,7 +125,6 @@ function createRiftEnergyRing(radius, segments, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
 
@@ -142,7 +139,6 @@ function createRiftEnergyRing(radius, segments, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -223,7 +219,6 @@ function createRiftParticles(count, radius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -250,7 +245,6 @@ function createRiftParticles(count, radius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -381,7 +375,6 @@ export default function animateHolographicNexusRift(props, callbacks) {
         },
         vertexShader: `
           precision highp float;
-          precision highp int;
 
           varying vec3 vNormal;
           varying vec3 vPosition;
@@ -394,7 +387,6 @@ export default function animateHolographicNexusRift(props, callbacks) {
         `,
         fragmentShader: `
           precision highp float;
-          precision highp int;
 
           uniform float uTime;
           uniform vec3 uColor;
@@ -404,7 +396,7 @@ export default function animateHolographicNexusRift(props, callbacks) {
           varying vec3 vPosition;
 
           void main() {
-            float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);
+            float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
             vec3 color = uColor * fresnel;
             float alpha = fresnel * uOpacity * 0.5;
             gl_FragColor = vec4(color, alpha);

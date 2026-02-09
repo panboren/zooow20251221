@@ -11,6 +11,8 @@
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { createTimeline, setupInitialCamera, safeCameraTransform } from '../animations/utils.js';
+import { getAdaptiveParticleCount, getDeviceTier } from '../animations/device-detection.js';
+import { logger } from '../animations/logger.js';
 
 /**
  * 青春绚丽特效主函数
@@ -21,7 +23,11 @@ export default async function animateYouthThree(props, callbacks) {
     const { camera, renderer, scene, controls } = props;
     const { onComplete, onError } = callbacks || {};
 
-    console.log('🎬 启动青春绚丽-Taichi.js 特效');
+    logger.log('🎬 启动青春绚丽-Taichi.js 特效');
+
+    // 检测设备性能并设置粒子数量
+    const deviceTier = getDeviceTier();
+    const PARTICLE_COUNT = getAdaptiveParticleCount('youth', deviceTier);
 
     // Taichi.js 相关
     let ti = null;
@@ -37,37 +43,31 @@ export default async function animateYouthThree(props, callbacks) {
     let initKernel = null;
     let updateKernel = null;
 
-    // 粒子数量
-    const PARTICLE_COUNT = 80000;
-
     try {
         // ========== 步骤1: 加载和初始化 Taichi.js ==========
-        console.log('📦 步骤 1/4: 加载 Taichi.js...');
+        logger.log('📦 步骤 1/4: 加载 Taichi.js...');
 
-        const { $loadTaichi, $initTaichi } = useNuxtApp();
+        // 从全局 window 对象获取 Taichi 工具
+        const taichiUtils = typeof window !== 'undefined' ? window.__TAICHI_UTILS__ : null;
 
-        try {
-            ti = await $loadTaichi();
-            console.log('✅ Taichi.js 加载成功');
-
-            await $initTaichi(ti);
-            console.log('✅ Taichi.js 初始化成功');
-
-            // 检查Taichi实例是否有效
-            if (!ti || typeof ti.Vector !== 'object') {
-                console.warn('⚠️ Taichi.js 实例无效，使用 JavaScript 模拟');
-                useTaichi = false;
-            } else {
-                useTaichi = true;
-            }
-        } catch (error) {
-            console.warn('⚠️ Taichi.js 加载或初始化失败，使用 JavaScript 模拟:', error.message);
+        if (!taichiUtils || !taichiUtils.isReady || !taichiUtils.isReady()) {
+            logger.warn('⚠️ Taichi.js 未初始化，使用 JavaScript 模拟');
             useTaichi = false;
+        } else {
+            try {
+                ti = taichiUtils.getModule();
+                logger.log('✅ Taichi.js 加载成功');
+
+                useTaichi = true;
+            } catch (error) {
+                logger.warn('⚠️ Taichi.js 获取失败，使用 JavaScript 模拟:', error.message);
+                useTaichi = false;
+            }
         }
 
         // ========== 步骤2: 创建 Taichi 字段和 Kernels（青春物理）==========
         if (useTaichi && ti) {
-            console.log('🔨 步骤 2/4: 创建青春 Taichi 字段和 Kernels...');
+            logger.log('🔨 步骤 2/4: 创建青春 Taichi 字段和 Kernels...');
 
             try {
                 await new Promise(resolve => setTimeout(resolve, 200));
@@ -83,7 +83,7 @@ export default async function animateYouthThree(props, callbacks) {
                 colorsField = ti.Vector.field(3, ti.f32, [PARTICLE_COUNT]);
                 sizeField = ti.field(ti.f32, [PARTICLE_COUNT]);
 
-                console.log('✅ 青春 Taichi 字段创建成功');
+                logger.log('✅ 青春 Taichi 字段创建成功');
 
                 // 青春常量 - 将 PARTICLE_COUNT 作为常量添加到 kernel scope
                 ti.addToKernelScope({
@@ -94,7 +94,7 @@ export default async function animateYouthThree(props, callbacks) {
                     PARTICLE_COUNT: PARTICLE_COUNT // 添加常量
                 });
 
-                console.log('✅ 青春 Kernel scope 设置完成');
+                logger.log('✅ 青春 Kernel scope 设置完成');
 
                 // 初始化内核 - 创建青春粒子
                 initKernel = ti.kernel(() => {
@@ -216,20 +216,20 @@ export default async function animateYouthThree(props, callbacks) {
                     }
                 });
 
-                console.log('✅ 青春 Taichi Kernels 编译完成');
+                logger.log('✅ 青春 Taichi Kernels 编译完成');
 
                 // 执行初始化
                 initKernel();
-                console.log('✅ 青春初始化执行完成');
+                logger.log('✅ 青春初始化执行完成');
 
             } catch (error) {
-                console.warn('⚠️ 青春 Taichi 字段或 Kernels 创建失败，降级到 JavaScript:', error.message);
+                logger.warn('⚠️ 青春 Taichi 字段或 Kernels 创建失败，降级到 JavaScript:', error.message);
                 useTaichi = false;
             }
         }
 
         // ========== 步骤3: 初始化 Three.js 青春场景 ==========
-        console.log('🎨 步骤 3/4: 初始化青春场景...');
+        logger.log('🎨 步骤 3/4: 初始化青春场景...');
 
         // 初始设置 - 远距离俯瞰
         setupInitialCamera(camera, new THREE.Vector3(0, 50, 100), 85, controls);
@@ -241,7 +241,7 @@ export default async function animateYouthThree(props, callbacks) {
 
         // 创建青春粒子系统
         const youthParticles = createYouthParticles(scene, {
-            particleCount: 50000,
+            particleCount: PARTICLE_COUNT,
             useTaichi,
             positionsField,
             colorsField,
@@ -257,10 +257,10 @@ export default async function animateYouthThree(props, callbacks) {
         // 创建青春光晕
         const youthGlow = createYouthGlow(scene);
 
-        console.log('✅ 青春场景创建完成');
+        logger.log('✅ 青春场景创建完成');
 
         // ========== 步骤4: 创建青春动画时间轴 ==========
-        console.log('⏱️  步骤 4/4: 创建青春动画时间轴...');
+        logger.log('⏱️  步骤 4/4: 创建青春动画时间轴...');
 
         const tl = createTimeline(
             () => {
@@ -272,7 +272,7 @@ export default async function animateYouthThree(props, callbacks) {
             controls
         );
 
-        console.log('✅ 青春动画时间轴创建完成');
+        logger.log('✅ 青春动画时间轴创建完成');
 
         // ========== 青春动画阶段 ==========
 
@@ -390,7 +390,7 @@ export default async function animateYouthThree(props, callbacks) {
 
         // 阶段6: 青春爆炸 - 白色球体炸裂
         tl.call(() => {
-            console.log('🎆 阶段6: 青春爆炸！');
+            logger.log('🎆 阶段6: 青春爆炸！');
             youthCore.explode();
 
             // 添加相机震动效果
@@ -501,14 +501,14 @@ export default async function animateYouthThree(props, callbacks) {
                     }
 
                 } catch (error) {
-                    console.warn('⚠️ 青春 Taichi 更新失败:', error);
+                    logger.warn('⚠️ 青春 Taichi 更新失败:', error);
                 }
             }
         };
 
         // 清理函数
         const cleanup = () => {
-            console.log('🧹 清理青春特效资源');
+            logger.log('🧹 清理青春特效资源');
             youthCore?.destroy();
             youthParticles?.destroy();
             youthBeams?.destroy();
@@ -534,7 +534,7 @@ export default async function animateYouthThree(props, callbacks) {
         return { updateHandler };
 
     } catch (error) {
-        console.error('❌ 青春绚丽-Taichi.js 特效启动失败:', error);
+        logger.error('❌ 青春绚丽-Taichi.js 特效启动失败:', error);
         if (onError) onError(error);
         return null;
     }
@@ -787,7 +787,7 @@ function createYouthCore(scene) {
         },
         explode() {
             // 强烈爆炸效果
-            console.log('💥 触发青春核心爆炸！');
+            logger.log('💥 触发青春核心爆炸！');
 
             // 核心剧烈脉动
             gsap.to(core.scale, {
@@ -1113,7 +1113,7 @@ function createShockwaveSystem(scene) {
  * 创建青春粒子系统
  */
 function createYouthParticles(scene, options) {
-    const { particleCount = 50000, useTaichi = false } = options;
+    const { particleCount = 30000, useTaichi = false } = options;
 
     const group = new THREE.Group();
     scene.add(group);

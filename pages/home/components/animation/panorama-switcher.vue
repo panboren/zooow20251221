@@ -105,8 +105,27 @@ let list=[
   { x: 1.25, y: -1.52, z: -9.7 }
 ]
 
+import { logger } from './animations/logger.js'
+
 // 图片缓存管理器 - 分离缩略图和全景图缓存
 const thumbnailCache = new Map() // 缩略图缓存 (Base64)
+
+// CDN 降级配置
+const CDN_CONFIG = {
+  primary: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com',
+  fallback: [
+    'https://zooow-backup.cos.ap-beijing.myqcloud.com', // 备用CDN
+    '/api/proxy/image' // 本地代理（最后降级）
+  ],
+  maxRetries: 2
+}
+
+// CDN 降级获取图片URL
+const getImageUrlWithFallback = (path, retries = 0) => {
+  const currentCdn = retries === 0 ? CDN_CONFIG.primary : CDN_CONFIG.fallback[retries - 1] || CDN_CONFIG.fallback[CDN_CONFIG.fallback.length - 1]
+  const url = `${currentCdn}${path}`
+  return url
+}
 
 // 从 localStorage 恢复缩略图缓存
 const loadThumbnailCacheFromStorage = () => {
@@ -123,7 +142,7 @@ const loadThumbnailCacheFromStorage = () => {
       }
     }
   } catch (e) {
-    console.warn('Failed to load thumbnail cache from storage:', e)
+    logger.warn('Failed to load thumbnail cache from storage:', e)
   }
 }
 
@@ -145,13 +164,31 @@ const saveThumbnailCacheToStorage = () => {
     }
     localStorage.setItem('panoramaThumbnailCache', JSON.stringify(data))
   } catch (e) {
-    console.warn('Failed to save thumbnail cache to storage:', e)
+    logger.warn('Failed to save thumbnail cache to storage:', e)
   }
 }
 
 // 获取缓存的缩略图 URL
 const getCachedThumbnailUrl = (url) => {
   return thumbnailCache.get(url) || url
+}
+
+// 带降级方案的图片加载函数
+const loadImageWithFallback = (url, retries = 0, onSuccess, onError) => {
+  const img = new Image()
+  img.crossOrigin = 'anonymous'
+  img.onload = onSuccess
+  img.onerror = () => {
+    if (retries < CDN_CONFIG.maxRetries) {
+      logger.warn(`Image load failed, retrying with fallback (${retries + 1}/${CDN_CONFIG.maxRetries}):`, url)
+      const fallbackUrl = getImageUrlWithFallback(url.split('quanjing')[1]?.replace(/^\//, '') || url.replace(/^https?:\/\/[^\/]+/, ''), retries + 1)
+      loadImageWithFallback(fallbackUrl, retries + 1, onSuccess, onError)
+    } else {
+      logger.error('Image load failed after all retries:', url)
+      if (onError) onError()
+    }
+  }
+  img.src = url
 }
 
 // 图片加载完成回调 - 缓存已加载的缩略图

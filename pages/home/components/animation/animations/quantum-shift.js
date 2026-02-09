@@ -58,18 +58,37 @@ export default function animateQuantumShift(props, callbacks) {
         )
       }, i * 0.4)
 
-      // 闪烁效果
-      tl.to(camera, {
-        opacity: 0.2,
-        duration: 0.1,
-        ease: 'power1.inOut'
+      // 闪烁效果 - 通过覆盖层实现
+      const flashOverlay = document.createElement('div')
+      flashOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 9999;
+      `
+      document.body.appendChild(flashOverlay)
+
+      tl.to(flashOverlay.style, {
+        opacity: 0.5,
+        duration: 0.05,
+        ease: 'power1.out'
       }, i * 0.4 + 0.1)
 
-      tl.to(camera, {
-        opacity: 1,
-        duration: 0.1,
-        ease: 'power1.inOut'
-      }, i * 0.4 + 0.2)
+      tl.to(flashOverlay.style, {
+        opacity: 0,
+        duration: 0.15,
+        ease: 'power1.in',
+        onComplete: () => {
+          if (i === 2) {
+            document.body.removeChild(flashOverlay)
+          }
+        }
+      }, i * 0.4 + 0.15)
     }
 
     // 动画阶段2: 最终跃迁到附近

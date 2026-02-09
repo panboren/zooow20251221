@@ -39,7 +39,6 @@ function createBlackHoleCore(radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uEventHorizon;
@@ -63,7 +62,6 @@ function createBlackHoleCore(radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -135,7 +133,6 @@ function createAccretionDisk(innerRadius, outerRadius, segments, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uRotation;
@@ -156,7 +153,6 @@ function createAccretionDisk(innerRadius, outerRadius, segments, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -257,7 +253,6 @@ function createAccretionParticles(count, innerRadius, outerRadius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -299,7 +294,6 @@ function createAccretionParticles(count, innerRadius, outerRadius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
 
@@ -342,7 +336,6 @@ function createGravitationalWaves(radius, segments, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uWavePhase;
@@ -356,7 +349,6 @@ function createGravitationalWaves(radius, segments, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -472,7 +464,6 @@ export default function animateHolographicVoidCosmos(props, callbacks) {
       },
       vertexShader: `
         precision highp float;
-        precision highp int;
 
         varying vec3 vNormal;
 
@@ -483,7 +474,6 @@ export default function animateHolographicVoidCosmos(props, callbacks) {
       `,
       fragmentShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;

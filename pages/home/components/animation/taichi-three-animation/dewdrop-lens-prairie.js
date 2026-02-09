@@ -44,24 +44,22 @@ export default async function animateDewdropLens(props, callbacks) {
         // ========== 步骤1: 加载和初始化 Taichi.js ==========
         console.log('📦 步骤 1/5: 加载 Taichi.js...');
 
-        const { $loadTaichi, $initTaichi } = useNuxtApp();
+        // 从全局 window 对象获取 Taichi 工具
+        const taichiUtils = typeof window !== 'undefined' ? window.__TAICHI_UTILS__ : null;
 
-        try {
-            ti = await $loadTaichi();
-            console.log('✅ Taichi.js 加载成功');
-
-            await $initTaichi(ti);
-            console.log('✅ Taichi.js 初始化成功');
-
-            if (!ti || typeof ti.Vector !== 'object') {
-                console.warn('⚠️ Taichi.js 实例无效，使用 JavaScript 模拟');
-                useTaichi = false;
-            } else {
-                useTaichi = true;
-            }
-        } catch (error) {
-            console.warn('⚠️ Taichi.js 加载或初始化失败，使用 JavaScript 模拟:', error.message);
+        if (!taichiUtils || !taichiUtils.isReady || !taichiUtils.isReady()) {
+            console.warn('⚠️ Taichi.js 未初始化，使用 JavaScript 模拟');
             useTaichi = false;
+        } else {
+            try {
+                ti = taichiUtils.getModule();
+                console.log('✅ Taichi.js 加载成功');
+
+                useTaichi = true;
+            } catch (error) {
+                console.warn('⚠️ Taichi.js 获取失败，使用 JavaScript 模拟:', error.message);
+                useTaichi = false;
+            }
         }
 
         // ========== 步骤2: 创建 Taichi 字段和 Kernels（露珠透镜物理）==========

@@ -143,8 +143,8 @@ export function createOceanAurora(scene, options = {}) {
 
       // 极光增强
       auroraCurtains.forEach((curtain, i) => {
-        gsap.to(curtain.mesh.material.uniforms, {
-          value: duration * (i + 1) * 0.2,
+        gsap.to(curtain.mesh.material.uniforms.uIntensity, {
+          value: 1.0 + i * 0.1,
           duration: 2,
           ease: 'power2.inOut'
         })

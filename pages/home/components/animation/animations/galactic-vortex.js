@@ -6,10 +6,16 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
+import { logger } from './logger.js'
+import { getAdaptiveParticleCount, getDeviceTier } from './device-detection.js'
 
 export default function animateGalacticVortex(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 检测设备性能
+  const deviceTier = getDeviceTier()
+  const adaptiveParticleCount = getAdaptiveParticleCount('vortex', deviceTier)
 
   try {
     setupInitialCamera(camera, new THREE.Vector3(0, 40, 100), 120, controls)
@@ -28,7 +34,7 @@ export default function animateGalacticVortex(props, callbacks) {
 
     // 创建星际漩涡系统
     const galacticVortex = createGalacticVortexSystem(scene, {
-      particleCount: 1500,
+      particleCount: Math.min(adaptiveParticleCount, 1500),
       spiralArms: 4,
       energyRings: 5,
       starClusters: 8
@@ -66,6 +72,7 @@ export default function animateGalacticVortex(props, callbacks) {
     // 持续漩涡演绎
     let startTime = null
     const duration = 6
+    let animationFrameId = null
 
     const animate = (time) => {
       if (!startTime) startTime = time
@@ -75,18 +82,27 @@ export default function animateGalacticVortex(props, callbacks) {
         const deltaTime = 0.016
         galacticVortex.update(deltaTime, elapsed)
         renderer.render(scene, camera)
-        requestAnimationFrame(animate)
+        animationFrameId = requestAnimationFrame(animate)
       }
       else {
         galacticVortex.deactivate()
       }
     }
 
-    requestAnimationFrame(animate)
+    animationFrameId = requestAnimationFrame(animate)
+
+    // 添加清理方法到时间轴
+    tl.eventCallback('onComplete', () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId)
+      }
+      galacticVortex.deactivate()
+    })
 
     return tl
   }
   catch (error) {
+    logger.error('星际漩涡特效执行错误:', error)
     if (onError) {
       onError(error, '星际漩涡特效执行错误')
     }
@@ -128,6 +144,9 @@ function createGalacticVortexSystem(scene, options = {}) {
   accretionDisk.rotation.x = Math.PI / 2
   galaxy.add(accretionDisk)
 
+  // 优化：复用临时颜色对象，避免在 update 循环中频繁创建
+  const tempColor = new THREE.Color()
+
   // 创建螺旋臂粒子系统
   const spiralGeometry = new THREE.BufferGeometry()
   const spiralPositions = new Float32Array(particleCount * 3)
@@ -156,7 +175,7 @@ function createGalacticVortexSystem(scene, options = {}) {
     // 根据距离中心的距离设置颜色
     const distanceFactor = Math.min(1, radius / 60)
     const hue = 0.6 + distanceFactor * 0.2  // 蓝紫色调
-    const color = new THREE.Color().setHSL(hue, 0.9, 0.6)
+    const color = tempColor.setHSL(hue, 0.9, 0.6)
     spiralColors[i3] = color.r
     spiralColors[i3 + 1] = color.g
     spiralColors[i3 + 2] = color.b
@@ -314,7 +333,7 @@ function createGalacticVortexSystem(scene, options = {}) {
       const pulse = Math.sin(time * 3 + particle.pulsePhase) * 0.3 + 0.7
       const distanceFactor = Math.min(1, particle.radius / 60)
       const hue = 0.6 + distanceFactor * 0.2
-      const color = new THREE.Color().setHSL(hue, 0.9, 0.6)
+      const color = tempColor.setHSL(hue, 0.9, 0.6)
       color.multiplyScalar(pulse)
 
       colors[i3] = color.r
@@ -353,6 +372,10 @@ function createGalacticVortexSystem(scene, options = {}) {
 
   // 停止动画
   result.deactivate = function() {
+    // 清理 GSAP 动画
+    gsap.killTweensOf(blackHole.scale)
+    gsap.killTweensOf(accretionDisk.rotation)
+
     // 清理资源
     if (spiralSystem?.geometry) spiralSystem.geometry.dispose()
     if (spiralSystem?.material) spiralSystem.material.dispose()

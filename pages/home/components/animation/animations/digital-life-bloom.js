@@ -43,6 +43,7 @@ export default function animateDigitalLifeBloom(props, callbacks) {
     const particleSystems = []
     const lines = []
     const textSprites = []
+    let neuralLinesAnimationId = null
 
     // ==================== 1. DNA双螺旋核心 ====================
     const dnaGeometry = new THREE.BufferGeometry()
@@ -335,6 +336,7 @@ export default function animateDigitalLifeBloom(props, callbacks) {
       })
 
       // 更新神经网络连线
+      let neuralLinesAnimationId = null
       const updateNeuralLines = () => {
         const neuralPos = neuralSystem.geometry.attributes.position.array
         const linePos = neuralLines.geometry.attributes.position.array
@@ -369,9 +371,9 @@ export default function animateDigitalLifeBloom(props, callbacks) {
         neuralLines.geometry.attributes.position.needsUpdate = true
         neuralLines.geometry.attributes.color.needsUpdate = true
 
-        requestAnimationFrame(updateNeuralLines)
+        neuralLinesAnimationId = requestAnimationFrame(updateNeuralLines)
       }
-      updateNeuralLines()
+      neuralLinesAnimationId = requestAnimationFrame(updateNeuralLines)
 
     }, null, 4.5)
 
@@ -465,6 +467,12 @@ export default function animateDigitalLifeBloom(props, callbacks) {
 
     // 清理函数
     tl.call(() => {
+      // 清理神经网络动画
+      if (neuralLinesAnimationId) {
+        cancelAnimationFrame(neuralLinesAnimationId)
+        neuralLinesAnimationId = null
+      }
+
       particleSystems.forEach(system => {
         scene.remove(system)
         system.geometry.dispose()

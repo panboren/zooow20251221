@@ -459,6 +459,7 @@ function createDreamMist(scene, options = {}) {
 
   let materialized = false
   let time = 0
+  let animationId = null
 
   const update = () => {
     time += 0.016
@@ -475,21 +476,25 @@ function createDreamMist(scene, options = {}) {
     }
   }
 
-  const animationId = requestAnimationFrame(function animate() {
+  const animate = () => {
     update()
-    requestAnimationFrame(animate)
-  })
+    animationId = requestAnimationFrame(animate)
+  }
+  animationId = requestAnimationFrame(animate)
 
   return {
     materialize(targetOpacity = 0.3, duration = 3) {
       materialized = true
-      gsap.to(material.uniforms.uOpacity, {
-        value: targetOpacity,
+      gsap.to(material, {
+        opacity: targetOpacity,
         duration: duration
       })
     },
     dispose() {
-      cancelAnimationFrame(animationId)
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+        animationId = null
+      }
       scene.remove(points)
       geometry.dispose()
       material.dispose()

@@ -70,6 +70,9 @@ export function createHyperspaceWarpDrive(scene, options = {}) {
       uColor: { value: new THREE.Color(0x00aaff) }
     },
     vertexShader: `
+      precision highp float;
+      precision highp int;
+
       uniform float uTime;
       uniform float uSpeed;
       varying vec2 vUv;
@@ -93,6 +96,9 @@ export function createHyperspaceWarpDrive(scene, options = {}) {
       }
     `,
     fragmentShader: `
+      precision highp float;
+      precision highp int;
+
       uniform float uTime;
       uniform float uSpeed;
       uniform vec3 uColor;
@@ -137,6 +143,9 @@ export function createHyperspaceWarpDrive(scene, options = {}) {
       uColor: { value: new THREE.Color(0x00ffff) }
     },
     vertexShader: `
+      precision highp float;
+      precision highp int;
+
       uniform float uTime;
       varying vec3 vNormal;
       varying vec3 vPos;
@@ -153,6 +162,9 @@ export function createHyperspaceWarpDrive(scene, options = {}) {
       }
     `,
     fragmentShader: `
+      precision highp float;
+      precision highp int;
+
       uniform float uTime;
       uniform vec3 uColor;
       varying vec3 vNormal;
@@ -160,7 +172,7 @@ export function createHyperspaceWarpDrive(scene, options = {}) {
 
       void main() {
         // 菲涅尔效果
-        float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+        float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.0);
 
         // 脉冲效果
         float pulse = sin(uTime * 5.0) * 0.3 + 0.7;

@@ -46,7 +46,6 @@ function createPrismMaterial(color, opacity) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       varying vec3 vNormal;
       varying vec3 vPosition;
@@ -61,7 +60,6 @@ function createPrismMaterial(color, opacity) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -241,14 +239,18 @@ export default function animateHolographicPolygonPrism(props, callbacks) {
           uOpacity: { value: 0 }
         },
         vertexShader: `
-          varying vec2 vUv;
+      precision highp float;
+
+      varying vec2 vUv;
           void main() {
             vUv = uv;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           }
         `,
         fragmentShader: `
-          uniform float uTime;
+      precision highp float;
+
+      uniform float uTime;
           uniform vec3 uColor;
           uniform float uOpacity;
           varying vec2 vUv;

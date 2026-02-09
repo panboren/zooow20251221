@@ -25,6 +25,8 @@
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { createTimeline, setupInitialCamera, safeCameraTransform } from '../animations/utils.js';
+import { getAdaptiveParticleCount, getDeviceTier } from '../animations/device-detection.js';
+import { logger } from '../animations/logger.js';
 
 /**
  * 水墨-Taichi.js 特效主函数
@@ -35,54 +37,48 @@ export default async function animateTaichiThree(props, callbacks) {
     const { camera, renderer, scene, controls } = props;
     const { onComplete, onError } = callbacks || {};
 
-    console.log('🎬 启动水墨-Taichi.js 特效');
+    logger.log('🎬 启动水墨-Taichi.js 特效');
 
-    // Taichi.js 相关
+    // 检测设备性能并设置粒子数量
+    const deviceTier = getDeviceTier();
+    const PARTICLE_COUNT = getAdaptiveParticleCount('shuimo', deviceTier);
+
+    // 声明 Taichi 相关变量
     let ti = null;
     let useTaichi = false;
-
-    // Taichi 字段
     let positionsField = null;
     let velocitiesField = null;
     let colorsField = null;
     let opacityField = null;
     let sizeField = null;
-
-    // Taichi kernels
     let initKernel = null;
     let updateKernel = null;
-
-    // 粒子数量
-    const PARTICLE_COUNT = 50000;
 
     try {
         // ========== 步骤1: 加载和初始化 Taichi.js ==========
         console.log('📦 步骤 1/4: 加载 Taichi.js...');
 
-        const { $loadTaichi, $initTaichi } = useNuxtApp();
+        // 从全局 window 对象获取 Taichi 工具
+        const taichiUtils = typeof window !== 'undefined' ? window.__TAICHI_UTILS__ : null;
 
-        try {
-            ti = await $loadTaichi();
-            console.log('✅ Taichi.js 加载成功');
-
-            await $initTaichi(ti);
-            console.log('✅ Taichi.js 初始化成功');
-
-            // 检查Taichi实例是否有效
-            if (!ti || typeof ti.Vector !== 'object') {
-                console.warn('⚠️ Taichi.js 实例无效，使用 JavaScript 模拟');
-                useTaichi = false;
-            } else {
-                useTaichi = true;
-            }
-        } catch (error) {
-            console.warn('⚠️ Taichi.js 加载或初始化失败，使用 JavaScript 模拟:', error.message);
+        if (!taichiUtils || !taichiUtils.isReady || !taichiUtils.isReady()) {
+            logger.warn('⚠️ Taichi.js 未初始化，使用 JavaScript 模拟');
             useTaichi = false;
+        } else {
+            try {
+                ti = taichiUtils.getModule();
+                logger.log('✅ Taichi.js 加载成功');
+
+                useTaichi = true;
+            } catch (error) {
+                logger.warn('⚠️ Taichi.js 获取失败，使用 JavaScript 模拟:', error.message);
+                useTaichi = false;
+            }
         }
 
         // ========== 步骤2: 创建 Taichi 字段和 Kernels（水墨物理）==========
         if (useTaichi && ti) {
-            console.log('🔨 步骤 2/4: 创建水墨 Taichi 字段和 Kernels...');
+            logger.log('🔨 步骤 2/4: 创建水墨 Taichi 字段和 Kernels...');
 
             try {
                 await new Promise(resolve => setTimeout(resolve, 200));
@@ -99,7 +95,7 @@ export default async function animateTaichiThree(props, callbacks) {
                 opacityField = ti.field(ti.f32, [PARTICLE_COUNT]);
                 sizeField = ti.field(ti.f32, [PARTICLE_COUNT]);
 
-                console.log('✅ 水墨 Taichi 字段创建成功');
+                logger.log('✅ 水墨 Taichi 字段创建成功');
 
                 // 水墨常量
                 ti.addToKernelScope({
@@ -110,7 +106,7 @@ export default async function animateTaichiThree(props, callbacks) {
                     size: sizeField
                 });
 
-                console.log('✅ 水墨 Kernel scope 设置完成');
+                logger.log('✅ 水墨 Kernel scope 设置完成');
 
                 // 初始化内核 - 创建墨滴
                 initKernel = ti.kernel(() => {
@@ -187,20 +183,20 @@ export default async function animateTaichiThree(props, callbacks) {
                     }
                 });
 
-                console.log('✅ 水墨 Taichi Kernels 编译完成');
+                logger.log('✅ 水墨 Taichi Kernels 编译完成');
 
                 // 执行初始化
                 initKernel();
-                console.log('✅ 水墨初始化执行完成');
+                logger.log('✅ 水墨初始化执行完成');
 
             } catch (error) {
-                console.warn('⚠️ 水墨 Taichi 字段或 Kernels 创建失败，降级到 JavaScript:', error.message);
+                logger.warn('⚠️ 水墨 Taichi 字段或 Kernels 创建失败，降级到 JavaScript:', error.message);
                 useTaichi = false;
             }
         }
 
         // ========== 步骤3: 初始化 Three.js 水墨场景 ==========
-        console.log('🎨 步骤 3/4: 初始化水墨场景...');
+        logger.log('🎨 步骤 3/4: 初始化水墨场景...');
 
         // 初始设置 - 远距离俯瞰
         setupInitialCamera(camera, new THREE.Vector3(0, 60, 120), 85, controls);
@@ -212,7 +208,7 @@ export default async function animateTaichiThree(props, callbacks) {
 
         // 创建墨滴粒子系统
         const inkDrops = createInkDrops(scene, {
-            particleCount: 30000,
+            particleCount: PARTICLE_COUNT,
             useTaichi,
             positionsField,
             colorsField,
@@ -237,10 +233,10 @@ export default async function animateTaichiThree(props, callbacks) {
         // 创建水墨云雾效果
         const inkClouds = createInkClouds(scene);
 
-        console.log('✅ 水墨场景创建完成');
+        logger.log('✅ 水墨场景创建完成');
 
         // ========== 步骤4: 创建水墨动画时间轴 ==========
-        console.log('⏱️  步骤 4/4: 创建水墨动画时间轴...');
+        logger.log('⏱️  步骤 4/4: 创建水墨动画时间轴...');
 
         const tl = createTimeline(
             () => {
@@ -252,7 +248,7 @@ export default async function animateTaichiThree(props, callbacks) {
             controls
         );
 
-        console.log('✅ 水墨动画时间轴创建完成');
+        logger.log('✅ 水墨动画时间轴创建完成');
 
         // ========== 水墨动画阶段 ==========
 
@@ -535,7 +531,7 @@ export default async function animateTaichiThree(props, callbacks) {
 
         // 清理函数
         const cleanup = () => {
-            console.log('🧹 清理水墨特效资源');
+            logger.log('🧹 清理水墨特效资源');
 
             // 清理 Three.js 资源
             if (inkCore) inkCore.destroy();
@@ -567,7 +563,7 @@ export default async function animateTaichiThree(props, callbacks) {
         return { updateHandler };
 
     } catch (error) {
-        console.error('❌ 水墨-Taichi.js 特效启动失败:', error);
+        logger.error('❌ 水墨-Taichi.js 特效启动失败:', error);
         if (onError) onError(error);
         return null;
     }

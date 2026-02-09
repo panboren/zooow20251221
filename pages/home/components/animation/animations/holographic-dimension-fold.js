@@ -49,7 +49,6 @@ function createTesseract(radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uFold;
@@ -71,7 +70,6 @@ function createTesseract(radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -168,7 +166,6 @@ function createMobiusStrip(radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uTwist;
@@ -195,7 +192,6 @@ function createMobiusStrip(radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -285,7 +281,6 @@ function createDimensionFragments(count, radius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -313,7 +308,6 @@ function createDimensionFragments(count, radius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
       uniform float uFold;
@@ -410,7 +404,6 @@ export default function animateHolographicDimensionFold(props, callbacks) {
         },
         vertexShader: `
           precision highp float;
-          precision highp int;
 
           uniform float uTime;
           uniform float uWarp;
@@ -431,7 +424,6 @@ export default function animateHolographicDimensionFold(props, callbacks) {
         `,
         fragmentShader: `
           precision highp float;
-          precision highp int;
 
           uniform float uTime;
           uniform vec3 uColor;

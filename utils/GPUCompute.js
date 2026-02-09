@@ -112,6 +112,8 @@ export class GPUCompute {
    */
   getParticleMotionShader() {
     return `
+      precision highp float;
+      precision highp int;
       uniform sampler2D inputTexture;
       uniform float time;
       uniform float deltaTime;
@@ -140,6 +142,8 @@ export class GPUCompute {
    */
   getParticleCollisionShader() {
     return `
+      precision highp float;
+      precision highp int;
       uniform sampler2D positionTexture;
       uniform sampler2D velocityTexture;
       uniform float collisionRadius;
@@ -172,6 +176,8 @@ export class GPUCompute {
    */
   getGravityShader() {
     return `
+      precision highp float;
+      precision highp int;
       uniform sampler2D positionTexture;
       uniform sampler2D massTexture;
       uniform vec3 attractorPosition;
@@ -202,6 +208,8 @@ export class GPUCompute {
    */
   getVertexShader() {
     return `
+      precision highp float;
+      precision highp int;
       varying vec2 vUv;
 
       void main() {

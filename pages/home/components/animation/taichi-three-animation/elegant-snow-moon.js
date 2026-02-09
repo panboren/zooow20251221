@@ -50,24 +50,22 @@ export default async function animateElegantSnowMoon(props, callbacks) {
         // ========== 步骤1: 加载和初始化 Taichi.js ==========
         console.log('📦 步骤 1/5: 加载 Taichi.js...');
 
-        const { $loadTaichi, $initTaichi } = useNuxtApp();
+        // 从全局 window 对象获取 Taichi 工具
+        const taichiUtils = typeof window !== 'undefined' ? window.__TAICHI_UTILS__ : null;
 
-        try {
-            ti = await $loadTaichi();
-            console.log('✅ Taichi.js 加载成功');
-
-            await $initTaichi(ti);
-            console.log('✅ Taichi.js 初始化成功');
-
-            if (!ti || typeof ti.Vector !== 'object') {
-                console.warn('⚠️ Taichi.js 实例无效，使用 JavaScript 模拟');
-                useTaichi = false;
-            } else {
-                useTaichi = true;
-            }
-        } catch (error) {
-            console.warn('⚠️ Taichi.js 加载或初始化失败，使用 JavaScript 模拟:', error.message);
+        if (!taichiUtils || !taichiUtils.isReady || !taichiUtils.isReady()) {
+            console.warn('⚠️ Taichi.js 未初始化，使用 JavaScript 模拟');
             useTaichi = false;
+        } else {
+            try {
+                ti = taichiUtils.getModule();
+                console.log('✅ Taichi.js 加载成功');
+
+                useTaichi = true;
+            } catch (error) {
+                console.warn('⚠️ Taichi.js 获取失败，使用 JavaScript 模拟:', error.message);
+                useTaichi = false;
+            }
         }
 
         // ========== 步骤2: 创建 Taichi 字段和 Kernels（风雪月物理）==========
@@ -530,6 +528,7 @@ function createMoon(scene) {
         },
         vertexShader: `
             precision highp float;
+            precision highp int;
             varying vec3 vNormal;
             varying vec3 vPosition;
             uniform float uTime;
@@ -544,6 +543,7 @@ function createMoon(scene) {
         `,
         fragmentShader: `
             precision highp float;
+            precision highp int;
             varying vec3 vNormal;
             varying vec3 vPosition;
             uniform float uTime;
@@ -558,7 +558,7 @@ function createMoon(scene) {
                 float brightness = 0.9 + crater * 0.1;
 
                 // 月晕
-                float fresnel = pow(1.0 - abs(dot(normal, vec3(0, 0, 1)), 3.0);
+                float fresnel = pow(1.0 - abs(dot(normal, vec3(0, 0, 1))), 3.0);
 
                 vec3 moonColor = vec3(0.95, 0.95, 0.95) * brightness;
                 vec3 glowColor = vec3(0.8, 0.85, 1.0);
@@ -588,6 +588,7 @@ function createMoon(scene) {
         },
         vertexShader: `
             precision highp float;
+            precision highp int;
             varying vec3 vNormal;
 
             void main() {
@@ -598,13 +599,14 @@ function createMoon(scene) {
         `,
         fragmentShader: `
             precision highp float;
+            precision highp int;
             varying vec3 vNormal;
             uniform float uTime;
             uniform float uIntensity;
 
             void main() {
                 vec3 normal = normalize(vNormal);
-                float fresnel = pow(1.0 - abs(dot(normal, vec3(0, 0, 1)), 4.0);
+                float fresnel = pow(1.0 - abs(dot(normal, vec3(0, 0, 1))), 4.0);
 
                 vec3 haloColor = vec3(0.7, 0.75, 0.9);
                 float alpha = fresnel * uIntensity * 0.5;
@@ -725,6 +727,7 @@ function createSnow(scene, options) {
         },
         vertexShader: `
             precision highp float;
+            precision highp int;
             attribute vec3 color;
             attribute float life;
             attribute float size;
@@ -748,6 +751,7 @@ function createSnow(scene, options) {
         `,
         fragmentShader: `
             precision highp float;
+            precision highp int;
             varying vec3 vColor;
             varying float vLife;
             uniform float uGlobalAlpha;
@@ -1027,6 +1031,7 @@ function createSnowGround(scene) {
         },
         vertexShader: `
             precision highp float;
+            precision highp int;
             varying vec2 vUv;
             varying float vHeight;
             uniform float uTime;
@@ -1044,6 +1049,7 @@ function createSnowGround(scene) {
         `,
         fragmentShader: `
             precision highp float;
+            precision highp int;
             varying vec2 vUv;
             varying float vHeight;
             uniform float uTime;

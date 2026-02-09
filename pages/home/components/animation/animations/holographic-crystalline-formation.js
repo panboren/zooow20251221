@@ -56,7 +56,6 @@ function createCrystalMaterial(color, opacity) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       varying vec3 vNormal;
       varying vec3 vPosition;
@@ -73,7 +72,6 @@ function createCrystalMaterial(color, opacity) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -210,7 +208,6 @@ function createCrystallizationParticles(count, radius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uCrystallization;
@@ -232,7 +229,6 @@ function createCrystallizationParticles(count, radius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       varying vec3 vColor;
 

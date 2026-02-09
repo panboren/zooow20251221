@@ -39,7 +39,6 @@ function createBioluminescentCreature(radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uPulse;
@@ -68,7 +67,6 @@ function createBioluminescentCreature(radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -131,7 +129,6 @@ function createLightWave(radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uWaveSpeed;
@@ -152,7 +149,6 @@ function createLightWave(radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -229,7 +225,6 @@ function createLightParticles(count, radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -262,7 +257,6 @@ function createLightParticles(count, radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
 

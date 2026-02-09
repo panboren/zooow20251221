@@ -231,6 +231,7 @@ import { gsap } from 'gsap'
 import { animations } from './animations'
 import './animations/styles/index.scss'  // 导入样式入口文件
 import { useTaichi } from '~/composables/useTaichi'
+import { logger } from './animations/logger.js'
 
 // 获取Taichi工具
 const taichiUtils = useTaichi()
@@ -328,7 +329,7 @@ const onAnimationComplete = (payload) => {
  * @param {Error} error - 错误对象
  */
 const onAnimationError = (error) => {
-  console.error(`${props.animationType} 动画执行错误:`, error)
+  logger.error(`${props.animationType} 动画执行错误:`, error)
   animationComplete.value = true
 
   // 错误时仍然调用 cleanup（因为 timeline 可能没有完成）
@@ -336,7 +337,7 @@ const onAnimationError = (error) => {
     try {
       currentCleanup.value()
     } catch (e) {
-      console.error('Cleanup error:', e)
+      logger.error('Cleanup error:', e)
     }
     currentCleanup.value = null
   }
@@ -356,7 +357,7 @@ const onAnimationError = (error) => {
 const startAnimation = () => {
   // 检查必需的 props 是否存在
   if (!props.scene || !props.camera || !props.renderer) {
-    console.warn('[CinematicAnimations] Required props are not available yet, skipping animation')
+    logger.warn('[CinematicAnimations] Required props are not available yet, skipping animation')
     return
   }
 
@@ -389,7 +390,7 @@ const startAnimation = () => {
       currentCleanup.value = result.cleanup
     }
   } else {
-    console.error(`未知的动画类型: ${props.animationType}`)
+    logger.error(`未知的动画类型: ${props.animationType}`)
     onAnimationError(new Error(`未知的动画类型: ${props.animationType}`))
   }
 }
@@ -413,7 +414,7 @@ const animateToDefaultView = () => {
   const { camera, controls } = props
 
   if (!camera) {
-    console.error('相机不可用，无法执行动画')
+    logger.error('相机不可用，无法执行动画')
     return
   }
 

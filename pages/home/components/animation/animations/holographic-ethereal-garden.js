@@ -68,7 +68,6 @@ function createEtherealPetals(count, radius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -108,7 +107,6 @@ function createEtherealPetals(count, radius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
 
@@ -164,7 +162,6 @@ function createLightVine(length, radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uGrowth;
@@ -194,7 +191,6 @@ function createLightVine(length, radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -267,7 +263,6 @@ function createLightButterflies(count, radius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -301,7 +296,6 @@ function createLightButterflies(count, radius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
 

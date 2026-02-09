@@ -20,6 +20,7 @@ import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
 import { ParticleFactory } from '~/utils/ParticleFactory.js'
 import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
+import { logger } from './logger.js'
 
 export default function animateQuantumEntanglement(props, callbacks) {
   const { camera, renderer, scene, controls } = props

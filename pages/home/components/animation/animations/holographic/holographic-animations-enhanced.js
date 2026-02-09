@@ -604,7 +604,6 @@ export function animateHolographicSphereArray(props, callbacks = {}) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       varying vec2 vUv;
       void main() {
@@ -614,7 +613,6 @@ export function animateHolographicSphereArray(props, callbacks = {}) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;

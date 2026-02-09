@@ -324,10 +324,21 @@ export default function animateBigBangGenesisOptimized(props, callbacks = {}) {
     })
 
     // 性能监控
-    setInterval(() => {
+    let performanceInterval = null
+    const cleanupPerformanceMonitor = () => {
+      if (performanceInterval) {
+        clearInterval(performanceInterval)
+        performanceInterval = null
+      }
+    }
+
+    performanceInterval = setInterval(() => {
       const status = effect.getPerformanceStatus()
       console.log('性能状态:', status)
     }, 1000)
+
+    // 在时间线完成时清理性能监控
+    tl.eventCallback('onComplete', cleanupPerformanceMonitor)
 
     return tl
 

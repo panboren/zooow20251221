@@ -39,7 +39,6 @@ function createPolygonCell(sides, radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       varying vec3 vNormal;
       varying vec3 vPosition;
@@ -54,7 +53,6 @@ function createPolygonCell(sides, radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -107,7 +105,6 @@ function createWaveGrid(size, divisions, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uWaveSpeed;
@@ -131,7 +128,6 @@ function createWaveGrid(size, divisions, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -209,7 +205,6 @@ function createSoundwaveParticles(count, radius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -236,7 +231,6 @@ function createSoundwaveParticles(count, radius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
       

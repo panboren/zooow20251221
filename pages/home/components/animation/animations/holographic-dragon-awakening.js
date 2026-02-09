@@ -44,7 +44,6 @@ function createDragonBody() {
       },
       vertexShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
         uniform float uAwakening;
@@ -69,7 +68,6 @@ function createDragonBody() {
       `,
       fragmentShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;
@@ -156,7 +154,6 @@ function createDragonFlames(count) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -187,7 +184,6 @@ function createDragonFlames(count) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
       uniform float uBurst;
@@ -234,7 +230,6 @@ function createDivineClouds(count, radius) {
       },
       vertexShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
 
@@ -257,7 +252,6 @@ function createDivineClouds(count, radius) {
       `,
       fragmentShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;
@@ -315,7 +309,6 @@ function createAwakeningLight() {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uIntensity;
@@ -339,7 +332,6 @@ function createAwakeningLight() {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;

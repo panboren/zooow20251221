@@ -39,7 +39,6 @@ function createNeuronNode(radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uPulse;
@@ -60,7 +59,6 @@ function createNeuronNode(radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -116,7 +114,6 @@ function createSynapseConnection(start, end, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uSignalPos;
@@ -136,7 +133,6 @@ function createSynapseConnection(start, end, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -215,7 +211,6 @@ function createThoughtParticles(count, radius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -242,7 +237,6 @@ function createThoughtParticles(count, radius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
 
@@ -378,7 +372,6 @@ export default function animateHolographicNeuralNetwork(props, callbacks) {
         },
         vertexShader: `
           precision highp float;
-          precision highp int;
 
           uniform float uTime;
 
@@ -391,7 +384,6 @@ export default function animateHolographicNeuralNetwork(props, callbacks) {
         `,
         fragmentShader: `
           precision highp float;
-          precision highp int;
 
           uniform float uTime;
           uniform vec3 uColor;

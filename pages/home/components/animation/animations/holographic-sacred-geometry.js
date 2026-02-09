@@ -74,7 +74,6 @@ function createMetatronsCube(radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       varying vec2 vUv;
       varying vec3 vPosition;
@@ -87,7 +86,6 @@ function createMetatronsCube(radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -145,7 +143,6 @@ function createFlowerOfLife(radius, layers, color) {
         },
         vertexShader: `
           precision highp float;
-          precision highp int;
 
           varying vec2 vUv;
           varying vec3 vPosition;
@@ -158,7 +155,6 @@ function createFlowerOfLife(radius, layers, color) {
         `,
         fragmentShader: `
           precision highp float;
-          precision highp int;
 
           uniform float uTime;
           uniform vec3 uColor;
@@ -232,7 +228,6 @@ function createPlatonicSolid(type, size, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       varying vec3 vNormal;
       varying vec3 vPosition;
@@ -247,7 +242,6 @@ function createPlatonicSolid(type, size, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -393,14 +387,18 @@ export default function animateHolographicSacredGeometry(props, callbacks) {
           uOpacity: { value: 0 }
         },
         vertexShader: `
-          varying vec2 vUv;
+      precision highp float;
+
+      varying vec2 vUv;
           void main() {
             vUv = uv;
             gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
           }
         `,
         fragmentShader: `
-          uniform float uTime;
+      precision highp float;
+
+      uniform float uTime;
           uniform vec3 uColor;
           uniform float uOpacity;
           varying vec2 vUv;

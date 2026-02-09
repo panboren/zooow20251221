@@ -155,7 +155,7 @@ export function createEnergyPulseRing(scene, options = {}) {
           float wave = sin(vRipple * 3.0) * 0.5 + 0.5;
 
           // 边缘发光
-          float edge = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
+          float edge = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);
 
           // 能量强度
           float intensity = wave * edge;

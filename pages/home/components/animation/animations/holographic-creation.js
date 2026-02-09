@@ -45,7 +45,6 @@ function createCreationBeams(count) {
       },
       vertexShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
         uniform float uGrowth;
@@ -75,7 +74,6 @@ function createCreationBeams(count) {
       `,
       fragmentShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;
@@ -137,7 +135,6 @@ function createDimensionRifts(count, radius) {
       },
       vertexShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
         uniform float uRiftOpen;
@@ -164,7 +161,6 @@ function createDimensionRifts(count, radius) {
       `,
       fragmentShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;
@@ -235,7 +231,6 @@ function createNewbornGalaxies(count, radius) {
       },
       vertexShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
         uniform float uBirth;
@@ -266,7 +261,6 @@ function createNewbornGalaxies(count, radius) {
       `,
       fragmentShader: `
         precision highp float;
-        precision highp int;
 
         uniform float uTime;
         uniform vec3 uColor;
@@ -325,7 +319,6 @@ function createSingularity() {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uIntensity;
@@ -348,7 +341,6 @@ function createSingularity() {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -423,7 +415,6 @@ function createPrimordialParticles(count, radius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -458,7 +449,6 @@ function createPrimordialParticles(count, radius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
       uniform float uBurst;

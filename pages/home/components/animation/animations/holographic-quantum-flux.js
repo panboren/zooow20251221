@@ -39,7 +39,6 @@ function createQuantumCloud(radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uTurbulence;
@@ -129,7 +128,6 @@ function createQuantumCloud(radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -231,7 +229,6 @@ function createEntangledParticles(count, radius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -258,7 +255,6 @@ function createEntangledParticles(count, radius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
 
@@ -297,7 +293,6 @@ function createWavePacket(radius, color) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
 
@@ -317,7 +312,6 @@ function createWavePacket(radius, color) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;
@@ -443,7 +437,6 @@ export default function animateHolographicQuantumFlux(props, callbacks) {
         },
         vertexShader: `
           precision highp float;
-          precision highp int;
 
           varying vec2 vUv;
 
@@ -454,7 +447,6 @@ export default function animateHolographicQuantumFlux(props, callbacks) {
         `,
         fragmentShader: `
           precision highp float;
-          precision highp int;
 
           uniform float uTime;
           uniform vec3 uColor;

@@ -22,10 +22,16 @@ import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils'
 import { ParticleFactory } from '~/utils/ParticleFactory.js'
 import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
+import { getAdaptiveParticleCount, getDeviceTier } from './device-detection.js'
+import { logger } from './logger.js'
 
 export default function animateInterstellarSupernova(props, callbacks) {
   const { camera, renderer, scene, controls } = props
   const { onComplete, onError } = callbacks || {}
+
+  // 检测设备性能并调整粒子数量
+  const deviceTier = getDeviceTier()
+  const adaptiveParticleCount = getAdaptiveParticleCount('supernova', deviceTier)
 
   // 创建性能监控器
   const perfMonitor = new PerformanceMonitor()
@@ -57,21 +63,21 @@ export default function animateInterstellarSupernova(props, callbacks) {
       evolutionStages: 5
     })
 
-    // 2. 超新星爆发粒子系统（25000粒子，减少50%）
+    // 2. 超新星爆发粒子系统（自适应粒子数量）
     const supernovaExplosion = createSupernovaExplosion(scene, {
-      particleCount: 25000,  // 50000 → 25000
+      particleCount: Math.min(adaptiveParticleCount, 15000),  // 设备自适应
       blastRadius: 300
     })
 
     // 3. 激波环 - 减少环数
     const shockwaveRings = createShockwaveRings(scene, {
-      ringCount: 5,        // 10 → 5
+      ringCount: deviceTier === 'LOW' ? 3 : 5,  // LOW: 3, MEDIUM/HIGH: 5
       maxRadius: 250
     })
 
     // 4. 引力波涟漪 - 减少波数
     const gravitationalWaves = createGravitationalWaves(scene, {
-      waveCount: 8,        // 15 → 8
+      waveCount: deviceTier === 'LOW' ? 5 : 8,  // LOW: 5, MEDIUM/HIGH: 8
       wavelength: 30
     })
 
@@ -81,9 +87,9 @@ export default function animateInterstellarSupernova(props, callbacks) {
       beamCount: 2
     })
 
-    // 6. 星际尘埃 - 减少50%粒子
+    // 6. 星际尘埃 - 设备自适应
     const interstellarDust = createInterstellarDust(scene, {
-      particleCount: 10000,  // 20000 → 10000
+      particleCount: Math.floor(adaptiveParticleCount * 0.5),  // 爆发粒子的50%
       distributionRadius: 400
     })
 
@@ -93,9 +99,9 @@ export default function animateInterstellarSupernova(props, callbacks) {
       beamWidth: 20
     })
 
-    // 8. 脉冲星束 - 减少束数
+    // 8. 脉冲星束 - 固定2束
     const pulsarBeams = createPulsarBeams(scene, {
-      beamCount: 2,        // 4 → 2
+      beamCount: 2,  // 保持2束
       beamLength: 350
     })
 

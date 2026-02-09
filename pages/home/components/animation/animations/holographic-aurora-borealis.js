@@ -29,6 +29,8 @@ import { createMultiLayerAurora } from './effects/unified-aurora-shader.js'
 import { createShaderStarField } from './effects/unified-star-field.js'
 import { getAdaptiveParticleCount, performanceMonitor } from './effects/particle-config.js'
 import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
+import { logger } from './logger.js'
+import { getDeviceTier } from './device-detection.js'
 
 /**
  * 创建等离子体粒子
@@ -73,7 +75,6 @@ function createPlasmaParticles(scene, count, radius) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uOpacity;
@@ -99,7 +100,6 @@ function createPlasmaParticles(scene, count, radius) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uOpacity;
 
@@ -140,15 +140,16 @@ export default function animateHolographicAuroraBorealis(props, callbacks) {
   const perfMonitor = new PerformanceMonitor()
   perfMonitor.start()
 
-  // 检测设备性能等级 - 使用 particle-config.js 的 performanceMonitor
-  performanceMonitor.update()
-  const deviceTier = performanceMonitor.getCurrentTier()
+  // 检测设备性能等级
+  const deviceTier = getDeviceTier()
 
   const tl = createTimeline(
     () => {
       perfMonitor.stop()
       perfMonitor.logReport()
       if (onComplete) onComplete({ type: 'holographic-aurora-borealis' })
+      // 动画完成后取消动画循环
+      cancelAnimationFrame(animationId)
     },
     onError,
     '🌌 全息极光（传说级VFX - 重构版）',
@@ -243,8 +244,9 @@ export default function animateHolographicAuroraBorealis(props, callbacks) {
   }, null, 'end-=1')
 
   // 动画循环
+  let animationId = null
   const animate = (time) => {
-    requestAnimationFrame(animate)
+    animationId = requestAnimationFrame(animate)
 
     const elapsedTime = time * 0.001
 
@@ -276,10 +278,16 @@ export default function animateHolographicAuroraBorealis(props, callbacks) {
     renderer.render(scene, camera)
   }
 
-  animate(0)
+  animationId = requestAnimationFrame(animate)
 
   // 清理函数
   return () => {
+    // 取消动画循环
+    if (animationId) {
+      cancelAnimationFrame(animationId)
+    }
+
+    // 清理资源
     starField.dispose()
     aurora.dispose()
     scene.remove(plasmaParticles)
@@ -287,5 +295,7 @@ export default function animateHolographicAuroraBorealis(props, callbacks) {
     plasmaParticles.material.dispose()
     scene.background = originalBackground
     scene.fog = originalFog
+
+    logger.log('全息极光特效清理完成')
   }
 }
