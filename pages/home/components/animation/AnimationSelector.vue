@@ -192,10 +192,34 @@ const sanitizedValue = computed({
 })
 
 const handleChange = (value) => {
+
+  console.log(156169, value);
+
   if (validValues.value.has(value)) {
     emit('change', value)
   }
 }
+
+let inx=0
+let test=()=>{
+  inx++
+  console.log(88889, inx);
+  if(inx>animationOptions.length+1){
+    alert('完成')
+    return
+  }
+  setTimeout(()=>{
+    let {value} = animationOptions[inx] || {}
+    if(value){
+      test()
+      handleChange(value)
+      emit('update:modelValue', value)
+    }
+  },20000)
+
+}
+// test()
+
 
 const resetAnimation = () => {
   emit('reset')
