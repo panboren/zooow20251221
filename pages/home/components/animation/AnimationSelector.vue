@@ -48,7 +48,14 @@ const emit = defineEmits(['update:modelValue', 'reset', 'change'])
 
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
-  // 🌌 超越级全息特效（全新突破）
+  // 🌌 超越级全息特效（次世代VFX - 奥斯卡级别）
+  { value: 'transcendent-singularity', label: '🌌 超越级奇点全息 (次世代VFX)' },
+  { value: 'transcendent-flying-orbs', label: '✨ 超越级满天飞舞 (Shadertoy风格)' },
+  { value: 'transcendent-fractal-pyramid', label: '🔺 超越级分形金字塔 (Shadertoy风格)' },
+  { value: 'transcendent-rocaille', label: '🌀 超越级洛可可湍流 (Shadertoy风格)' },
+  { value: 'transcendent-raymarching-tunnel', label: '🌀 Raymarching无限隧道 (Shadertoy风格)' },
+  { value: 'transcendent-consciousness', label: '🧠 超越级意识涌现 (次世代VFX)' },
+  { value: 'transcendent-entropy', label: '⚛️ 超越级熵增奇点 (次世代VFX)' },
   { value: 'holographic-neural-network', label: '🧠 全息神经网络' },
   { value: 'holographic-nexus-rift', label: '🌌 全息时空裂缝' },
   { value: 'holographic-quantum-flux', label: '⚛️ 全息量子涨落' },

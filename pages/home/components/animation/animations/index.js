@@ -69,6 +69,15 @@ import animateHolographicQuantumFlux from './holographic-quantum-flux.js'
 import animateHolographicDimensionFold from './holographic-dimension-fold.js'
 import animateHolographicVoidCosmos from './holographic-void-cosmos.js'
 
+// 🌌 次世代超越级全息特效（奥斯卡级别VFX）
+import animateTranscendentSingularity from './transcendent-singularity.js'
+import animateTranscendentConsciousness from './transcendent-consciousness.js'
+import animateTranscendentEntropy from './transcendent-entropy.js'
+import animateTranscendentRaymarchingTunnel from './transcendent-raymarching-tunnel.js'
+import animateTranscendentRocaille from './transcendent-rocaille.js'
+import animateTranscendentFractalPyramid from './transcendent-fractal-pyramid.js'
+import animateTranscendentFlyingOrbs from './transcendent-flying-orbs.js'
+
 // ✨ 传说级全息特效（奇迹重现）
 import animateHolographicAuroraBorealis from './holographic-aurora-borealis.js'
 import animateHolographicBioluminescence from './holographic-bioluminescence.js'
@@ -296,6 +305,15 @@ export const animations = {
     'holographic-quantum-flux': animateHolographicQuantumFlux,
     'holographic-dimension-fold': animateHolographicDimensionFold,
     'holographic-void-cosmos': animateHolographicVoidCosmos,
+
+    // 🌌 次世代超越级全息特效（奥斯卡级别VFX）
+    'transcendent-singularity': animateTranscendentSingularity,
+    'transcendent-consciousness': animateTranscendentConsciousness,
+    'transcendent-entropy': animateTranscendentEntropy,
+    'transcendent-raymarching-tunnel': animateTranscendentRaymarchingTunnel,
+    'transcendent-rocaille': animateTranscendentRocaille,
+    'transcendent-fractal-pyramid': animateTranscendentFractalPyramid,
+    'transcendent-flying-orbs': animateTranscendentFlyingOrbs,
 
     // ✨ 传说级全息特效（奇迹重现）
     'holographic-aurora-borealis': animateHolographicAuroraBorealis,
