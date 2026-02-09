@@ -71,7 +71,6 @@ export function createHyperspaceWarpDrive(scene, options = {}) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uSpeed;
@@ -97,7 +96,6 @@ export function createHyperspaceWarpDrive(scene, options = {}) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform float uSpeed;
@@ -144,7 +142,6 @@ export function createHyperspaceWarpDrive(scene, options = {}) {
     },
     vertexShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       varying vec3 vNormal;
@@ -163,7 +160,6 @@ export function createHyperspaceWarpDrive(scene, options = {}) {
     `,
     fragmentShader: `
       precision highp float;
-      precision highp int;
 
       uniform float uTime;
       uniform vec3 uColor;

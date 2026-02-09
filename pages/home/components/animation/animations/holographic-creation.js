@@ -84,18 +84,18 @@ function createCreationBeams(count) {
         varying vec3 vPosition;
         varying vec3 vNormal;
 
-        void main() {
-          // 能量流动
-          float flow = sin(vUv.y * 20.0 - uTime * 5.0) * 0.5 + 0.5;
+          void main() {
+            // 能量流动
+            float flow = sin(vUv.y * 20.0 - uTime * 5.0) * 0.5 + 0.5;
 
-          // 光束发光
-          float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 1.0, 0.0)), 3.0);
+            // 光束发光
+            float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 1.0, 0.0))), 3.0);
 
-          vec3 color = uColor * (flow + fresnel * 0.5) * 2.0;
-          float alpha = (fresnel + flow * 0.5) * uOpacity * smoothstep(0.0, uGrowth, vUv.y);
+            vec3 color = uColor * (flow + fresnel * 0.5) * 2.0;
+            float alpha = (fresnel + flow * 0.5) * uOpacity * smoothstep(0.0, uGrowth, vUv.y);
 
-          gl_FragColor = vec4(color, alpha);
-        }
+            gl_FragColor = vec4(color, alpha);
+          }
       `,
       transparent: true,
       side: THREE.DoubleSide,
