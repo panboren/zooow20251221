@@ -1,7 +1,8 @@
-/**
+/*
+/!**
  * 可视化性能监控面板
  * 实时显示FPS、内存、粒子数等性能指标
- */
+ *!/
 
 export class PerformancePanel {
   constructor(options = {}) {
@@ -215,7 +216,7 @@ export class PerformancePanel {
         pointer-events: none;
       }
 
-      /* 位置样式 */
+      /!* 位置样式 *!/
       #performance-panel.position-top-left { top: 20px; left: 20px; }
       #performance-panel.position-top-right { top: 20px; right: 20px; }
       #performance-panel.position-bottom-left { bottom: 20px; left: 20px; }
@@ -412,3 +413,4 @@ export function updatePerformancePanel(metrics) {
 }
 
 export default PerformancePanel
+*/

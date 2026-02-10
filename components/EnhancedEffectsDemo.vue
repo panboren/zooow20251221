@@ -1,8 +1,14 @@
 <template>
   <div class="enhanced-effects-demo">
+  </div>
+</template>
+
+<!--
+<template>
+  <div class="enhanced-effects-demo">
     <div ref="container" class="demo-container" />
 
-    <!-- 控制面板 -->
+    &lt;!&ndash; 控制面板 &ndash;&gt;
     <div class="control-panel">
       <h3>特效控制器</h3>
 
@@ -400,3 +406,4 @@ function updateFPS() {
   color: rgba(255, 255, 255, 0.6);
 }
 </style>
+-->

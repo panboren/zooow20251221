@@ -1,8 +1,15 @@
 <template>
+  <div class="enhanced-effects-demo">
+  </div>
+</template>
+<script setup lang="ts">
+</script>
+<!--
+<template>
   <div class="holographic-demo">
     <div ref="container" class="demo-container" />
 
-    <!-- 控制面板 -->
+    &lt;!&ndash; 控制面板 &ndash;&gt;
     <div class="control-panel">
       <h3>🔮 全息特效控制器</h3>
 
@@ -72,7 +79,7 @@
       </div>
     </div>
 
-    <!-- 标题 -->
+    &lt;!&ndash; 标题 &ndash;&gt;
     <div class="title-overlay">
       <h1 class="holographic-title">HOLOGRAPHIC</h1>
       <p class="holographic-subtitle">INTERACTIVE EXPERIENCE</p>
@@ -93,7 +100,7 @@ import {
   animateHolographicGlitch,
   updateHolographicObjects,
   setHolographicGlitchIntensity
-} from '~/pages/home/components/animation/animations/holographic/holographic-animations.js'
+} from '~/pages/home/components/animation/animations/holographic/holographic-animations-enhanced.js'
 
 const container = ref(null)
 const currentEffect = ref('holographic-data-stream')
@@ -493,3 +500,4 @@ function updateFPS() {
   }
 }
 </style>
+-->
