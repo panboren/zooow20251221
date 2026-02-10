@@ -76,9 +76,17 @@ import animateTranscendentEntropy from './transcendent-entropy.js'
 import animateTranscendentRaymarchingTunnel from './transcendent-raymarching-tunnel.js'
 import animateTranscendentRocaille from './transcendent-rocaille.js'
 import animateTranscendentFractalPyramid from './transcendent-fractal-pyramid.js'
-import animateTranscendentFlyingOrbs from './transcendent-flying-orbs.js'
+import animateTranscendentFractalVortex from './transcendent-fractal-vortex.js'
+    import animateTranscendentSynthwaveTerrain from './transcendent-synthwave-terrain.js'
+    import animateTranscendentVaporwaveCity from './transcendent-vaporwave-city.js'
+    import animateTranscendentMetaOrb from './transcendent-meta-orb.js'
+    import animateTranscendentKaleidosphere from './transcendent-kaleidosphere.js'
+    import animateTranscendentVolumetricCloud from './transcendent-volumetric-cloud.js'
+    import animateTranscendentSDFArchitecture from './transcendent-sdf-architecture.js'
+    import animateTranscendentFractalHueScape from './transcendent-fractal-hue-scape.js'
+    import animateTranscendentUltimateSynthesis from './transcendent-ultimate-synthesis.js'
 
-// ✨ 传说级全息特效（奇迹重现）
+    // ✨ 传说级全息特效（奇迹重现）
 import animateHolographicAuroraBorealis from './holographic-aurora-borealis.js'
 import animateHolographicBioluminescence from './holographic-bioluminescence.js'
 import animateHolographicCrystalCathedral from './holographic-crystal-cathedral.js'
@@ -313,7 +321,15 @@ export const animations = {
     'transcendent-raymarching-tunnel': animateTranscendentRaymarchingTunnel,
     'transcendent-rocaille': animateTranscendentRocaille,
     'transcendent-fractal-pyramid': animateTranscendentFractalPyramid,
-    'transcendent-flying-orbs': animateTranscendentFlyingOrbs,
+    'transcendent-fractal-vortex': animateTranscendentFractalVortex,
+    'transcendent-synthwave-terrain': animateTranscendentSynthwaveTerrain,
+    'transcendent-vaporwave-city': animateTranscendentVaporwaveCity,
+    'transcendent-meta-orb': animateTranscendentMetaOrb,
+    'transcendent-kaleidosphere': animateTranscendentKaleidosphere,
+    'transcendent-volumetric-cloud': animateTranscendentVolumetricCloud,
+    'transcendent-sdf-architecture': animateTranscendentSDFArchitecture,
+    'transcendent-fractal-hue-scape': animateTranscendentFractalHueScape,
+    'transcendent-ultimate-synthesis': animateTranscendentUltimateSynthesis,
 
     // ✨ 传说级全息特效（奇迹重现）
     'holographic-aurora-borealis': animateHolographicAuroraBorealis,
