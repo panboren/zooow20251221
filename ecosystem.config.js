@@ -1,3 +1,7 @@
+// pm2 restart all
+
+
+
 /*
 module.exports = {
   apps:[
