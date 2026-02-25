@@ -130,6 +130,8 @@ const animationOptions = [
   // 🧘 禅意全息特效（东方美学）
   { value: 'holographic-zenith-mandala', label: '🧘 全息禅意曼陀罗' },
 
+  // 🆕 全新超越级特效（2026年创作）
+
   // ★★★ 超越级特效（全新突破）★★★
   { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝 (优化版)' },
   { value: 'interstellar-supernova', label: '💥 星际超新星爆发 (优化版)' },

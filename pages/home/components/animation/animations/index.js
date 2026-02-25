@@ -153,6 +153,8 @@ import animateQuantumFractalVortex from './quantum-fractal-vortex.js'
 // 🌌 极光之息 - 宇宙呼吸
 import animateEtherealAurora from './ethereal-aurora.js'
 
+// 🆕 全新超越级特效（2026年创作）
+
 
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
@@ -373,7 +375,9 @@ export const animations = {
     'quantum-fractal-vortex': animateQuantumFractalVortex,
 
     // 🌌 极光之息 - 宇宙呼吸
-    'ethereal-aurora': animateEtherealAurora
+    'ethereal-aurora': animateEtherealAurora,
+
+    // 🆕 全新超越级特效（2026年创作）
 
 }
 
