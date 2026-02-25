@@ -281,10 +281,10 @@ let test=()=>{
       handleChange(value)
       emit('update:modelValue', value)
     }
-  },30000)
+  },20000)
 
 }
-test()
+// test()
 
 
 const resetAnimation = () => {
