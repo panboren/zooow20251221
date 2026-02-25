@@ -232,6 +232,7 @@ import { animations } from './animations'
 import './animations/styles/index.scss'  // 导入样式入口文件
 import { useTaichi } from '~/composables/useTaichi'
 import { logger } from './animations/logger.js'
+import { fixSceneMaterials } from '~/utils/WebGPUMaterialManager.js'
 
 // 获取Taichi工具
 const taichiUtils = useTaichi()
@@ -389,6 +390,16 @@ const startAnimation = () => {
       onComplete: onAnimationComplete,
       onError: onAnimationError
     })
+
+    // 🔧 WebGPU 材质兼容性修复：暂时禁用，调试用
+    // if (props.scene && props.renderer && props.rendererType === 'webgpu') {
+    //   try {
+    //     fixSceneMaterials(props.scene, props.renderer)
+    //     logger.debug('WebGPU 材质兼容性修复完成')
+    //   } catch (error) {
+    //     logger.warn('WebGPU 材质修复失败:', error)
+    //   }
+    // }
 
     // 保存 cleanup 函数以便在动画完成时调用
     if (result && result.cleanup) {

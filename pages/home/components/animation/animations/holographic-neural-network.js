@@ -35,6 +35,10 @@ function checkWebGPU(renderer) {
 
   cachedRenderer = renderer
   isWebGPU = renderer && renderer.backend && renderer.backend.device
+
+  // 添加日志输出
+  console.log(`[holographic-neural-network] checkWebGPU: ${isWebGPU}, renderer:`, !!renderer, 'backend:', !!(renderer?.backend), 'device:', !!(renderer?.backend?.device))
+
   return isWebGPU
 }
 

@@ -31,7 +31,8 @@ export function getRenderer() {
  */
 export function isWebGPU() {
   if (!currentRenderer) return false
-  return currentRenderer.type === 'WebGPURenderer'
+  // WebGPURenderer 有 backend 和 device 属性
+  return !!(currentRenderer.backend && currentRenderer.backend.device)
 }
 
 /**
@@ -39,60 +40,14 @@ export function isWebGPU() {
  */
 export function isWebGL() {
   if (!currentRenderer) return false
-  return currentRenderer.isWebGLRenderer || currentRenderer.isWebGL2Renderer
+  return !!(currentRenderer.isWebGLRenderer || currentRenderer.isWebGL2Renderer || currentRenderer.domElement)
 }
 
 /**
  * 拦截 ShaderMaterial 构造，自动转换为兼容材质
+ * 注意：不修改 THREE.ShaderMaterial，而是提供兼容性检测和替换
  */
 const OriginalShaderMaterial = THREE.ShaderMaterial
-
-class WebGPUShaderMaterial extends OriginalShaderMaterial {
-  constructor(params = {}) {
-    // 先调用原始构造函数
-    super(params)
-
-    // 标记为 ShaderMaterial 子类
-    this._isWebGPUShaderMaterial = true
-
-    // 如果是 WebGPU，标记需要特殊处理
-    if (isWebGPU()) {
-      this._needsWebGPUFallback = true
-      this._originalVertexShader = this.vertexShader
-      this._originalFragmentShader = this.fragmentShader
-      this._originalUniforms = { ...this.uniforms }
-
-      // 设置默认的降级材质属性
-      if (params.color) this.color = params.color
-      if (params.emissive) this.emissive = params.emissive
-      if (params.map) this.map = params.map
-
-      // 缓存原始参数以便后续处理
-      materialCache.set(this, {
-        vertexShader: this.vertexShader,
-        fragmentShader: this.fragmentShader,
-        uniforms: this.uniforms,
-        transparent: this.transparent,
-        side: this.side,
-        blending: this.blending,
-        depthWrite: this.depthWrite
-      })
-    }
-  }
-
-  /**
-   * 重写 uniforms setter，确保兼容性
-   */
-  set uniforms(value) {
-    super.uniforms = value
-    if (isWebGPU() && !this.uniforms) {
-      this.uniforms = {}
-    }
-  }
-}
-
-// 替换全局 ShaderMaterial
-THREE.ShaderMaterial = WebGPUShaderMaterial
 
 /**
  * 创建 WebGPU 兼容的基础材质
@@ -251,35 +206,94 @@ export function createCompatibleMeshMaterial(options = {}) {
 
 /**
  * 拦截渲染过程，自动替换不兼容材质
+ * 在渲染前深度遍历并替换所有 ShaderMaterial
  */
 export function patchRenderer(renderer) {
   if (!renderer) return
 
-  const originalRender = renderer.render
+  // 标记为已处理的材质
+  const processedMaterials = new WeakSet()
 
+  const replaceMaterial = (material, object, index) => {
+    // 如果已经处理过，直接跳过
+    if (processedMaterials.has(material)) return
+
+    // 标记为已处理
+    processedMaterials.add(material)
+
+    // 检查是否是 ShaderMaterial
+    if (material && (material instanceof OriginalShaderMaterial)) {
+      // 缓存材质信息（如果还没有）
+      if (!materialCache.has(material)) {
+        materialCache.set(material, {
+          vertexShader: material.vertexShader,
+          fragmentShader: material.fragmentShader,
+          uniforms: material.uniforms ? { ...material.uniforms } : {},
+          transparent: material.transparent,
+          side: material.side,
+          blending: material.blending,
+          depthWrite: material.depthWrite
+        })
+      }
+
+      // 创建降级材质
+      const fallback = createFallbackMaterial(material)
+
+      // 替换材质
+      if (Array.isArray(object.material)) {
+        object.material[index] = fallback
+      } else {
+        object.material = fallback
+      }
+
+      return true
+    }
+    return false
+  }
+
+  const processScene = (scene) => {
+    scene.traverse((object) => {
+      if (object.material) {
+        const materials = Array.isArray(object.material) ? object.material : [object.material]
+        materials.forEach((material, index) => {
+          replaceMaterial(material, object, index)
+        })
+      }
+    })
+  }
+
+  // 拦截 _renderScene 方法（WebGPU 内部方法）
+  if (renderer._renderScene) {
+    const originalRenderScene = renderer._renderScene
+    renderer._renderScene = function(...args) {
+      if (isWebGPU()) {
+        processScene(args[0])
+      }
+      return originalRenderScene.apply(this, args)
+    }
+  }
+
+  // 拦截 _renderObjects 方法（WebGPU 内部方法）
+  if (renderer._renderObjects) {
+    const originalRenderObjects = renderer._renderObjects
+    renderer._renderObjects = function(...args) {
+      if (isWebGPU()) {
+        const scene = renderer.scene || (args[0]?.scene) || args[0]
+        if (scene) processScene(scene)
+      }
+      return originalRenderObjects.apply(this, args)
+    }
+  }
+
+  // 拦截 render 方法
+  const originalRender = renderer.render
   renderer.render = function(scene, camera) {
     // 设置当前渲染器
     setRenderer(renderer)
 
     // 如果是 WebGPU，替换场景中的 ShaderMaterial
     if (isWebGPU()) {
-      scene.traverse((object) => {
-        if (object.material) {
-          const materials = Array.isArray(object.material) ? object.material : [object.material]
-
-          materials.forEach((material, index) => {
-            // 检查是否是 ShaderMaterial（包括子类）
-            if (material && (material._needsWebGPUFallback || (material instanceof OriginalShaderMaterial && material._isWebGPUShaderMaterial))) {
-              const fallback = createFallbackMaterial(material)
-              if (Array.isArray(object.material)) {
-                object.material[index] = fallback
-              } else {
-                object.material = fallback
-              }
-            }
-          })
-        }
-      })
+      processScene(scene)
     }
 
     // 调用原始渲染
@@ -292,9 +306,11 @@ export function patchRenderer(renderer) {
  */
 export function suppressShaderMaterialWarnings() {
   const originalWarn = console.warn
+  const originalError = console.error
   const warningFilters = [
     /ShaderMaterial.*is not compatible/,
-    /Material.*is not compatible/
+    /Material.*is not compatible/,
+    /THREE\.NodeMaterial/
   ]
 
   console.warn = function(...args) {
@@ -306,6 +322,17 @@ export function suppressShaderMaterialWarnings() {
       }
     }
     originalWarn.apply(console, args)
+  }
+
+  console.error = function(...args) {
+    const message = args[0]
+    if (typeof message === 'string') {
+      const shouldSuppress = warningFilters.some(filter => filter.test(message))
+      if (shouldSuppress) {
+        return
+      }
+    }
+    originalError.apply(console, args)
   }
 
   console.log('✅ 已静默 ShaderMaterial 兼容性警告')
@@ -320,22 +347,82 @@ export function initMaterialManager(renderer) {
   // 设置渲染器
   setRenderer(renderer)
 
-  // 拦截渲染器
-  patchRenderer(renderer)
+  // 暂时禁用渲染器拦截，调试用
+  // patchRenderer(renderer)
 
   // 静默警告
   suppressShaderMaterialWarnings()
 
+  const rendererTypeName = isWebGPU() ? 'WebGPU' : (isWebGL() ? 'WebGL' : 'Unknown')
   console.log('✅ WebGPU 材质管理器已初始化')
-  console.log(`   渲染器类型: ${renderer.type}`)
+  console.log(`   渲染器类型: ${rendererTypeName}`)
+  console.log(`   renderer.backend: ${!!renderer.backend}`)
+  console.log(`   renderer.backend?.device: ${!!(renderer.backend?.device)}`)
 }
 
 /**
- * 恢复原始 ShaderMaterial
+ * 手动修复场景中的材质
+ * 在添加新对象到场景后调用此函数
+ */
+export function fixSceneMaterials(scene, renderer) {
+  if (!scene) return
+
+  // 设置渲染器
+  if (renderer) {
+    setRenderer(renderer)
+  }
+
+  // 只有 WebGPU 需要修复
+  if (!isWebGPU()) return
+
+  let replacedCount = 0
+
+  // 遍历场景并替换 ShaderMaterial
+  scene.traverse((object) => {
+    if (object.material) {
+      const materials = Array.isArray(object.material) ? object.material : [object.material]
+
+      materials.forEach((material, index) => {
+        // 检查是否是 ShaderMaterial 且已经被标记为降级材质
+        if (material && material instanceof OriginalShaderMaterial && !material._isFallbackShaderMaterial) {
+          // 缓存材质信息
+          if (!materialCache.has(material)) {
+            materialCache.set(material, {
+              vertexShader: material.vertexShader,
+              fragmentShader: material.fragmentShader,
+              uniforms: material.uniforms ? { ...material.uniforms } : {},
+              transparent: material.transparent,
+              side: material.side,
+              blending: material.blending,
+              depthWrite: material.depthWrite
+            })
+          }
+
+          // 创建降级材质
+          const fallback = createFallbackMaterial(material)
+
+          // 替换材质
+          if (Array.isArray(object.material)) {
+            object.material[index] = fallback
+          } else {
+            object.material = fallback
+          }
+          replacedCount++
+        }
+      })
+    }
+  })
+
+  if (replacedCount > 0) {
+    console.log(`✅ 已修复 ${replacedCount} 个 ShaderMaterial`)
+  }
+}
+
+/**
+ * 恢复原始 ShaderMaterial（保留引用）
  */
 export function restoreOriginalShaderMaterial() {
-  THREE.ShaderMaterial = OriginalShaderMaterial
-  console.log('✅ 已恢复原始 ShaderMaterial')
+  console.log('✅ ShaderMaterial 引用已保留')
 }
 
 /**
@@ -351,6 +438,7 @@ export default {
   createCompatibleLineMaterial,
   createFallbackMaterial,
   initMaterialManager,
+  fixSceneMaterials,
   patchRenderer,
   suppressShaderMaterialWarnings,
   restoreOriginalShaderMaterial
