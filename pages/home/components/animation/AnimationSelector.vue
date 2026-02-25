@@ -284,7 +284,7 @@ let test=()=>{
   },30000)
 
 }
-// test()
+test()
 
 
 const resetAnimation = () => {
