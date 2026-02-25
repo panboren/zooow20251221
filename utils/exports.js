@@ -32,6 +32,39 @@ export { CodeAnalyzer } from './CodeAnalyzer.js'
 export { default as BaseEffect } from '../pages/home/components/animation/animations/base/BaseEffect.js'
 export { default as EnhancedBaseEffect } from '../pages/home/components/animation/animations/base/EnhancedBaseEffect.js'
 
+// ==================== Shader系统 ====================
+
+export { default as NoiseLibrary } from './shaders/NoiseLibrary.js'
+export { default as HolographicShaders } from './shaders/HolographicShaders.js'
+export { default as ShaderUtils } from './shaders/ShaderUtils.js'
+
+// ==================== 资源清理 ====================
+
+export {
+  safeDispose,
+  cleanupGeometry,
+  cleanupMaterial,
+  cleanupTexture,
+  cleanupMesh,
+  cleanupScene,
+  cleanupParticleSystem,
+  cleanupAnimationMixer,
+  cleanupControls,
+  cleanupRenderer,
+  batchCleanup,
+  cleanupBlobURL,
+  cleanupBlobCache,
+  ResourceContext
+} from './ResourceCleaner.js'
+
+// ==================== 动画模板 ====================
+
+export {
+  ParticleEffectTemplate,
+  ParticleAnimationConfig,
+  createParticleAnimation
+} from './animation-templates/ParticleEffectTemplate.js'
+
 // ==================== Composables ====================
 
 export { usePerformanceMonitor } from '../composables/usePerformanceMonitor.js'
@@ -105,13 +138,53 @@ export const analyzeCode = (filePath) => {
   return analyzer.analyze(filePath)
 }
 
+/**
+ * 快速创建粒子动画
+ */
+export const createParticleEffect = (config, implementation) => {
+  return createParticleAnimation(implementation, config)
+}
+
+// ==================== Shader便捷导出 ====================
+
+/**
+ * 快速获取噪声Shader
+ */
+export const getNoiseShader = (type) => {
+  const library = require('./shaders/NoiseLibrary.js')
+  return library.default?.NOISE_SHADERS?.[type]
+}
+
+/**
+ * 快速获取全息Shader
+ */
+export const getHolographicShader = (type) => {
+  const library = require('./shaders/HolographicShaders.js')
+  return library.default?.getHolographicShader(type)
+}
+
+/**
+ * 快速创建Shader材质
+ */
+export const createShaderMaterial = (options) => {
+  const utils = require('./shaders/ShaderUtils.js')
+  return utils.default?.createShaderMaterial(options)
+}
+
+/**
+ * 快速创建清理管理器
+ */
+export const createResourceContext = (name) => {
+  return new ResourceContext(name)
+}
+
 // ==================== 版本信息 ====================
 
-export const UTILS_VERSION = '2.0.0'
+export const UTILS_VERSION = '2.2.0'
 
 export const UTILS_INFO = {
   version: UTILS_VERSION,
-  buildDate: '2026-02-07',
+  buildDate: '2026-02-26',
   tools: [
     'ParticleFactory',
     'PerformanceMonitor',
@@ -121,6 +194,25 @@ export const UTILS_INFO = {
     'TextureAtlas',
     'MemoryPool',
     'BaseEffect',
-    'EnhancedBaseEffect'
+    'EnhancedBaseEffect',
+    'NoiseLibrary',
+    'HolographicShaders',
+    'ShaderUtils',
+    'ResourceCleaner',
+    'ParticleEffectTemplate'
+  ],
+  newInV2: [
+    '统一Shader库',
+    '全息特效Shader',
+    'Shader工具函数',
+    '统一资源清理',
+    '粒子动画模板系统'
+  ],
+  newInV2_1: [
+    'Shader噪声库',
+    '全息特效库',
+    'Shader工具集',
+    '粒子动画模板'
   ]
 }
+
