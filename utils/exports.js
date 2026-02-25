@@ -7,6 +7,7 @@
 
 export { ParticleFactory } from './ParticleFactory.js'
 export { GPUCompute, GPUParticleSystem } from './GPUCompute.js'
+export { EnhancedGPUCompute, GPUParticleSystem as EnhancedGPUParticleSystem } from './EnhancedGPUCompute.js'
 export { TextureAtlas, ParticleTextureAtlas } from './TextureAtlas.js'
 export {
   MemoryPool,
@@ -18,9 +19,34 @@ export {
   getPoolManager
 } from './MemoryPool.js'
 
+// ==================== 资源预加载 ====================
+
+export { ResourcePreloader, TextureAtlasPreloader, ResourceManager } from './ResourcePreloader.js'
+
+// ==================== Web Workers ====================
+
+export { WorkerManager, ParticleComputeWorker } from './WorkerManager.js'
+
+// ==================== 智能资源管理 ====================
+
+export { SmartResourceManager, TextureLODManager } from './SmartResourceManager.js'
+
+// ==================== 纹理优化 ====================
+
+export { MipmapOptimizer, TextureStreamLoader } from './MipmapOptimizer.js'
+
+// ==================== 视锥体剔除 ====================
+
+export { FrustumCulling, OcclusionQueryCulling } from './FrustumCulling.js'
+
+// ==================== 立体渲染 ====================
+
+export { StereoRendering, VRRenderer, ARRenderer } from './StereoRendering.js'
+
 // ==================== 性能监控 ====================
 
 export { PerformanceMonitor } from './PerformanceMonitor.js'
+export { EnhancedPerformanceMonitor } from './EnhancedPerformanceMonitor.js'
 export { LODManager } from './LODManager.js'
 
 // ==================== 代码分析 ====================
@@ -108,7 +134,7 @@ export type {
   IPerformancePanel
 } from '../types/animation.d.ts'
 
-// ==================== 便捷导出 ====================
+// ==================== 快捷创建函数 ====================
 
 /**
  * 快速创建粒子系统
@@ -121,14 +147,68 @@ export const createParticles = ParticleFactory.create.bind(ParticleFactory)
 export const createPerformanceMonitor = (options) => new PerformanceMonitor(options)
 
 /**
+ * 快速创建增强性能监控
+ */
+export const createEnhancedPerformanceMonitor = (options) => new EnhancedPerformanceMonitor(options)
+
+/**
  * 快速创建LOD管理器
  */
 export const createLODManager = (monitor) => new LODManager(monitor)
 
 /**
- * 快速获取内存池
+ * 快速创建GPU粒子系统（增强版）
  */
-export const getMemoryPool = getPoolManager
+export const createEnhancedGPUParticles = (renderer, options) => {
+  const system = new GPUParticleSystem(renderer, options)
+  system.init()
+  return system
+}
+
+/**
+ * 快速创建预加载器
+ */
+export const createResourcePreloader = (options) => new ResourcePreloader(options)
+
+/**
+ * 快速创建资源管理器
+ */
+export const createResourceManager = (options) => new ResourceManager(options)
+
+/**
+ * 快速创建Worker管理器
+ */
+export const createWorkerManager = (options) => new WorkerManager(options)
+
+/**
+ * 快速创建智能资源管理器
+ */
+export const createSmartResourceManager = (options) => new SmartResourceManager(options)
+
+/**
+ * 快速创建Mipmap优化器
+ */
+export const createMipmapOptimizer = (options) => new MipmapOptimizer(options)
+
+/**
+ * 快速创建视锥体剔除器
+ */
+export const createFrustumCulling = (renderer, options) => new FrustumCulling(renderer, options)
+
+/**
+ * 快速创建立体渲染器
+ */
+export const createStereoRendering = (renderer, options) => new StereoRendering(renderer, options)
+
+/**
+ * 快速创建VR渲染器
+ */
+export const createVRRenderer = (renderer, options) => new VRRenderer(renderer, options)
+
+/**
+ * 快速创建AR渲染器
+ */
+export const createARRenderer = (renderer, options) => new ARRenderer(renderer, options)
 
 /**
  * 快速分析代码
@@ -180,7 +260,7 @@ export const createResourceContext = (name) => {
 
 // ==================== 版本信息 ====================
 
-export const UTILS_VERSION = '2.2.0'
+export const UTILS_VERSION = '2.4.0'
 
 export const UTILS_INFO = {
   version: UTILS_VERSION,
@@ -188,11 +268,20 @@ export const UTILS_INFO = {
   tools: [
     'ParticleFactory',
     'PerformanceMonitor',
+    'EnhancedPerformanceMonitor',
     'LODManager',
     'CodeAnalyzer',
     'GPUCompute',
+    'EnhancedGPUCompute',
     'TextureAtlas',
     'MemoryPool',
+    'ResourcePreloader',
+    'ResourceManager',
+    'WorkerManager',
+    'SmartResourceManager',
+    'MipmapOptimizer',
+    'FrustumCulling',
+    'StereoRendering',
     'BaseEffect',
     'EnhancedBaseEffect',
     'NoiseLibrary',
@@ -213,6 +302,23 @@ export const UTILS_INFO = {
     '全息特效库',
     'Shader工具集',
     '粒子动画模板'
+  ],
+  newInV2_3: [
+    '增强性能监控系统',
+    '资源预加载系统',
+    '增强GPU计算系统',
+    '纹理图集预加载器',
+    '预测性性能告警',
+    'GPU粒子系统'
+  ],
+  newInV2_4: [
+    'Web Workers后台任务',
+    '智能资源卸载',
+    '多级纹理优化',
+    'GPU视锥体剔除',
+    'VR/AR立体渲染',
+    '遮挡查询剔除',
+    '纹理流式加载'
   ]
 }
 

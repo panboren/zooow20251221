@@ -24,6 +24,7 @@
       :renderer="renderer"
       :controls="controls"
       :animation-type="animationType"
+      :animation-speed="animationSpeed"
       @animation-complete="onAnimationComplete"
     />
 
@@ -34,6 +35,7 @@
       v-model="animationType"
       @change="resetAnimation"
       @reset="resetAnimation"
+      @speed-change="handleSpeedChange"
     />
 
     <!-- 视角控制组件 -->
@@ -122,6 +124,7 @@ const animationType = ref('holographic-neural-network')
 const isInitialized = ref(false)
 const isAnimationPlaying = ref(false) // 动画播放状态
 const textureLoaded = ref(false) // 纹理是否已加载
+const animationSpeed = ref(1.0) // 动画速度控制
 
 // ==================== 计算属性 ====================
 const loadingText = computed(() => '正在加载ZOOOW-AI智慧工具...')
@@ -1010,6 +1013,14 @@ const onAnimationComplete = () => {
       }
     },
   })
+}
+
+/**
+ * 处理动画速度变化
+ */
+const handleSpeedChange = (speed) => {
+  animationSpeed.value = speed
+  logger.info(`动画速度已更新: ${speed}x`)
 }
 
 /**

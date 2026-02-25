@@ -264,6 +264,10 @@ const props = defineProps({
     type: String,
     default: 'epic-dive',
     validator: (value) => Object.keys(animations).includes(value)
+  },
+  animationSpeed: {
+    type: Number,
+    default: 1.0
   }
 })
 
@@ -369,6 +373,9 @@ const startAnimation = () => {
     props.controls.target.set(0, 0, 0)
   }
 
+  // 设置 GSAP 全局时间缩放（速度控制）
+  gsap.globalTimeline.timeScale(props.animationSpeed)
+
   // 获取对应的动画函数
   const animationFn = animations[props.animationType]
 
@@ -423,6 +430,9 @@ const animateToDefaultView = () => {
     controls.enabled = false
     controls.target.set(0, 0, 0)
   }
+
+  // 设置 GSAP 全局时间缩放（速度控制）
+  gsap.globalTimeline.timeScale(props.animationSpeed)
 
   // 使用球坐标系统定位最终位置
   const spherical = new THREE.Spherical(
@@ -487,6 +497,14 @@ watch(() => props.animationType, () => {
   startAnimation()
 })
 
+/**
+ * 监听动画速度变化
+ */
+watch(() => props.animationSpeed, (newSpeed) => {
+  // 实时更新 GSAP 全局时间缩放
+  gsap.globalTimeline.timeScale(newSpeed)
+})
+
 
 
 
@@ -507,6 +525,9 @@ onBeforeUnmount(() => {
     currentCleanup.value()
     currentCleanup.value = null
   }
+
+  // 重置 GSAP 全局时间缩放为默认值
+  gsap.globalTimeline.timeScale(1)
 })
 
 /**

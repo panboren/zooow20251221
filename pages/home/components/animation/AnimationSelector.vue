@@ -27,12 +27,30 @@
     >
       重新播放
     </el-button>
+    <span class="speed-label">速度:</span>
+    <el-slider
+        v-model="animationSpeed"
+        :min="0.1"
+        :max="3"
+        :step="0.1"
+        :show-tooltip="true"
+        :format-tooltip="formatTooltip"
+        :marks="speedMarks"
+        @change="handleSpeedChange"
+        style="width: 150px;"
+    />
+    <el-button
+        @click="resetSpeed"
+        :icon="RefreshLeft"
+        title="重置速度"
+    />
   </div>
 </template>
 
 
 <script setup>
 import { computed, ref } from 'vue'  // 添加 ref 导入
+import { RefreshLeft } from '@element-plus/icons-vue'
 import {isPc} from '../../../../utils/index.js'
 
 const props = defineProps({
@@ -44,7 +62,35 @@ const props = defineProps({
 
 // 判断是否为PC端环境
 let isPcEnvironment = ref(isPc())
-const emit = defineEmits(['update:modelValue', 'reset', 'change'])
+const emit = defineEmits(['update:modelValue', 'reset', 'change', 'speed-change'])
+
+// 动画速度控制
+const animationSpeed = ref(1.0)
+const speedMarks = {
+  0.1: '慢',
+  0.5: '',
+  1: '1x',
+  1.5: '',
+  2: '2x',
+  3: '快'
+}
+
+// 格式化速度显示
+const formatTooltip = (value) => {
+  return `${value}x`
+}
+
+// 处理速度变化
+const handleSpeedChange = (value) => {
+  console.log('动画速度变化:', value)
+  emit('speed-change', parseFloat(value))
+}
+
+// 重置速度
+const resetSpeed = () => {
+  animationSpeed.value = 1.0
+  handleSpeedChange(1.0)
+}
 
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
@@ -275,6 +321,11 @@ const selectRandomAnimation = () => {
 // 暴露给父组件调用
 defineExpose({
   selectRandomAnimation,
+  animationSpeed,
+  setAnimationSpeed: (speed) => {
+    animationSpeed.value = speed
+    handleSpeedChange(speed)
+  }
 })
 
 </script>
@@ -300,10 +351,35 @@ defineExpose({
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 
   label {
     font-weight: 500;
     white-space: nowrap;
+  }
+
+  .speed-label {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+  }
+
+  :deep(.el-slider) {
+    --el-slider-main-bg-color: rgba(255, 255, 255, 0.2);
+    --el-slider-runway-bg-color: rgba(255, 255, 255, 0.1);
+    --el-slider-button-bg-color: #4ade80;
+    --el-slider-button-hover-color: #22c55e;
+    --el-slider-stop-bg-color: rgba(255, 255, 255, 0.5);
+
+    .el-slider__button {
+      border: 2px solid white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .el-slider__marks-text {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 11px;
+    }
   }
 
   :deep(.custom-animation-select-dropdown) {
@@ -370,32 +446,35 @@ defineExpose({
     }
   }
 
-  // 移动端适配
+    // 移动端适配
   @media (max-width: 768px) {
-    position: fixed;  // 改为固定定位便于居中
+    position: fixed;
     top: 10px;
     left: 50%;
-    transform: translateX(-50%);  // 实现居中
-    width: 85vw;      // 宽度调整为视窗宽度的85%
-    max-width: 300px; // 限制最大宽度
-    padding: 4px 8px; // 减少内边距
-    font-size: 12px;   // 字体缩小
-    gap: 5px;
+    transform: translateX(-50%);
+    width: 90vw;
+    max-width: 450px;
+    padding: 6px 10px;
+    font-size: 12px;
+    gap: 6px;
     height: auto;
     min-height: 32px;
 
-    // 调整子元素尺寸
     label {
       font-size: 12px;
     }
 
+    .speed-label {
+      font-size: 11px;
+    }
+
     :deep(.el-select) {
-      flex: 1;  // 使用 flex 布局自适应
+      flex: 1 1 140px;
       min-width: 120px !important;
-      max-width: none !important;
+      max-width: 160px !important;
 
       :deep(.el-input__wrapper) {
-        padding: 2px 5px !important; // 减少输入框内边距
+        padding: 2px 5px !important;
         min-height: 26px;
       }
     }
@@ -411,30 +490,62 @@ defineExpose({
         line-height: 1;
       }
     }
+
+    :deep(.el-slider) {
+      flex: 1 1 100px;
+      min-width: 80px !important;
+      max-width: 120px !important;
+
+      .el-slider__button {
+        width: 12px;
+        height: 12px;
+      }
+
+      .el-slider__marks-text {
+        font-size: 9px;
+      }
+    }
+
+    :deep(.el-input-number) {
+      width: 60px !important;
+
+      .el-input__wrapper {
+        padding: 2px 3px !important;
+        min-height: 24px;
+
+        .el-input__inner {
+          font-size: 12px;
+        }
+      }
+    }
   }
 
   // 小屏手机优化
   @media (max-width: 480px) {
     top: 8px;
-    padding: 3px 6px;
+    padding: 4px 6px;
     font-size: 11px;
     gap: 4px;
-    max-width: 280px;
+    max-width: 350px;
     min-height: 28px;
 
     label {
       display: none;
     }
 
+    .speed-label {
+      font-size: 10px;
+    }
+
     :deep(.el-select) {
-      flex: 1;
-      min-width: 100px !important;
-      max-width: none !important;
-      font-size: 11px;
+      flex: 1 1 100px;
+      min-width: 90px !important;
+      max-width: 120px !important;
+      font-size: 10px;
 
       :deep(.el-input__wrapper) {
         padding: 2px 4px !important;
-        min-height: 24px;
+        min-height: 22px;
       }
     }
 
@@ -442,10 +553,25 @@ defineExpose({
       font-size: 11px;
       height: 24px;
       padding: 0 6px !important;
-      min-width: 40px;
+      min-width: 36px;
 
       span {
         line-height: 1;
+      }
+    }
+
+    :deep(.el-slider) {
+      flex: 1 1 80px;
+      min-width: 60px !important;
+      max-width: 90px !important;
+
+      .el-slider__button {
+        width: 10px;
+        height: 10px;
+      }
+
+      .el-slider__marks {
+        display: none;
       }
     }
   }
@@ -456,7 +582,7 @@ defineExpose({
     padding: 3px 5px;
     font-size: 10px;
     gap: 3px;
-    max-width: 260px;
+    max-width: 320px;
     border-radius: 6px;
     min-height: 26px;
 
@@ -464,15 +590,19 @@ defineExpose({
       display: none;
     }
 
+    .speed-label {
+      display: none;
+    }
+
     :deep(.el-select) {
-      flex: 1;
-      min-width: 90px !important;
-      max-width: none !important;
+      flex: 1 1 80px;
+      min-width: 70px !important;
+      max-width: 90px !important;
       font-size: 10px;
 
       :deep(.el-input__wrapper) {
-        padding: 1px 4px !important;
-        min-height: 22px;
+        padding: 1px 3px !important;
+        min-height: 20px;
       }
     }
 
@@ -480,10 +610,25 @@ defineExpose({
       font-size: 10px;
       height: 22px;
       padding: 0 5px !important;
-      min-width: 36px;
+      min-width: 34px;
 
       span {
         line-height: 1;
+      }
+    }
+
+    :deep(.el-slider) {
+      flex: 1 1 60px;
+      min-width: 50px !important;
+      max-width: 70px !important;
+
+      .el-slider__button {
+        width: 9px;
+        height: 9px;
+      }
+
+      .el-slider__marks {
+        display: none;
       }
     }
   }
@@ -501,10 +646,14 @@ defineExpose({
       display: none;
     }
 
+    .speed-label {
+      font-size: 10px;
+    }
+
     :deep(.el-select) {
-      flex: 1;
-      min-width: 150px !important;
-      max-width: none !important;
+      flex: 1 1 120px;
+      min-width: 100px !important;
+      max-width: 140px !important;
 
       :deep(.el-input__wrapper) {
         padding: 2px 5px !important;
@@ -518,6 +667,21 @@ defineExpose({
 
       span {
         line-height: 1;
+      }
+    }
+
+    :deep(.el-slider) {
+      flex: 1 1 100px;
+      min-width: 80px !important;
+      max-width: 120px !important;
+
+      .el-slider__button {
+        width: 11px;
+        height: 11px;
+      }
+
+      .el-slider__marks {
+        display: none;
       }
     }
   }
