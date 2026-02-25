@@ -138,6 +138,21 @@ import animateFireworksMoonNight from './fireworks-moon-night.js'
 
 // 全新青春年华特效
 
+// 🌌 量子宇宙交响曲 - 终极视觉盛宴（超越所有现有特效）
+import { quantumUniverseSymphony } from './quantum-universe-symphony.js'
+
+// 🌌 全息宇宙创世交响曲 - 融合所有精华的终极超越
+import animateHolographicCreationSymphony from './holographic-creation-symphony.js'
+
+// 🕸️ 全息时空织机 - 量子编织
+import animateHolographicLoom from './holographic-loom.js'
+
+// 🌀 量子分形涡旋 - 无限递归（已合并天体子午线）
+import animateQuantumFractalVortex from './quantum-fractal-vortex.js'
+
+// 🌌 极光之息 - 宇宙呼吸
+import animateEtherealAurora from './ethereal-aurora.js'
+
 
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
@@ -343,7 +358,22 @@ export const animations = {
     'holographic-dragon-awakening': animateHolographicDragonAwakening,
 
     // 🧘 禅意全息特效（东方美学）
-    'holographic-zenith-mandala': animateHolographicZenithMandala
+    'holographic-zenith-mandala': animateHolographicZenithMandala,
+
+    // 🌌 量子宇宙交响曲 - 终极视觉盛宴（超越所有现有特效）
+    'quantum-universe-symphony': quantumUniverseSymphony,
+
+    // 🌌 全息宇宙创世交响曲 - 融合所有精华的终极超越
+    'holographic-creation-symphony': animateHolographicCreationSymphony,
+
+    // 🕸️ 全息时空织机 - 量子编织
+    'holographic-loom': animateHolographicLoom,
+
+    // 🌀 量子分形涡旋 - 无限递归（已合并天体子午线）
+    'quantum-fractal-vortex': animateQuantumFractalVortex,
+
+    // 🌌 极光之息 - 宇宙呼吸
+    'ethereal-aurora': animateEtherealAurora
 
 }
 

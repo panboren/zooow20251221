@@ -425,8 +425,9 @@ export default function animateHolographicCrystalCathedral(props, callbacks) {
   )
 
   // 动画循环
+  let animId = null
   const animate = (time) => {
-    requestAnimationFrame(animate)
+    animId = requestAnimationFrame(animate)
 
     const elapsedTime = time * 0.001
 
@@ -451,9 +452,22 @@ export default function animateHolographicCrystalCathedral(props, callbacks) {
 
   // 清理函数
   return () => {
-    columns.forEach(c => scene.remove(c))
+    // 停止动画循环
+    if (animId) {
+      cancelAnimationFrame(animId)
+    }
+
+    columns.forEach(c => {
+      scene.remove(c)
+      c.geometry.dispose()
+      c.material.dispose()
+    })
     scene.remove(dome)
+    dome.geometry.dispose()
+    dome.material.dispose()
     scene.remove(crystalShards)
+    crystalShards.geometry.dispose()
+    crystalShards.material.dispose()
     scene.background = originalBackground
     scene.fog = originalFog
   }

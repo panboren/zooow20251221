@@ -96,7 +96,20 @@ const resetSpeed = () => {
 const animationOptions = [
   { value: 'holographic-neural-network', label: '🧠 全息神经网络' },
 
+  // 🌌 全息宇宙创世交响曲 - 融合所有精华的终极超越
+  { value: 'holographic-creation-symphony', label: '🌌 全息宇宙创世交响曲' },
 
+  // 🕸️ 全息时空织机 - 量子编织
+  { value: 'holographic-loom', label: '🕸️ 全息时空织机' },
+
+  // 🌀 量子分形涡旋 - 无限递归
+  { value: 'quantum-fractal-vortex', label: '🌀 量子分形涡旋' },
+
+  // 🌌 极光之息 - 宇宙呼吸
+  { value: 'ethereal-aurora', label: '🌌 极光之息' },
+
+  // 🌌 量子宇宙交响曲 - 终极特效
+  { value: 'quantum-universe-symphony', label: '🌌 量子宇宙交响曲' },
 
   { value: 'holographic-nexus-rift', label: '🌌 全息时空裂缝' },
   { value: 'holographic-quantum-flux', label: '⚛️ 全息量子涨落' },
@@ -240,6 +253,8 @@ const animationOptions = [
   { value: 'dewdrop-lens-prairie', label: '💧 露珠透镜草原' },
   { value: 'galaxy-butterfly', label: '🦋 银河蝴蝶' },
   { value: 'elegant-snow-moon', label: '🌙 风华雪月' },
+
+
 
 
 ]
