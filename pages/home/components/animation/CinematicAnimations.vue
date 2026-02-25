@@ -260,6 +260,11 @@ const props = defineProps({
     type: [Object, null],
     default: null
   },
+  rendererType: {
+    type: String,
+    default: 'webgl2',
+    validator: (value) => ['webgl2', 'webgpu'].includes(value)
+  },
   animationType: {
     type: String,
     default: 'epic-dive',

@@ -24,75 +24,112 @@ import { gsap } from 'gsap'
 import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils.js'
 import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
+// 🔧 检测 WebGPU 渲染器
+let isWebGPU = false
+let cachedRenderer = null
+
+function checkWebGPU(renderer) {
+  if (cachedRenderer === renderer) {
+    return isWebGPU
+  }
+
+  cachedRenderer = renderer
+  isWebGPU = renderer && renderer.backend && renderer.backend.device
+  return isWebGPU
+}
+
 /**
  * 创建神经元节点
  */
-function createNeuronNode(radius, color) {
+function createNeuronNode(radius, color, renderer) {
   const geometry = new THREE.SphereGeometry(radius, 32, 32)
 
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
+  const webGPU = checkWebGPU(renderer)
+
+  let material
+
+  // 🔧 WebGPU 使用基础材质（避免 ShaderMaterial 兼容性问题）
+  if (webGPU) {
+    material = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(color),
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    })
+
+    // 为兼容性添加 uniforms 属性（模拟 ShaderMaterial）
+    material.uniforms = {
       uTime: { value: 0 },
       uColor: { value: new THREE.Color(color) },
       uOpacity: { value: 0 },
       uPulse: { value: 0 }
-    },
-    vertexShader: `
-      precision highp float;
+    }
+  } else {
+    material = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uColor: { value: new THREE.Color(color) },
+        uOpacity: { value: 0 },
+        uPulse: { value: 0 }
+      },
+      vertexShader: `
+        precision highp float;
 
-      uniform float uTime;
-      uniform float uPulse;
+        uniform float uTime;
+        uniform float uPulse;
 
-      varying vec3 vNormal;
-      varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vPosition;
 
-      void main() {
-        vNormal = normalize(normalMatrix * normal);
-        vPosition = position;
+        void main() {
+          vNormal = normalize(normalMatrix * normal);
+          vPosition = position;
 
-        vec3 pos = position;
-        float pulse = sin(uTime * 5.0 + uPulse) * uPulse * 0.3;
-        pos += normal * pulse;
+          vec3 pos = position;
+          float pulse = sin(uTime * 5.0 + uPulse) * uPulse * 0.3;
+          pos += normal * pulse;
 
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-      }
-    `,
-    fragmentShader: `
-      precision highp float;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
 
-      uniform float uTime;
-      uniform vec3 uColor;
-      uniform float uOpacity;
-      uniform float uPulse;
+        uniform float uTime;
+        uniform vec3 uColor;
+        uniform float uOpacity;
+        uniform float uPulse;
 
-      varying vec3 vNormal;
-      varying vec3 vPosition;
+        varying vec3 vNormal;
+        varying vec3 vPosition;
 
-      void main() {
-        vec3 viewDir = normalize(cameraPosition - vPosition);
-        float fresnel = pow(1.0 - abs(dot(vNormal, viewDir)), 3.0);
+        void main() {
+          vec3 viewDir = normalize(cameraPosition - vPosition);
+          float fresnel = pow(1.0 - abs(dot(vNormal, viewDir)), 3.0);
 
-        // 脉冲效果
-        float pulse = sin(uTime * 4.0 + uPulse) * 0.5 + 0.5;
+          // 脉冲效果
+          float pulse = sin(uTime * 4.0 + uPulse) * 0.5 + 0.5;
 
-        // 神经发光
-        vec3 glow = uColor * (1.0 + pulse * 0.5);
+          // 神经发光
+          vec3 glow = uColor * (1.0 + pulse * 0.5);
 
-        // 核心亮度
-        float core = smoothstep(0.5, 1.0, fresnel);
+          // 核心亮度
+          float core = smoothstep(0.5, 1.0, fresnel);
 
-        vec3 finalColor = mix(uColor, glow, fresnel * 0.6);
-        finalColor += core * uColor * 0.5;
+          vec3 finalColor = mix(uColor, glow, fresnel * 0.6);
+          finalColor += core * uColor * 0.5;
 
-        float alpha = (fresnel * 0.5 + pulse * 0.3 + core * 0.2) * uOpacity;
+          float alpha = (fresnel * 0.5 + pulse * 0.3 + core * 0.2) * uOpacity;
 
-        gl_FragColor = vec4(finalColor, alpha);
-      }
-    `,
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending
-  })
+          gl_FragColor = vec4(finalColor, alpha);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    })
+  }
 
   return new THREE.Mesh(geometry, material)
 }
@@ -100,72 +137,96 @@ function createNeuronNode(radius, color) {
 /**
  * 创建突触连接
  */
-function createSynapseConnection(start, end, color) {
+function createSynapseConnection(start, end, color, renderer) {
   const points = [start, end]
   const geometry = new THREE.BufferGeometry().setFromPoints(points)
 
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
+  const webGPU = checkWebGPU(renderer)
+
+  let material
+
+  // 🔧 WebGPU 使用基础材质
+  if (webGPU) {
+    material = new THREE.LineBasicMaterial({
+      color: new THREE.Color(color),
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    })
+
+    // 为兼容性添加 uniforms
+    material.uniforms = {
       uTime: { value: 0 },
       uColor: { value: new THREE.Color(color) },
       uOpacity: { value: 0 },
       uSignalPos: { value: 0 },
       uActive: { value: 0 }
-    },
-    vertexShader: `
-      precision highp float;
+    }
+  } else {
+    material = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uColor: { value: new THREE.Color(color) },
+        uOpacity: { value: 0 },
+        uSignalPos: { value: 0 },
+        uActive: { value: 0 }
+      },
+      vertexShader: `
+        precision highp float;
 
-      uniform float uTime;
-      uniform float uSignalPos;
-      uniform float uActive;
+        uniform float uTime;
+        uniform float uSignalPos;
+        uniform float uActive;
 
-      attribute float progress;
+        attribute float progress;
 
-      varying float vProgress;
-      varying vec3 vPosition;
+        varying float vProgress;
+        varying vec3 vPosition;
 
-      void main() {
-        vProgress = progress;
-        vPosition = position;
+        void main() {
+          vProgress = progress;
+          vPosition = position;
 
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-      precision highp float;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
 
-      uniform float uTime;
-      uniform vec3 uColor;
-      uniform float uOpacity;
-      uniform float uSignalPos;
-      uniform float uActive;
+        uniform float uTime;
+        uniform vec3 uColor;
+        uniform float uOpacity;
+        uniform float uSignalPos;
+        uniform float uActive;
 
-      varying float vProgress;
-      varying vec3 vPosition;
+        varying float vProgress;
+        varying vec3 vPosition;
 
-      void main() {
-        // 基础连接线
-        float baseLine = 0.1;
+        void main() {
+          // 基础连接线
+          float baseLine = 0.1;
 
-        // 信号脉冲
-        float signal = exp(-pow(vProgress - uSignalPos, 2.0) * 50.0);
+          // 信号脉冲
+          float signal = exp(-pow(vProgress - uSignalPos, 2.0) * 50.0);
 
-        // 活跃状态
-        float isActive = uActive * signal * 2.0;
+          // 活跃状态
+          float isActive = uActive * signal * 2.0;
 
-        // 能量流动
-        float energy = smoothstep(0.3, 0.7, sin(uTime * 10.0 + vProgress * 10.0));
+          // 能量流动
+          float energy = smoothstep(0.3, 0.7, sin(uTime * 10.0 + vProgress * 10.0));
 
-        vec3 color = uColor * (baseLine + signal + isActive + energy * 0.3);
-        float alpha = (baseLine + signal * 0.8 + isActive + energy * 0.2) * uOpacity;
+          vec3 color = uColor * (baseLine + signal + isActive + energy * 0.3);
+          float alpha = (baseLine + signal * 0.8 + isActive + energy * 0.2) * uOpacity;
 
-        gl_FragColor = vec4(color, alpha);
-      }
-    `,
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending
-  })
+          gl_FragColor = vec4(color, alpha);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    })
+  }
 
   return new THREE.Line(geometry, material)
 }
@@ -173,90 +234,98 @@ function createSynapseConnection(start, end, color) {
 /**
  * 创建思维粒子
  */
-function createThoughtParticles(count, radius) {
+function createThoughtParticles(count, radius, renderer) {
   const geometry = new THREE.BufferGeometry()
   const positions = new Float32Array(count * 3)
   const colors = new Float32Array(count * 3)
-  const sizes = new Float32Array(count)
   const speeds = new Float32Array(count)
+
+  const webGPU = checkWebGPU(renderer)
 
   for (let i = 0; i < count; i++) {
     const theta = Math.random() * Math.PI * 2
     const phi = Math.acos(2 * Math.random() - 1)
-    const r = radius * Math.cbrt(Math.random())
+    const r = radius + Math.random() * 20
 
     positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
     positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta)
     positions[i * 3 + 2] = r * Math.cos(phi)
 
-    const hue = Math.random() * 0.4 + 0.4
+    const hue = Math.random()
     const color = new THREE.Color().setHSL(hue, 0.8, 0.6)
     colors[i * 3] = color.r
     colors[i * 3 + 1] = color.g
     colors[i * 3 + 2] = color.b
 
-    sizes[i] = 0.3 + Math.random() * 0.7
     speeds[i] = 0.5 + Math.random() * 1.5
   }
 
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
   geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
-  geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1))
-  geometry.setAttribute('speed', new THREE.BufferAttribute(speeds, 1))
 
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
+  let material
+
+  // 🔧 WebGPU 使用基础粒子材质
+  if (webGPU) {
+    material = new THREE.PointsMaterial({
+      size: 0.5,
+      transparent: true,
+      opacity: 0,
+      vertexColors: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    })
+
+    // 为兼容性添加 uniforms
+    material.uniforms = {
       uTime: { value: 0 },
       uOpacity: { value: 0 }
-    },
-    vertexShader: `
-      precision highp float;
+    }
+  } else {
+    material = new THREE.ShaderMaterial({
+      uniforms: {
+        uOpacity: { value: 0 }
+      },
+      vertexShader: `
+        precision highp float;
 
-      uniform float uTime;
-      uniform float uOpacity;
+        attribute vec3 color;
+        attribute float speed;
 
-      attribute float size;
-      attribute vec3 color;
-      attribute float speed;
+        varying vec3 vColor;
+        varying float vSpeed;
 
-      varying vec3 vColor;
-      varying float vSpeed;
+        void main() {
+          vColor = color;
+          vSpeed = speed;
 
-      void main() {
-        vColor = color;
-        vSpeed = speed;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          gl_PointSize = 2.0;
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
 
-        vec3 pos = position;
-        float orbit = sin(uTime * speed + position.y * 0.1) * 3.0;
-        pos.y += orbit;
+        uniform float uOpacity;
 
-        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-        gl_PointSize = size * (500.0 / -mvPosition.z) * (0.8 + 0.2 * sin(uTime * 5.0));
-        gl_Position = projectionMatrix * mvPosition;
-      }
-    `,
-    fragmentShader: `
-      precision highp float;
+        varying vec3 vColor;
+        varying float vSpeed;
 
-      uniform float uOpacity;
+        void main() {
+          float dist = length(gl_PointCoord - vec2(0.5));
 
-      varying vec3 vColor;
-      varying float vSpeed;
+          // 闪烁效果
+          float flicker = sin(uOpacity * 8.0 + vSpeed * 10.0) * 0.2 + 0.8;
 
-      void main() {
-        float dist = length(gl_PointCoord - vec2(0.5));
-
-        // 闪烁效果
-        float flicker = sin(uOpacity * 8.0 + vSpeed * 10.0) * 0.2 + 0.8;
-
-        float alpha = smoothstep(0.5, 0.0, dist) * uOpacity * flicker;
-        gl_FragColor = vec4(vColor * 1.2, alpha);
-      }
-    `,
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending
-  })
+          float alpha = smoothstep(0.5, 0.0, dist) * uOpacity * flicker;
+          gl_FragColor = vec4(vColor * 1.2, alpha);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    })
+  }
 
   return new THREE.Points(geometry, material)
 }
@@ -304,7 +373,7 @@ export default function animateHolographicNeuralNetwork(props, callbacks) {
       const hue = (i / neuronCount) * 0.5 + 0.4
       const color = new THREE.Color().setHSL(hue, 0.9, 0.5).getHex()
 
-      const neuron = createNeuronNode(radius, color)
+      const neuron = createNeuronNode(radius, color, renderer)
 
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
@@ -343,7 +412,8 @@ export default function animateHolographicNeuralNetwork(props, callbacks) {
         const synapse = createSynapseConnection(
           neuronPositions[i],
           neuronPositions[j],
-          color
+          color,
+          renderer
         )
         scene.add(synapse)
         synapses.push({
@@ -356,52 +426,75 @@ export default function animateHolographicNeuralNetwork(props, callbacks) {
     }
 
     // 创建思维粒子
-    const thoughtParticles = createThoughtParticles(5000, 80)
+    const thoughtParticles = createThoughtParticles(5000, 80, renderer)
     scene.add(thoughtParticles)
 
     // 创建认知光环
     const cognitiveHalos = []
+    const webGPU = checkWebGPU(renderer)
+
     for (let i = 0; i < 6; i++) {
       const geometry = new THREE.TorusGeometry(25 + i * 8, 0.3, 16, 100)
       const hue = i / 6
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
+
+      let material
+
+      // 🔧 WebGPU 使用基础材质
+      if (webGPU) {
+        material = new THREE.MeshBasicMaterial({
+          color: new THREE.Color().setHSL(hue, 1.0, 0.6),
+          transparent: true,
+          opacity: 0,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending
+        })
+
+        // 为兼容性添加 uniforms
+        material.uniforms = {
           uTime: { value: 0 },
           uColor: { value: new THREE.Color().setHSL(hue, 1.0, 0.6) },
           uOpacity: { value: 0 }
-        },
-        vertexShader: `
-          precision highp float;
+        }
+      } else {
+        material = new THREE.ShaderMaterial({
+          uniforms: {
+            uTime: { value: 0 },
+            uColor: { value: new THREE.Color().setHSL(hue, 1.0, 0.6) },
+            uOpacity: { value: 0 }
+          },
+          vertexShader: `
+            precision highp float;
 
-          uniform float uTime;
+            uniform float uTime;
 
-          varying vec2 vUv;
+            varying vec2 vUv;
 
-          void main() {
-            vUv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `,
-        fragmentShader: `
-          precision highp float;
+            void main() {
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `,
+          fragmentShader: `
+            precision highp float;
 
-          uniform float uTime;
-          uniform vec3 uColor;
-          uniform float uOpacity;
+            uniform float uTime;
+            uniform vec3 uColor;
+            uniform float uOpacity;
 
-          varying vec2 vUv;
+            varying vec2 vUv;
 
-          void main() {
-            float pulse = sin(uTime * 4.0 + vUv.x * 20.0) * 0.5 + 0.5;
-            vec3 color = uColor * (0.3 + pulse * 0.7);
-            float alpha = pulse * uOpacity * 0.5;
-            gl_FragColor = vec4(color, alpha);
-          }
-        `,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-      })
+            void main() {
+              float pulse = sin(uTime * 4.0 + vUv.x * 20.0) * 0.5 + 0.5;
+              vec3 color = uColor * (0.3 + pulse * 0.7);
+              float alpha = pulse * uOpacity * 0.5;
+              gl_FragColor = vec4(color, alpha);
+            }
+          `,
+          transparent: true,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending
+        })
+      }
 
       const halo = new THREE.Mesh(geometry, material)
       halo.rotation.x = Math.PI / 2 + (i % 2 === 0 ? 0.3 : -0.3)
@@ -420,6 +513,10 @@ export default function animateHolographicNeuralNetwork(props, callbacks) {
         const pulse = Math.sin(time * neuron.pulseSpeed + neuron.pulsePhase) * 0.5 + 0.5
         neuron.mesh.material.uniforms.uTime.value = time
         neuron.mesh.material.uniforms.uPulse.value = pulse
+        // 🔧 WebGPU 下更新 opacity
+        if (webGPU && neuron.mesh.material.opacity !== undefined) {
+          neuron.mesh.material.opacity = neuron.mesh.material.uniforms.uOpacity.value
+        }
 
         const floatY = Math.sin(time * 0.3 + i * 0.1) * 1
         neuron.mesh.position.y += floatY * 0.005
@@ -435,21 +532,34 @@ export default function animateHolographicNeuralNetwork(props, callbacks) {
         }
         synapse.active *= 0.95
 
+        // 🔧 兼容 WebGPU 和 WebGL2
         synapse.mesh.material.uniforms.uTime.value = time
         synapse.mesh.material.uniforms.uSignalPos.value = synapse.signalPos
         synapse.mesh.material.uniforms.uActive.value = synapse.active
+        // WebGPU 下更新 opacity
+        if (webGPU && synapse.mesh.material.opacity !== undefined) {
+          synapse.mesh.material.opacity = synapse.mesh.material.uniforms.uOpacity.value
+        }
       })
 
       // 更新思维粒子
       thoughtParticles.material.uniforms.uTime.value = time
       thoughtParticles.rotation.y += 0.002
       thoughtParticles.rotation.x = Math.sin(time * 0.3) * 0.05
+      // WebGPU 下更新 opacity
+      if (webGPU && thoughtParticles.material.opacity !== undefined) {
+        thoughtParticles.material.opacity = thoughtParticles.material.uniforms.uOpacity.value
+      }
 
       // 更新认知光环
       cognitiveHalos.forEach((halo, i) => {
         halo.mesh.rotation.z += halo.rotSpeed
         halo.mesh.rotation.x = Math.PI / 2 + Math.sin(time + i) * 0.1
         halo.mesh.material.uniforms.uTime.value = time
+        // WebGPU 下更新 opacity
+        if (webGPU && halo.mesh.material.opacity !== undefined) {
+          halo.mesh.material.opacity = halo.mesh.material.uniforms.uOpacity.value
+        }
       })
     }
 

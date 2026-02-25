@@ -8,11 +8,15 @@ import { gsap } from 'gsap'
 import { AnimationCleanupManager, PerformanceOptimizer } from '~/utils/AnimationCleanupManager.js'
 
 export class OptimizedBaseEffect {
-  constructor(scene, camera, renderer, controls) {
+  constructor(scene, camera, renderer, controls, rendererType = 'webgl2') {
     this.scene = scene
     this.camera = camera
     this.renderer = renderer
+    this.rendererType = rendererType
     this.controls = controls
+
+    // 检测渲染器类型
+    this.isWebGPU = rendererType === 'webgpu'
 
     // 资源管理
     this.cleanupManager = new AnimationCleanupManager()

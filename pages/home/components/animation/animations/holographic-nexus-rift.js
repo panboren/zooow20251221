@@ -25,19 +25,49 @@ import { createTimeline, setupInitialCamera, safeCameraTransform } from './utils
 import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 /**
+ * 检测是否使用 WebGPU 渲染器
+ */
+function checkWebGPU(renderer) {
+  return renderer && renderer.type === 'WebGPURenderer'
+}
+
+/**
  * 创建时空裂缝核心
  */
-function createNexusCore(radius, color) {
+function createNexusCore(radius, color, renderer) {
   const geometry = new THREE.TorusKnotGeometry(radius * 0.6, radius * 0.1, 200, 32, 2, 3)
 
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
+  const webGPU = checkWebGPU(renderer)
+
+  let material
+
+  // 🔧 WebGPU 使用基础材质
+  if (webGPU) {
+    material = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(color),
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide
+    })
+
+    // 为兼容性添加 uniforms
+    material.uniforms = {
       uTime: { value: 0 },
       uColor: { value: new THREE.Color(color) },
       uOpacity: { value: 0 },
       uDistortion: { value: 0 }
-    },
-    vertexShader: `
+    }
+  } else {
+    material = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uColor: { value: new THREE.Color(color) },
+        uOpacity: { value: 0 },
+        uDistortion: { value: 0 }
+      },
+      vertexShader: `
       precision highp float;
 
       uniform float uTime;
@@ -106,6 +136,7 @@ function createNexusCore(radius, color) {
     depthWrite: false,
     blending: THREE.AdditiveBlending
   })
+  }
 
   const mesh = new THREE.Mesh(geometry, material)
   return mesh
@@ -114,16 +145,38 @@ function createNexusCore(radius, color) {
 /**
  * 创建裂缝能量环
  */
-function createRiftEnergyRing(radius, segments, color) {
+function createRiftEnergyRing(radius, segments, color, renderer) {
   const geometry = new THREE.TorusGeometry(radius, 0.5, 16, segments)
 
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
+  const webGPU = checkWebGPU(renderer)
+
+  let material
+
+  // 🔧 WebGPU 使用基础材质
+  if (webGPU) {
+    material = new THREE.MeshBasicMaterial({
+      color: new THREE.Color(color),
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide
+    })
+
+    // 为兼容性添加 uniforms
+    material.uniforms = {
       uTime: { value: 0 },
       uColor: { value: new THREE.Color(color) },
       uOpacity: { value: 0 }
-    },
-    vertexShader: `
+    }
+  } else {
+    material = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uColor: { value: new THREE.Color(color) },
+        uOpacity: { value: 0 }
+      },
+      vertexShader: `
       precision highp float;
 
       uniform float uTime;
@@ -168,6 +221,7 @@ function createRiftEnergyRing(radius, segments, color) {
     depthWrite: false,
     blending: THREE.AdditiveBlending
   })
+  }
 
   return new THREE.Mesh(geometry, material)
 }
@@ -175,7 +229,7 @@ function createRiftEnergyRing(radius, segments, color) {
 /**
  * 创建时空粒子流
  */
-function createRiftParticles(count, radius) {
+function createRiftParticles(count, radius, renderer) {
   const geometry = new THREE.BufferGeometry()
   const positions = new Float32Array(count * 3)
   const colors = new Float32Array(count * 3)
@@ -212,38 +266,59 @@ function createRiftParticles(count, radius) {
   geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1))
   geometry.setAttribute('lifetime', new THREE.BufferAttribute(lifetimes, 1))
 
-  const material = new THREE.ShaderMaterial({
-    uniforms: {
+  const webGPU = checkWebGPU(renderer)
+
+  let material
+
+  // 🔧 WebGPU 使用基础粒子材质
+  if (webGPU) {
+    material = new THREE.PointsMaterial({
+      size: 1.5,
+      transparent: true,
+      opacity: 0,
+      vertexColors: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    })
+
+    // 为兼容性添加 uniforms
+    material.uniforms = {
       uTime: { value: 0 },
       uOpacity: { value: 0 }
-    },
-    vertexShader: `
-      precision highp float;
+    }
+  } else {
+    material = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uOpacity: { value: 0 }
+      },
+      vertexShader: `
+        precision highp float;
 
-      uniform float uTime;
-      uniform float uOpacity;
+        uniform float uTime;
+        uniform float uOpacity;
 
-      attribute float size;
-      attribute vec3 color;
-      attribute float lifetime;
+        attribute float size;
+        attribute vec3 color;
+        attribute float lifetime;
 
-      varying vec3 vColor;
-      varying float vLifetime;
+        varying vec3 vColor;
+        varying float vLifetime;
 
-      void main() {
-        vColor = color;
-        vLifetime = lifetime;
+        void main() {
+          vColor = color;
+          vLifetime = lifetime;
 
-        vec3 pos = position;
-        float spiral = sin(uTime * 2.0 + lifetime * 10.0) * 5.0;
-        pos += normalize(pos) * spiral;
+          vec3 pos = position;
+          float spiral = sin(uTime * 2.0 + lifetime * 10.0) * 5.0;
+          pos += normalize(pos) * spiral;
 
-        vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-        gl_PointSize = size * (400.0 / -mvPosition.z) * (0.5 + 0.5 * sin(uTime * 5.0 + lifetime * 20.0));
-        gl_Position = projectionMatrix * mvPosition;
-      }
-    `,
-    fragmentShader: `
+          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+          gl_PointSize = size * (400.0 / -mvPosition.z) * (0.5 + 0.5 * sin(uTime * 5.0 + lifetime * 20.0));
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `,
+      fragmentShader: `
       precision highp float;
 
       uniform float uTime;
@@ -266,6 +341,7 @@ function createRiftParticles(count, radius) {
     depthWrite: false,
     blending: THREE.AdditiveBlending
   })
+  }
 
   return new THREE.Points(geometry, material)
 }
@@ -304,7 +380,7 @@ export default function animateHolographicNexusRift(props, callbacks) {
     scene.fog = new THREE.FogExp2(0x050510, 0.0015)
 
     // 创建裂缝核心
-    const nexusCore = createNexusCore(20, 0x8a2be2)
+    const nexusCore = createNexusCore(20, 0x8a2be2, renderer)
     scene.add(nexusCore)
 
     // 创建能量环
@@ -313,7 +389,7 @@ export default function animateHolographicNexusRift(props, callbacks) {
       const radius = 30 + i * 12
       const hue = i / 8
       const color = new THREE.Color().setHSL(hue, 1.0, 0.6).getHex()
-      const ring = createRiftEnergyRing(radius, 100, color)
+      const ring = createRiftEnergyRing(radius, 100, color, renderer)
       ring.rotation.x = (Math.random() - 0.5) * 0.5
       ring.rotation.z = (Math.random() - 0.5) * 0.5
       scene.add(ring)
@@ -321,7 +397,7 @@ export default function animateHolographicNexusRift(props, callbacks) {
     }
 
     // 创建时空粒子
-    const riftParticles = createRiftParticles(8000, 100)
+    const riftParticles = createRiftParticles(8000, 100, renderer)
     scene.add(riftParticles)
 
     // 创建维度碎片
@@ -365,48 +441,72 @@ export default function animateHolographicNexusRift(props, callbacks) {
 
     // 创建重力透镜光晕
     const lensFlares = []
+    const webGPU = checkWebGPU(renderer)
     for (let i = 0; i < 5; i++) {
       const geometry = new THREE.SphereGeometry(3 + i * 2, 32, 32)
-      const material = new THREE.ShaderMaterial({
-        uniforms: {
+      const flareColor = new THREE.Color().setHSL(0.7 + i * 0.05, 1.0, 0.6)
+
+      let material
+
+      // 🔧 WebGPU 使用基础材质
+      if (webGPU) {
+        material = new THREE.MeshBasicMaterial({
+          color: flareColor,
+          transparent: true,
+          opacity: 0,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+          side: THREE.BackSide
+        })
+
+        // 为兼容性添加 uniforms
+        material.uniforms = {
           uTime: { value: 0 },
-          uColor: { value: new THREE.Color().setHSL(0.7 + i * 0.05, 1.0, 0.6) },
+          uColor: { value: flareColor },
           uOpacity: { value: 0 }
-        },
-        vertexShader: `
-          precision highp float;
+        }
+      } else {
+        material = new THREE.ShaderMaterial({
+          uniforms: {
+            uTime: { value: 0 },
+            uColor: { value: flareColor },
+            uOpacity: { value: 0 }
+          },
+          vertexShader: `
+            precision highp float;
 
-          varying vec3 vNormal;
-          varying vec3 vPosition;
+            varying vec3 vNormal;
+            varying vec3 vPosition;
 
-          void main() {
-            vNormal = normalize(normalMatrix * normal);
-            vPosition = position;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-          }
-        `,
-        fragmentShader: `
-          precision highp float;
+            void main() {
+              vNormal = normalize(normalMatrix * normal);
+              vPosition = position;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `,
+          fragmentShader: `
+            precision highp float;
 
-          uniform float uTime;
-          uniform vec3 uColor;
-          uniform float uOpacity;
+            uniform float uTime;
+            uniform vec3 uColor;
+            uniform float uOpacity;
 
-          varying vec3 vNormal;
-          varying vec3 vPosition;
+            varying vec3 vNormal;
+            varying vec3 vPosition;
 
-          void main() {
-            float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
-            vec3 color = uColor * fresnel;
-            float alpha = fresnel * uOpacity * 0.5;
-            gl_FragColor = vec4(color, alpha);
-          }
-        `,
-        transparent: true,
-        side: THREE.BackSide,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-      })
+            void main() {
+              float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
+              vec3 color = uColor * fresnel;
+              float alpha = fresnel * uOpacity * 0.5;
+              gl_FragColor = vec4(color, alpha);
+            }
+          `,
+          transparent: true,
+          side: THREE.BackSide,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending
+        })
+      }
 
       const flare = new THREE.Mesh(geometry, material)
       scene.add(flare)
@@ -424,6 +524,10 @@ export default function animateHolographicNexusRift(props, callbacks) {
       nexusCore.rotation.y += 0.015
       nexusCore.material.uniforms.uTime.value = time
       nexusCore.material.uniforms.uDistortion.value = 0.5 + 0.5 * Math.sin(time * 2)
+      // WebGPU 下更新 opacity
+      if (webGPU && nexusCore.material.opacity !== undefined) {
+        nexusCore.material.opacity = nexusCore.material.uniforms.uOpacity.value
+      }
 
       // 更新能量环
       energyRings.forEach((ring, i) => {
@@ -432,12 +536,20 @@ export default function animateHolographicNexusRift(props, callbacks) {
         ring.mesh.rotation.z += ring.rotSpeed * 0.5
         ring.mesh.material.uniforms.uTime.value = time
         ring.mesh.scale.setScalar(1 + 0.1 * Math.sin(time * 2 + i))
+        // WebGPU 下更新 opacity
+        if (webGPU && ring.mesh.material.opacity !== undefined) {
+          ring.mesh.material.opacity = ring.mesh.material.uniforms.uOpacity.value
+        }
       })
 
       // 更新时空粒子
       riftParticles.material.uniforms.uTime.value = time
       riftParticles.rotation.y += 0.003
       riftParticles.rotation.x = Math.sin(time * 0.5) * 0.1
+      // WebGPU 下更新 opacity
+      if (webGPU && riftParticles.material.opacity !== undefined) {
+        riftParticles.material.opacity = riftParticles.material.uniforms.uOpacity.value
+      }
 
       // 更新维度碎片
       dimensionFragments.forEach((frag, i) => {
@@ -455,6 +567,10 @@ export default function animateHolographicNexusRift(props, callbacks) {
         flare.mesh.scale.setScalar(1 + pulse * 0.3)
         flare.mesh.material.uniforms.uTime.value = time
         flare.mesh.material.uniforms.uOpacity.value = 0.3 + pulse * 0.2
+        // WebGPU 下更新 opacity
+        if (webGPU && flare.mesh.material.opacity !== undefined) {
+          flare.mesh.material.opacity = flare.mesh.material.uniforms.uOpacity.value
+        }
       })
     }
 

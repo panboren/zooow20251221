@@ -7,8 +7,8 @@ import { BaseEffect } from './BaseEffect.js'
 import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 
 export class EnhancedBaseEffect extends BaseEffect {
-  constructor(scene, camera, renderer, controls) {
-    super(scene, camera, renderer, controls)
+  constructor(scene, camera, renderer, controls, rendererType = 'webgl2') {
+    super(scene, camera, renderer, controls, rendererType)
 
     // 性能监控
     this.monitor = new PerformanceMonitor()

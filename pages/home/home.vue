@@ -23,6 +23,7 @@
       :camera="camera"
       :renderer="renderer"
       :controls="controls"
+      :renderer-type="rendererType"
       :animation-type="animationType"
       @animation-complete="onAnimationComplete"
     />
@@ -67,6 +68,12 @@ import { onMounted, onUnmounted, watch, ref, computed, shallowRef } from 'vue'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/addons/controls/OrbitControls'
 import { gsap } from 'gsap'
+// WebGPU 渲染器 (Three.js r183+)
+import { WebGPURenderer } from 'three/webgpu'
+// 高级 WebGPU 工具
+import { MaterialCompatibilityChecker, WebGPUDebugger } from '~/utils/ThreeJSSourceAnalyzer.js'
+// WebGPU 兼容性修复
+import { suppressShaderMaterialWarnings, getRendererType, fixSceneMaterials } from '~/utils/WebGPUCompatibilityFix.js'
 
 // 导入组件
 import LoadingIndicator from './components/ui/LoadingIndicator.vue'
@@ -92,9 +99,16 @@ import {
 import { createLogger } from './utils/logger'
 import { debounce } from './utils/performance'
 import Beian from '@/pages/home/components/ui/beian.vue'
+import { getRendererFactory } from '~/utils/WebGPURendererFactory.js'
+import { quickDiagnose } from '~/utils/WebGPUDiagnostic.js'
+import { initMaterialManager } from '~/utils/WebGPUMaterialManager.js'
 
 // 创建日志实例
 const logger = createLogger('HomeView')
+
+// WebGPU 相关变量
+const rendererFactory = getRendererFactory()
+const rendererType = ref('webgl2') // 'webgpu' 或 'webgl2'
 
 // ==================== 全景图配置 ====================
 
@@ -111,6 +125,7 @@ const renderer = shallowRef(null)
 const mesh = shallowRef(null)
 const controls = shallowRef(null)
 const texture = shallowRef(null) // 保存当前纹理
+const isThreeJSInitialized = ref(false) // Three.js 是否已初始化
 const animationId = ref(null)
 const lastRenderTime = ref(performance.now())
 
@@ -135,10 +150,54 @@ const isChangingPanorama = ref(false)
 const panoramaCache = new Map() // 全景图纹理缓存 (Blob URL)
 let db = null
 
+// 🚀 缓存优化配置
+const MAX_CACHE_SIZE = 5 // 内存缓存最大数量
+const CACHE_MAX_AGE = 7 * 24 * 60 * 60 * 1000 // 7天过期
+const DB_MAX_SIZE = 100 * 1024 * 1024 // IndexedDB 最大100MB
+
 // IndexedDB 配置
 const DB_NAME = 'panoramaTextureCache'
 const DB_VERSION = 1
 const STORE_NAME = 'textures'
+
+/**
+ * 限制缓存大小，删除最旧的缓存
+ */
+const limitCacheSize = () => {
+  if (panoramaCache.size >= MAX_CACHE_SIZE) {
+    const firstKey = panoramaCache.keys().next().value
+    URL.revokeObjectURL(panoramaCache.get(firstKey))
+    panoramaCache.delete(firstKey)
+    logger.debug(`缓存已满，移除: ${firstKey}`)
+  }
+}
+
+/**
+ * 清理过期的 IndexedDB 缓存
+ */
+const cleanupExpiredCache = async () => {
+  if (!db) return
+
+  try {
+    const transaction = db.transaction([STORE_NAME], 'readwrite')
+    const store = transaction.objectStore(STORE_NAME)
+    const request = store.openCursor()
+    const now = Date.now()
+
+    request.onsuccess = (event) => {
+      const cursor = event.target.result
+      if (cursor) {
+        if (now - cursor.value.timestamp > CACHE_MAX_AGE) {
+          cursor.delete()
+          logger.debug(`清理过期缓存: ${cursor.value.url}`)
+        }
+        cursor.continue()
+      }
+    }
+  } catch (error) {
+    logger.warn('清理缓存失败:', error)
+  }
+}
 
 // 初始化 IndexedDB
 const initDB = () => {
@@ -216,6 +275,7 @@ const preloadPanoramaTexture = (url) => {
     const blob = await getTextureFromDB(url)
     if (blob) {
       const blobUrl = URL.createObjectURL(blob)
+      limitCacheSize() // 🔧 限制缓存大小
       panoramaCache.set(url, blobUrl)
       resolve(blobUrl)
       return
@@ -226,6 +286,9 @@ const preloadPanoramaTexture = (url) => {
       const response = await fetch(url)
       const blobData = await response.blob()
       const blobUrl = URL.createObjectURL(blobData)
+
+      // 限制缓存大小
+      limitCacheSize()
 
       // 存储到内存缓存
       panoramaCache.set(url, blobUrl)
@@ -334,49 +397,110 @@ const createCamera = () => {
 }
 
 /**
- * 创建渲染器 - 保守性能优化版本
- * @returns {THREE.WebGLRenderer} 创建的渲染器对象
+ * 创建渲染器 - 支持 WebGPU 和 WebGL2
+ * @returns {Promise<THREE.WebGLRenderer|WebGPURenderer>} 创建的渲染器对象
  */
-const createRenderer = () => {
+const createRenderer = async () => {
   if (!canvasRef.value) {
     throw new Error('Canvas元素不存在')
   }
 
-  logger.debug('创建渲染器')
+  logger.debug('创建渲染器 (WebGPU/WebGL2 自动检测)')
 
-  const newRenderer = new THREE.WebGLRenderer({
-    canvas: canvasRef.value,
-    // 🔧 性能优化：关闭抗锯齿
-    antialias: false,
-    // 保留 alpha 通道配置
-    alpha: RENDER_CONFIG.ALPHA,
-    // 🔧 性能优化：优先性能
-    powerPreference: 'high-performance',
-    preserveDrawingBuffer: RENDER_CONFIG.PRESERVE_DRAWING_BUFFER,
-    // 🔧 性能优化：使用中等精度
-    precision: 'mediump',
-    // 🔧 性能优化：关闭模板缓冲
-    stencil: false,
-    // 保留深度缓冲
-    depth: RENDER_CONFIG.DEPTH,
-    // 🔧 性能优化：禁用对数深度
-    logarithmicDepthBuffer: false,
-  })
+  try {
+    // 使用渲染器工厂创建最优渲染器
+    const newRenderer = await rendererFactory.createRenderer({
+      canvas: canvasRef.value,
+      antialias: false,
+      alpha: RENDER_CONFIG.ALPHA,
+      powerPreference: 'high-performance',
+      preserveDrawingBuffer: RENDER_CONFIG.PRESERVE_DRAWING_BUFFER,
+      precision: 'mediump',
+      stencil: false,
+      depth: RENDER_CONFIG.DEPTH,
+      logarithmicDepthBuffer: false,
+      // WebGPU 特定配置
+      sampleCount: 1,
+      toneMappingExposure: 1.3
+    })
 
-  // 🔧 性能优化：适度限制像素比
-  const pixelRatio = Math.min(window.devicePixelRatio, 1.5)
-  newRenderer.setSize(
-    containerRef.value.clientWidth,
-    containerRef.value.clientHeight,
-    true,
-  )
-  newRenderer.setPixelRatio(pixelRatio)
+    // 获取渲染器类型
+    rendererType.value = rendererFactory.getRendererType()
 
-  // 应用高级渲染设置
-  applyRendererSettings(newRenderer)
+    if (rendererFactory.isWebGPU()) {
+      logger.info('✓ 使用 WebGPU 渲染器')
+      // 🔧 Three.js r183+ WebGPURenderer：某些情况下仍需要等待 backend 初始化
+      if (typeof newRenderer.init === 'function' && newRenderer.backend && !newRenderer.backend.initialized) {
+        await newRenderer.init()
+      }
+    } else {
+      logger.info('✓ 使用 WebGL2 渲染器')
+    }
 
-  logger.debug(`渲染器创建完成，像素比: ${pixelRatio}`)
-  return newRenderer
+    // 调整尺寸
+    const pixelRatio = rendererFactory.isWebGPU()
+      ? window.devicePixelRatio  // WebGPU 可以使用更高的像素比
+      : Math.min(window.devicePixelRatio, 1.5)
+
+    newRenderer.setSize(
+      containerRef.value.clientWidth,
+      containerRef.value.clientHeight,
+      true,
+    )
+    newRenderer.setPixelRatio(pixelRatio)
+
+    // 应用高级渲染设置
+    applyRendererSettings(newRenderer)
+
+    // 🔧 初始化 WebGPU 材质管理器
+    initMaterialManager(newRenderer)
+
+    logger.debug(`渲染器创建完成，类型: ${rendererType.value}，像素比: ${pixelRatio}`)
+
+    // 输出渲染器信息
+    const rendererInfo = rendererFactory.getRendererInfo()
+    if (rendererInfo) {
+      logger.debug('渲染器信息:', rendererInfo)
+    }
+
+    return newRenderer
+  } catch (error) {
+    logger.error('渲染器创建失败，尝试使用 WebGL2 回退:', error)
+
+    // 回退到 WebGL2
+    try {
+      const fallbackRenderer = await rendererFactory.createRenderer({
+        canvas: canvasRef.value,
+        forceWebGL: true,
+        antialias: false,
+        alpha: RENDER_CONFIG.ALPHA,
+        powerPreference: 'high-performance',
+        preserveDrawingBuffer: RENDER_CONFIG.PRESERVE_DRAWING_BUFFER,
+        precision: 'mediump',
+        stencil: false,
+        depth: RENDER_CONFIG.DEPTH,
+        logarithmicDepthBuffer: false,
+      })
+
+      rendererType.value = 'webgl2'
+      logger.info('✓ 回退到 WebGL2 渲染器')
+
+      const pixelRatio = Math.min(window.devicePixelRatio, 1.5)
+      fallbackRenderer.setSize(
+        containerRef.value.clientWidth,
+        containerRef.value.clientHeight,
+        true,
+      )
+      fallbackRenderer.setPixelRatio(pixelRatio)
+      applyRendererSettings(fallbackRenderer)
+
+      logger.debug(`WebGL2 渲染器创建完成，像素比: ${pixelRatio}`)
+      return fallbackRenderer
+    } catch (fallbackError) {
+      logger.error('WebGL2 回退也失败:', fallbackError)
+      throw new Error('无法创建任何渲染器')
+    }
+  }
 }
 
 /**
@@ -485,7 +609,12 @@ const loadTexture = async (imageUrl) => {
         // 🔧 性能优化：动态调整各向异性
         const isLowEndDevice = window.devicePixelRatio < 2
           || navigator.hardwareConcurrency < 4
-        const maxAnisotropy = isLowEndDevice ? 2 : Math.min(4, renderer.value.capabilities.getMaxAnisotropy())
+
+        // 🔧 WebGPU 兼容性修复：检查 capabilities 是否存在
+        let maxAnisotropy = isLowEndDevice ? 2 : 4
+        if (renderer.value.capabilities && typeof renderer.value.capabilities.getMaxAnisotropy === 'function') {
+          maxAnisotropy = isLowEndDevice ? 2 : Math.min(4, renderer.value.capabilities.getMaxAnisotropy())
+        }
         loadedTexture.anisotropy = maxAnisotropy
 
         // 颜色空间设置
@@ -555,6 +684,12 @@ const switchPanorama = async () => {
     return
   }
 
+  // 🔧 修复：检查 Three.js 是否已初始化
+  if (!isThreeJSInitialized.value) {
+    logger.debug('Three.js 尚未初始化，跳过全景图切换')
+    return
+  }
+
   try {
     logger.info(`切换全景图: ${currentPanorama.value.title}`)
     isChangingPanorama.value = true
@@ -577,6 +712,12 @@ const switchPanorama = async () => {
     // 加载新纹理 - 使用 image 字段(全景图)
     const newImageUrl = currentPanorama.value.image
     await loadTexture(newImageUrl)
+
+    // 🔧 修复：确保相机已初始化
+    if (!camera.value) {
+      logger.warn('相机未初始化，跳过位置动画')
+      return
+    }
 
     // 获取新全景图的目标位置
     const targetPosition = currentPanorama.value.target || { x: 0, y: 0, z: 0 }
@@ -1183,8 +1324,8 @@ const initThreeJS = async () => {
     // 创建相机
     camera.value = createCamera()
 
-    // 创建渲染器
-    renderer.value = createRenderer()
+    // 创建渲染器（支持 WebGPU/WebGL2）
+    renderer.value = await createRenderer()
 
     // 创建球体几何体
     mesh.value = createSphereGeometry()
@@ -1213,10 +1354,20 @@ const initThreeJS = async () => {
 
     await loadTexture(initialImageUrl)
 
+    // 🔧 检查并修复材质兼容性（WebGPU）
+    if (scene.value && renderer.value) {
+      try {
+        fixSceneMaterials(scene.value, renderer.value)
+      } catch (error) {
+        logger.warn('材质兼容性检查失败:', error)
+      }
+    }
+
     // 启动渲染循环
     animate()
 
     isInitialized.value = true
+    isThreeJSInitialized.value = true // 标记 Three.js 已初始化
     logger.info('Three.js初始化完成')
 
     // 首屏优化：延迟预加载后续全景图（空闲时）
@@ -1240,6 +1391,29 @@ const initThreeJS = async () => {
 
 onMounted(async () => {
   try {
+    // 🔍 WebGPU 诊断和调试 (仅在开发环境)
+    if (process.env.NODE_ENV === 'development') {
+      logger.info('🔍 开始 WebGPU 诊断...')
+      
+      // 启用 WebGPU 调试层
+      WebGPUDebugger.enableDebugLayer()
+      
+      // 检查 WebGPU 支持级别
+      try {
+        const tier = await WebGPUDebugger.checkWebGPUSupportTier()
+        logger.info(`🎮 WebGPU 支持级别: Tier ${tier.tier} - ${tier.name}`)
+      } catch (error) {
+        logger.warn('WebGPU 支持级别检测失败:', error.message)
+      }
+      
+      // 运行完整诊断
+      try {
+        await quickDiagnose()
+      } catch (error) {
+        logger.warn('WebGPU 诊断失败:', error.message)
+      }
+    }
+
     // 首屏优化：非阻塞初始化 IndexedDB
     initDB().then(() => {
       logger.info('IndexedDB 初始化成功')

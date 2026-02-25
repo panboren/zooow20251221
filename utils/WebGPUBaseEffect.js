@@ -1,39 +1,43 @@
 /**
- * 特效基类 - 统一特效架构
- * 所有特效都应继承此类，实现代码复用和标准化
- * 同时支持 WebGL2 和 WebGPU 渲染
+ * WebGPU 特效基类
+ * 支持 WebGL2 和 WebGPU 的特效基类
+ * 提供统一的特效接口，自动适配不同的渲染器
  */
 
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { createHighPerformanceParticles } from '~/utils/highPerformanceParticles.js'
 import { InstancedParticleSystem } from '~/utils/InstancedParticleSystem.js'
+import { createCompatibleShaderMaterial } from '~/utils/WebGPURendererFactory.js'
 
-export class BaseEffect {
-  constructor(scene, camera, renderer, controls, rendererType = 'webgl2') {
+export class WebGPUBaseEffect {
+  constructor(scene, camera, renderer, rendererType = 'webgl2') {
     this.scene = scene
     this.camera = camera
     this.renderer = renderer
     this.rendererType = rendererType
-    this.controls = controls
+    this.controls = null
     this.objects = []  // 存储所有创建的对象
     this.timeline = null
     this.animationId = null
     this.isActive = false
+    this.uniforms = {}  // 统一管理着色器 uniforms
   }
 
   /**
-   * 判断是否为 WebGPU 渲染器
+   * 创建着色器材质（自动适配渲染器类型）
    */
-  isWebGPU() {
-    return this.rendererType === 'webgpu'
-  }
+  createShaderMaterial(vertexShader, fragmentShader, uniforms = {}) {
+    const material = createCompatibleShaderMaterial(
+      vertexShader,
+      fragmentShader,
+      uniforms,
+      this.rendererType
+    )
 
-  /**
-   * 判断是否为 WebGL2 渲染器
-   */
-  isWebGL2() {
-    return this.rendererType === 'webgl2'
+    // 存储 uniforms 以便统一更新
+    Object.assign(this.uniforms, uniforms)
+    return material
   }
 
   /**
@@ -209,19 +213,51 @@ export class BaseEffect {
   }
 
   /**
+   * Uniform 动画
+   */
+  animateUniform(uniformObject, targetValue, duration = 2) {
+    return gsap.to(uniformObject, {
+      value: targetValue,
+      duration: duration,
+      ease: 'power2.inOut'
+    })
+  }
+
+  /**
+   * 批量更新 uniforms（WebGPU 优化）
+   */
+  updateUniforms(time, delta) {
+    for (const key in this.uniforms) {
+      const uniform = this.uniforms[key]
+      if (uniform && typeof uniform.value !== 'undefined') {
+        // 如果 uniform 有 update 方法，调用它
+        if (typeof uniform.update === 'function') {
+          uniform.update(time, delta)
+        }
+      }
+    }
+  }
+
+  /**
    * 启动动画循环
    */
   startAnimationLoop(updateFn) {
     this.isActive = true
 
-    const animate = () => {
+    const animate = (time) => {
       if (!this.isActive) return
 
-      updateFn?.()
+      // WebGPU 需要传入时间参数
+      const seconds = time * 0.001
+      updateFn?.(seconds, 0.016)
+
+      // 批量更新 uniforms
+      this.updateUniforms(seconds, 0.016)
+
       this.animationId = requestAnimationFrame(animate)
     }
 
-    animate()
+    animate(0)
   }
 
   /**
@@ -247,6 +283,9 @@ export class BaseEffect {
       this.timeline.kill()
       this.timeline = null
     }
+
+    // 清理 uniforms
+    this.uniforms = {}
 
     // 清理所有对象
     this.objects.forEach(obj => {
@@ -305,5 +344,26 @@ export class BaseEffect {
   stop() {
     this.pause()
     this.cleanup()
+  }
+
+  /**
+   * 获取渲染器类型
+   */
+  getRendererType() {
+    return this.rendererType
+  }
+
+  /**
+   * 判断是否为 WebGPU
+   */
+  isWebGPU() {
+    return this.rendererType === 'webgpu'
+  }
+
+  /**
+   * 判断是否为 WebGL2
+   */
+  isWebGL2() {
+    return this.rendererType === 'webgl2'
   }
 }
