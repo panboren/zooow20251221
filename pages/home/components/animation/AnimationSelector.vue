@@ -139,6 +139,9 @@ const animationOptions = [
   { value: 'fengxianyin-appearance', label: '🏮 封仙印出世' },
   { value: 'fengxianyin', label: '🏮 封仙印' },
   { value: 'huafan', label: '🌸 化凡意境' },
+  { value: 'yongye', label: '🏰 永夜魔城' },
+  { value: 'yongye-huafan', label: '🏰🌸 永夜化凡' },
+  { value: 'sadouchengbing', label: '🫘 撒豆成兵' },
 
 
 

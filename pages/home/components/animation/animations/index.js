@@ -168,6 +168,15 @@ import animateFengxianyin from './fengxianyin.js'
 // 🌸 化凡意境 - 留白美学与情绪光影的视觉诗篇
 import animateHuafan from './huafan.js'
 
+// 🏰 永夜魔城 - 赛博朋克与东方玄学的视觉融合
+import animateYongye from './yongye.js'
+
+// 🏰🌸 永夜化凡 - 永夜魔城与化凡意境的完美融合
+import animateYongyeHuafan from './yongye-huafan.js'
+
+// 🫘 撒豆成兵 - 分身光流与军阵光效
+import animateSadouchengbing from './sadouchengbing.js'
+
 
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
@@ -403,8 +412,16 @@ export const animations = {
     'fengxianyin': animateFengxianyin,
 
     // 🌸 化凡意境 - 留白美学与情绪光影的视觉诗篇
-    'huafan': animateHuafan
+    'huafan': animateHuafan,
 
+    // 🏰 永夜魔城 - 赛博朋克与东方玄学的视觉融合
+    'yongye': animateYongye,
+
+    // 🏰🌸 永夜化凡 - 永夜魔城与化凡意境的完美融合
+    'yongye-huafan': animateYongyeHuafan,
+
+    // 🫘 撒豆成兵 - 分身光流与军阵光效
+    'sadouchengbing': animateSadouchengbing
 }
 
 /**
