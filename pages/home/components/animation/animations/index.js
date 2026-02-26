@@ -165,6 +165,9 @@ import animateFengxianyinAppearance from './fengxianyin-appearance.js'
 // 🏮 封仙印 - 液态金属与立体封纹
 import animateFengxianyin from './fengxianyin.js'
 
+// 🌸 化凡意境 - 留白美学与情绪光影的视觉诗篇
+import animateHuafan from './huafan.js'
+
 
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
@@ -397,7 +400,10 @@ export const animations = {
     'fengxianyin-appearance': animateFengxianyinAppearance,
 
     // 🏮 封仙印 - 液态金属与立体封纹
-    'fengxianyin': animateFengxianyin
+    'fengxianyin': animateFengxianyin,
+
+    // 🌸 化凡意境 - 留白美学与情绪光影的视觉诗篇
+    'huafan': animateHuafan
 
 }
 

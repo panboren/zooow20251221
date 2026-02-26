@@ -134,12 +134,11 @@ const animationOptions = [
   { value: 'holographic-zenith-mandala', label: '🧘 全息禅意曼陀罗' },
 
   // 🆕 全新超越级特效（2026年创作）
-
-  // 🆕 全新超越级特效（2026年创作）
   { value: 'quantum-storm-singularity', label: '🌀 量子风暴奇点' },
   { value: 'hinokami-kagura', label: '🔥 火之神神乐' },
   { value: 'fengxianyin-appearance', label: '🏮 封仙印出世' },
   { value: 'fengxianyin', label: '🏮 封仙印' },
+  { value: 'huafan', label: '🌸 化凡意境' },
 
 
 
