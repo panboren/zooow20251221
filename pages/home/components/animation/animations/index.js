@@ -157,6 +157,7 @@ import animateEtherealAurora from './ethereal-aurora.js'
 
 // 🌀 量子风暴奇点 - SDF Raymarching体积渲染
 import animateQuantumStormSingularity from './quantum-storm-singularity.js'
+import animateHinokamiKagura from './hinokami-kagura.js'
 
 
 // 组合动画 - 使用动态导入避免 SSR 问题
@@ -381,7 +382,10 @@ export const animations = {
     'ethereal-aurora': animateEtherealAurora,
 
     // 🆕 全新超越级特效（2026年创作）
-    'quantum-storm-singularity': animateQuantumStormSingularity
+    'quantum-storm-singularity': animateQuantumStormSingularity,
+
+    // 🔥 火之神神乐 - 火焰刀光特效
+    'hinokami-kagura': animateHinokamiKagura
 
 }
 

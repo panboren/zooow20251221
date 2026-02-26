@@ -137,6 +137,7 @@ const animationOptions = [
 
   // 🆕 全新超越级特效（2026年创作）
   { value: 'quantum-storm-singularity', label: '🌀 量子风暴奇点' },
+  { value: 'hinokami-kagura', label: '🔥 火之神神乐' },
 
 
 
