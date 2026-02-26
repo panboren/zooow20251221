@@ -310,17 +310,15 @@ export default function animateVoidCreation(props, callbacks) {
       heatDeath.update(time)
     }
 
-    // 清理函数
-    const cleanup = () => {
-      planckSingularity.destroy()
-      inflationField.destroy()
-      cosmicMatter.destroy()
-      cosmicStructure.destroy()
-      blackHoleSystem.destroy()
-      heatDeath.destroy()
-    }
-
-    tl.call(cleanup, null, 25)
+    // 清理函数 - 使用箭头函数包装，避免变量作用域问题
+    tl.call(() => {
+      planckSingularity?.destroy()
+      inflationField?.destroy()
+      cosmicMatter?.destroy()
+      cosmicStructure?.destroy()
+      blackHoleSystem?.destroy()
+      heatDeath?.destroy()
+    }, null, 25)
 
     return { updateHandler }
 

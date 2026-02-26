@@ -155,6 +155,9 @@ import animateEtherealAurora from './ethereal-aurora.js'
 
 // 🆕 全新超越级特效（2026年创作）
 
+// 🌀 量子风暴奇点 - SDF Raymarching体积渲染
+import animateQuantumStormSingularity from './quantum-storm-singularity.js'
+
 
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
@@ -378,6 +381,7 @@ export const animations = {
     'ethereal-aurora': animateEtherealAurora,
 
     // 🆕 全新超越级特效（2026年创作）
+    'quantum-storm-singularity': animateQuantumStormSingularity
 
 }
 

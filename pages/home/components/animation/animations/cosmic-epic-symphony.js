@@ -183,18 +183,16 @@ export default function animateCosmicEpic(props, callbacks) {
       pulsarBeams.update(time)
     }
 
-    // 清理函数
-    const cleanup = () => {
-      creationSingularity.destroy()
-      cosmicExplosion.destroy()
-      galaxyGenerator.destroy()
-      supermassiveBlackHole.destroy()
-      stellarDust.destroy()
-      energyRipples.destroy()
-      pulsarBeams.destroy()
-    }
-
-    tl.call(cleanup, null, 11)
+    // 清理函数 - 使用箭头函数包装，避免变量作用域问题
+    tl.call(() => {
+      creationSingularity?.destroy()
+      cosmicExplosion?.destroy()
+      galaxyGenerator?.destroy()
+      supermassiveBlackHole?.destroy()
+      stellarDust?.destroy()
+      energyRipples?.destroy()
+      pulsarBeams?.destroy()
+    }, null, 11)
 
     return { updateHandler }
 

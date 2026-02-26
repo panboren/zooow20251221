@@ -96,6 +96,13 @@ const resetSpeed = () => {
 const animationOptions = [
   { value: 'holographic-neural-network', label: '🧠 全息神经网络' },
 
+
+  // 🆕 全新超越级特效（2026年创作）
+  { value: 'quantum-storm-singularity', label: '🌀 量子风暴奇点' },
+
+
+
+
   // 🌌 全息宇宙创世交响曲 - 融合所有精华的终极超越
   { value: 'holographic-creation-symphony', label: '🌌 全息宇宙创世交响曲' },
 
@@ -131,6 +138,7 @@ const animationOptions = [
   { value: 'holographic-zenith-mandala', label: '🧘 全息禅意曼陀罗' },
 
   // 🆕 全新超越级特效（2026年创作）
+
 
   // ★★★ 超越级特效（全新突破）★★★
   { value: 'cyber-space-rift', label: '🌌 赛博时空裂缝 (优化版)' },

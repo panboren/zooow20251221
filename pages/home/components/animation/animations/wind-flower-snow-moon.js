@@ -238,7 +238,18 @@ export default function animateWindFlowerSnowMoon(props, callbacks) {
       rainbowRipples.destroy()
     }
 
-    tl.call(cleanup, null, 12.5)
+    // 清理函数 - 使用箭头函数包装，避免变量作用域问题
+    tl.call(() => {
+      snowDrift?.destroy()
+      flowerRipples?.destroy()
+      windTrails?.destroy()
+      moonGlow?.destroy()
+      flowerStardust?.destroy()
+      starField?.destroy()
+      dreamHalo?.destroy()
+      featherFall?.destroy()
+      rainbowRipples?.destroy()
+    }, null, 12.5)
 
     return { updateHandler }
 

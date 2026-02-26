@@ -255,16 +255,14 @@ export default function animateDimensionalResonance(props, callbacks) {
       resonanceWaves.update(time)
     }
 
-    // 清理函数
-    const cleanup = () => {
-      dimensionalCore.destroy()
-      compactDimensions.destroy()
-      stringTheory.destroy()
-      multiverse.destroy()
-      resonanceWaves.destroy()
-    }
-
-    tl.call(cleanup, null, 16)
+    // 清理函数 - 使用箭头函数包装，避免变量作用域问题
+    tl.call(() => {
+      dimensionalCore?.destroy()
+      compactDimensions?.destroy()
+      stringTheory?.destroy()
+      multiverse?.destroy()
+      resonanceWaves?.destroy()
+    }, null, 16)
 
     return { updateHandler }
 

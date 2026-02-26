@@ -247,15 +247,13 @@ export default function animateRainbowQuantumFoam(props, callbacks) {
       spacetimeFoam.update(time)
     }
 
-    // 清理函数
-    const cleanup = () => {
-      quantumCore.destroy()
-      rainbowRipples.destroy()
-      probabilityClouds.destroy()
-      spacetimeFoam.destroy()
-    }
-
-    tl.call(cleanup, null, 15.5)
+    // 清理函数 - 使用箭头函数包装，避免变量作用域问题
+    tl.call(() => {
+      quantumCore?.destroy()
+      rainbowRipples?.destroy()
+      probabilityClouds?.destroy()
+      spacetimeFoam?.destroy()
+    }, null, 15.5)
 
     return { updateHandler }
 

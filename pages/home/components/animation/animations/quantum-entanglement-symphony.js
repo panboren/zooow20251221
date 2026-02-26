@@ -254,20 +254,18 @@ export default function animateQuantumEntanglement(props, callbacks) {
       unityField.update(time)
     }
 
-    // 清理函数
-    const cleanup = () => {
-      entanglementCore.destroy()
-      entanglementCloud.destroy()
-      quantumBeams.destroy()
-      spacetimeRipples.destroy()
-      observerRing.destroy()
-      tunnelingTunnel.destroy()
-      multiverseFork.destroy()
-      bellVisualization.destroy()
-      unityField.destroy()
-    }
-
-    tl.call(cleanup, null, 18.5)
+    // 清理函数 - 使用箭头函数包装，避免变量作用域问题
+    tl.call(() => {
+      entanglementCore?.destroy()
+      entanglementCloud?.destroy()
+      quantumBeams?.destroy()
+      spacetimeRipples?.destroy()
+      observerRing?.destroy()
+      tunnelingTunnel?.destroy()
+      multiverseFork?.destroy()
+      bellVisualization?.destroy()
+      unityField?.destroy()
+    }, null, 18.5)
 
     return { updateHandler }
 

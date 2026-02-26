@@ -207,21 +207,19 @@ export default function animateTimeSand(props, callbacks) {
       timeTunnel.update(time)
     }
 
-    // 清理函数
-    const cleanup = () => {
-      hourglassFrame.destroy()
-      goldenSand.destroy()
-      galaxyStardust.destroy()
-      timeRipples.destroy()
-      reversedParticles.destroy()
-      timeVortex.destroy()
-      lightTrails.destroy()
-      timeShards.destroy()
-      energyPulses.destroy()
-      timeTunnel.destroy()
-    }
-
-    tl.call(cleanup, null, 10.5)
+    // 清理函数 - 使用箭头函数包装，避免变量作用域问题
+    tl.call(() => {
+      hourglassFrame?.destroy()
+      goldenSand?.destroy()
+      galaxyStardust?.destroy()
+      timeRipples?.destroy()
+      reversedParticles?.destroy()
+      timeVortex?.destroy()
+      lightTrails?.destroy()
+      timeShards?.destroy()
+      energyPulses?.destroy()
+      timeTunnel?.destroy()
+    }, null, 10.5)
 
     return { updateHandler }
 

@@ -246,15 +246,13 @@ export default function animateNebulaEnergyBurst(props, callbacks) {
       spacetimeVortex.update(time)
     }
 
-    // 清理函数
-    const cleanup = () => {
-      energyCore.destroy()
-      nebulaRings.destroy()
-      particleStorm.destroy()
-      spacetimeVortex.destroy()
-    }
-
-    tl.call(cleanup, null, 14)
+    // 清理函数 - 使用箭头函数包装，避免变量作用域问题
+    tl.call(() => {
+      energyCore?.destroy()
+      nebulaRings?.destroy()
+      particleStorm?.destroy()
+      spacetimeVortex?.destroy()
+    }, null, 14)
 
     return { updateHandler }
 
