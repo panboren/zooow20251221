@@ -124,7 +124,7 @@ const animationType = ref('holographic-neural-network')
 const isInitialized = ref(false)
 const isAnimationPlaying = ref(false) // 动画播放状态
 const textureLoaded = ref(false) // 纹理是否已加载
-const animationSpeed = ref(1.0) // 动画速度控制
+const animationSpeed = ref(1.5) // 动画速度控制
 
 // ==================== 计算属性 ====================
 const loadingText = computed(() => '正在加载ZOOOW-AI智慧工具...')

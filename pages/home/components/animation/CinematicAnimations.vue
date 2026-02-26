@@ -267,7 +267,7 @@ const props = defineProps({
   },
   animationSpeed: {
     type: Number,
-    default: 1.0
+    default: 1.5
   }
 })
 

@@ -65,7 +65,7 @@ let isPcEnvironment = ref(isPc())
 const emit = defineEmits(['update:modelValue', 'reset', 'change', 'speed-change'])
 
 // 动画速度控制
-const animationSpeed = ref(1.0)
+const animationSpeed = ref(1.5)
 const speedMarks = {
   0.1: '慢',
   0.5: '',
@@ -95,10 +95,6 @@ const resetSpeed = () => {
 // 动画选项数组 - 只包含实际存在的动画
 const animationOptions = [
   { value: 'holographic-neural-network', label: '🧠 全息神经网络' },
-
-
-  // 🆕 全新超越级特效（2026年创作）
-  { value: 'quantum-storm-singularity', label: '🌀 量子风暴奇点' },
 
 
 
@@ -138,6 +134,10 @@ const animationOptions = [
   { value: 'holographic-zenith-mandala', label: '🧘 全息禅意曼陀罗' },
 
   // 🆕 全新超越级特效（2026年创作）
+
+  // 🆕 全新超越级特效（2026年创作）
+  { value: 'quantum-storm-singularity', label: '🌀 量子风暴奇点' },
+
 
 
   // ★★★ 超越级特效（全新突破）★★★
@@ -306,7 +306,7 @@ let test=()=>{
       handleChange(value)
       emit('update:modelValue', value)
     }
-  },20000)
+  },30000)
 
 }
 // test()
