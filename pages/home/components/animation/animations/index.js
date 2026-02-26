@@ -159,6 +159,12 @@ import animateEtherealAurora from './ethereal-aurora.js'
 import animateQuantumStormSingularity from './quantum-storm-singularity.js'
 import animateHinokamiKagura from './hinokami-kagura.js'
 
+// 🏮 封仙印出世 - 金色封纹天地异象
+import animateFengxianyinAppearance from './fengxianyin-appearance.js'
+
+// 🏮 封仙印 - 液态金属与立体封纹
+import animateFengxianyin from './fengxianyin.js'
+
 
 // 组合动画 - 使用动态导入避免 SSR 问题
 import animateCosmicRainfall from './cosmic-rainfall.js'
@@ -385,7 +391,13 @@ export const animations = {
     'quantum-storm-singularity': animateQuantumStormSingularity,
 
     // 🔥 火之神神乐 - 火焰刀光特效
-    'hinokami-kagura': animateHinokamiKagura
+    'hinokami-kagura': animateHinokamiKagura,
+
+    // 🏮 封仙印出世 - 金色封纹天地异象
+    'fengxianyin-appearance': animateFengxianyinAppearance,
+
+    // 🏮 封仙印 - 液态金属与立体封纹
+    'fengxianyin': animateFengxianyin
 
 }
 

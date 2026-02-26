@@ -30,6 +30,30 @@ import { PerformanceMonitor } from '~/utils/PerformanceMonitor.js'
 function createNeuronNode(radius, color) {
   const geometry = new THREE.SphereGeometry(radius, 32, 32)
 
+  // SphereGeometry 会自动生成 uv，但验证一下
+  if (!geometry.attributes.uv) {
+    const count = geometry.attributes.position.count
+    const uvs = new Float32Array(count * 2)
+    const positions = geometry.attributes.position.array
+
+    for (let i = 0; i < count; i++) {
+      const pos = new THREE.Vector3(
+        positions[i * 3],
+        positions[i * 3 + 1],
+        positions[i * 3 + 2]
+      )
+
+      // 球面坐标映射到 uv
+      const phi = Math.acos(pos.y / radius)
+      const theta = Math.atan2(pos.z, pos.x)
+
+      uvs[i * 2] = (theta / (Math.PI * 2) + 0.5)
+      uvs[i * 2 + 1] = phi / Math.PI
+    }
+
+    geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2))
+  }
+
   const material = new THREE.ShaderMaterial({
     uniforms: {
       uTime: { value: 0 },
@@ -103,6 +127,13 @@ function createNeuronNode(radius, color) {
 function createSynapseConnection(start, end, color) {
   const points = [start, end]
   const geometry = new THREE.BufferGeometry().setFromPoints(points)
+
+  // 手动添加 progress attribute（每个顶点代表线段的一个端点）
+  const count = geometry.attributes.position.count
+  const progress = new Float32Array(count)
+  progress[0] = 0.0  // 起点
+  progress[1] = 1.0  // 终点
+  geometry.setAttribute('progress', new THREE.BufferAttribute(progress, 1))
 
   const material = new THREE.ShaderMaterial({
     uniforms: {
@@ -238,6 +269,7 @@ function createThoughtParticles(count, radius) {
     fragmentShader: `
       precision highp float;
 
+      uniform float uTime;
       uniform float uOpacity;
 
       varying vec3 vColor;
@@ -246,8 +278,8 @@ function createThoughtParticles(count, radius) {
       void main() {
         float dist = length(gl_PointCoord - vec2(0.5));
 
-        // 闪烁效果
-        float flicker = sin(uOpacity * 8.0 + vSpeed * 10.0) * 0.2 + 0.8;
+        // 闪烁效果 - 使用 uTime 而不是 uOpacity
+        float flicker = sin(uTime * 8.0 + vSpeed * 10.0) * 0.2 + 0.8;
 
         float alpha = smoothstep(0.5, 0.0, dist) * uOpacity * flicker;
         gl_FragColor = vec4(vColor * 1.2, alpha);
@@ -363,6 +395,26 @@ export default function animateHolographicNeuralNetwork(props, callbacks) {
     const cognitiveHalos = []
     for (let i = 0; i < 6; i++) {
       const geometry = new THREE.TorusGeometry(25 + i * 8, 0.3, 16, 100)
+
+      // 手动生成 uv attribute（TorusGeometry 默认不生成）
+      const posCount = geometry.attributes.position.count
+      const uvs = new Float32Array(posCount * 2)
+      const positions = geometry.attributes.position.array
+
+      for (let j = 0; j < posCount; j++) {
+        const x = positions[j * 3]
+        const y = positions[j * 3 + 1]
+
+        // 将坐标映射到 uv [0, 1]
+        const angle = Math.atan2(y, x)
+        const radius = Math.sqrt(x * x + y * y)
+
+        uvs[j * 2] = (angle / Math.PI + 1.0) * 0.5  // 角度映射
+        uvs[j * 2 + 1] = (radius - (25 + i * 8)) / 0.6  // 半径映射（管径是0.3）
+      }
+
+      geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2))
+
       const hue = i / 6
       const material = new THREE.ShaderMaterial({
         uniforms: {
