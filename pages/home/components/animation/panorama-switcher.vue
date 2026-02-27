@@ -62,17 +62,22 @@
 <script setup>
 
 let config={
-  3:{
+  1:{
+    num: 28,
+    pre: 'h-v4',
+    imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjing-v4/'
+  },
+  2:{
     num: 41,
     pre: 'h-v3',
     imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjing-v3/'
   },
-  1:{
+  3:{
     num: 17,
     pre: 'h-v2',
     imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjing-v2/'
   },
-  2:{
+  4:{
     num: 37,
     pre: 'h',
     imgUrl: 'https://zooow-1258443890.cos.ap-guangzhou.myqcloud.com/quanjingtu/'
@@ -284,7 +289,7 @@ onMounted(() => {
 
   // 初始化时随机选择一个全景图
   if (homeOptions.length > 0) {
-    const randomNumber = Math.floor(Math.random() * homeOptions.length)
+    const randomNumber = Math.floor(Math.random() * 20)
     const item = homeOptions[randomNumber] || {}
     changePanorama(item)
   }
