@@ -127,7 +127,7 @@ const textureLoaded = ref(false) // 纹理是否已加载
 const animationSpeed = ref(1.5) // 动画速度控制
 
 // ==================== 计算属性 ====================
-const loadingText = computed(() => '正在加载ZOOOW-AI智慧工具...')
+const loadingText = computed(() => '正在加载ZOOOW智慧工具...')
 const loadingProgress = computed(() => '准备进入沉浸式体验')
 
 // 当前全景图索引

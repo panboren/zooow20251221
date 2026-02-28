@@ -2,7 +2,7 @@
   <div class="website-container">
     <!-- 导航栏 -->
     <nav class="navbar">
-      <div class="nav-logo">ZOOOW-AI</div>
+      <div class="nav-logo">ZOOOW</div>
       <div class="nav-links">
         <a href="#home" class="nav-link">首页</a>
         <a href="#about" class="nav-link">3D动画特效</a>
@@ -349,10 +349,10 @@
               <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"/>
             </svg>
             <p class="testimonial-text text-1">
-              <span class="brand-name">ZOOOW-AI</span> 让我们的网站焕然一新，用户体验提升了<span class="highlight-num">300%</span>！
+              <span class="brand-name">ZOOOW</span> 让我们的网站焕然一新，用户体验提升了<span class="highlight-num">300%</span>！
             </p>
             <p class="testimonial-text text-2">
-              <span class="brand-name">ZOOOW-AI</span> 让创作更<span class="highlight-word">智能</span>，更<span class="highlight-word">高效</span>！
+              <span class="brand-name">ZOOOW</span> 让创作更<span class="highlight-word">智能</span>，更<span class="highlight-word">高效</span>！
             </p>
             <div class="testimonial-stars">
               <span class="star">★</span>
@@ -444,7 +444,7 @@
         <div class="about-content">
           <div class="about-text">
             <p class="about-description">
-              ZOOOW-AI 提供业界领先的<span class="highlight gradient-text highlight-1">3D动画</span>解决方案，基于<span class="highlight gradient-text highlight-2">自研强大</span>的动画引擎，
+              ZOOOW 提供业界领先的<span class="highlight gradient-text highlight-1">3D动画</span>解决方案，基于<span class="highlight gradient-text highlight-2">自研强大</span>的动画引擎，
               为您打造令人惊叹的视觉体验。从基础过渡到复杂的粒子系统，应有尽有。
             </p>
             <p class="about-description">
@@ -997,8 +997,8 @@
               </div>
               <div class="info-text">
                 <h4>电子邮箱</h4>
-                <p>contact@zooow-ai.com</p>
-                <p class="info-sub">business@zooow-ai.com</p>
+                <p>contact@ZOOOW.com</p>
+                <p class="info-sub">business@ZOOOW.com</p>
               </div>
             </div>
             <div class="info-card">
@@ -1086,7 +1086,7 @@ definePageMeta({
 
 // SEO Meta
 useHead({
-  title: '产品中心 - ZOOOW-AI',
+  title: '产品中心 - ZOOOW',
   meta: [
     { name: 'description', content: '探索我们的全线产品，找到最适合您的解决方案' }
   ]

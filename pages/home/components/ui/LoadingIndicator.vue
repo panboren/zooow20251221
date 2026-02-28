@@ -23,7 +23,7 @@
  * 加载指示器组件，提供友好的加载状态展示
  *
  * @component LoadingIndicator
- * @author ZOOOW-AI Team
+ * @author ZOOOW Team
  * @version 1.0.0
  * @license MIT
  */

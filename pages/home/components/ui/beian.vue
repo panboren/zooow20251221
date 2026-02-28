@@ -1,6 +1,6 @@
 <template>
   <div class="bei-an">
-    ZOOOW © 2026 {{ ICP_NUMBER }}
+    ZOOOW © 2026 {{ ICP_NUMBER }}<span style="color: #00dc82"> 邮箱：3248874747@qq.com</span>
   </div>
 </template>
 

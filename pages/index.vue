@@ -10,10 +10,10 @@ import Home from './home/home.vue'
 
 const config = useRuntimeConfig()
 // SEO 元数据优化
-const siteName = 'ZOOOW-AI'
-const siteTitle = 'ZOOOW-AI - 专业的AI工具与全景图展示平台 | 3D全景 | 特效工具 | 智能化解决方案'
-const siteDescription = 'ZOOOW-AI提供专业的AI工具和3D全景图展示服务，涵盖文本生成、图像处理、数据分析、特效工具、3D全景展示等多个领域。基于最新AI技术和WebGL技术，为企业与个人提供高效的智能服务和沉浸式体验。'
-const siteKeywords = 'ZOOOW,AI工具,ZOOOW-AI,人工智能,智能助手,文本生成,图像处理,数据分析,3D全景,全景图,WebGL,Three.js,AI解决方案,智能化,AI平台,虚拟现实'
+const siteName = 'ZOOOW'
+const siteTitle = 'ZOOOW - 专业的AI工具与全景图展示平台 | 3D全景 | 特效工具 | 智能化解决方案'
+const siteDescription = 'ZOOOW提供专业的AI工具和3D全景图展示服务，涵盖文本生成、图像处理、数据分析、特效工具、3D全景展示等多个领域。基于最新AI技术和WebGL技术，为企业与个人提供高效的智能服务和沉浸式体验。'
+const siteKeywords = 'ZOOOW,AI工具,ZOOOW,人工智能,智能助手,文本生成,图像处理,数据分析,3D全景,全景图,WebGL,Three.js,AI解决方案,智能化,AI平台,虚拟现实'
 const siteUrl = config.public.siteUrl || 'http://www.zooow.xyz/'
 
 // 安全的URL拼接函数
@@ -51,7 +51,7 @@ function generateStructuredData(): StructuredDataItem[] {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: siteName,
-      alternateName: 'ZOOOW-AI',
+      alternateName: 'ZOOOW',
       url: siteUrl,
       description: siteDescription,
       inLanguage: 'zh-CN',
@@ -73,7 +73,7 @@ function generateStructuredData(): StructuredDataItem[] {
       '@context': 'https://schema.org',
       '@type': 'Organization',
       name: siteName,
-      alternateName: 'ZOOOW-AI',
+      alternateName: 'ZOOOW',
       url: siteUrl,
       logo: safeUrlJoin(siteUrl, '/images/logo.png'),
       description: siteDescription,
@@ -108,7 +108,7 @@ function generateStructuredData(): StructuredDataItem[] {
       '@context': 'https://schema.org',
       '@type': 'SoftwareApplication',
       name: siteName,
-      alternateName: 'ZOOOW-AI',
+      alternateName: 'ZOOOW',
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       browserRequirements: 'Requires JavaScript. Requires HTML5.',

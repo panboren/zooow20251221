@@ -1,14 +1,32 @@
 <template>
-  <div class="echarts-hint" title="Go ECharts" @click="goTo">
-    <div class="echarts-hint-title">数据可视化</div>
-    <div class="echarts-hint-abc">
-      <span class="echarts-3d letter-animate letter-e" style="animation-delay: 0s">E</span>
-      <span class="echarts-3d letter-animate letter-c" style="animation-delay: 0.1s">c</span>
-      <span class="echarts-3d letter-animate letter-h" style="animation-delay: 0.2s">h</span>
-      <span class="echarts-3d letter-animate letter-a" style="animation-delay: 0.3s">a</span>
-      <span class="echarts-3d letter-animate letter-r" style="animation-delay: 0.4s">r</span>
-      <span class="echarts-3d letter-animate letter-t" style="animation-delay: 0.5s">t</span>
-      <span class="echarts-3d letter-animate letter-s" style="animation-delay: 0.6s">s</span>
+  <div class="echarts-hints-container">
+    <div class="echarts-hint" title="Go ECharts" @click="goTo">
+      <div class="echarts-hint-title">数据可视化</div>
+      <div class="echarts-hint-abc">
+        <span class="echarts-3d letter-animate letter-e" style="animation-delay: 0s">E</span>
+        <span class="echarts-3d letter-animate letter-c" style="animation-delay: 0.1s">c</span>
+        <span class="echarts-3d letter-animate letter-h" style="animation-delay: 0.2s">h</span>
+        <span class="echarts-3d letter-animate letter-a" style="animation-delay: 0.3s">a</span>
+        <span class="echarts-3d letter-animate letter-r" style="animation-delay: 0.4s">r</span>
+        <span class="echarts-3d letter-animate letter-t" style="animation-delay: 0.5s">t</span>
+        <span class="echarts-3d letter-animate letter-s" style="animation-delay: 0.6s">s</span>
+      </div>
+      <div class="echarts-hint-icon">📊</div>
+    </div>
+    <div class="echarts-hint" title="Go Animation" @click="goTo2">
+      <div class="echarts-hint-title">动画可视化</div>
+      <div class="echarts-hint-abc">
+        <span class="echarts-3d letter-animate letter-e" style="animation-delay: 0s">A</span>
+        <span class="echarts-3d letter-animate letter-c" style="animation-delay: 0.1s">N</span>
+        <span class="echarts-3d letter-animate letter-h" style="animation-delay: 0.2s">I</span>
+        <span class="echarts-3d letter-animate letter-a" style="animation-delay: 0.3s">M</span>
+        <span class="echarts-3d letter-animate letter-r" style="animation-delay: 0.4s">A</span>
+        <span class="echarts-3d letter-animate letter-t" style="animation-delay: 0.5s">T</span>
+        <span class="echarts-3d letter-animate letter-s" style="animation-delay: 0.6s">I</span>
+        <span class="echarts-3d letter-animate letter-s" style="animation-delay: 0.7s">O</span>
+        <span class="echarts-3d letter-animate letter-s" style="animation-delay: 0.8s">N</span>
+      </div>
+      <div class="echarts-hint-icon">✨</div>
     </div>
   </div>
 </template>
@@ -19,71 +37,105 @@
  * 控制提示组件，显示用户交互提示
  *
  * @component ControlsHint
- * @author ZOOOW-AI Team
+ * @author ZOOOW Team
  * @version 1.0.0
  * @license MIT
  */
 let goTo = () => {
   window.open('http://www.echarts.zooow.xyz')
 }
+let goTo2 = () => {
+  window.open('http://www.animation.zooow.xyz')
+}
 </script>
 
 <style scoped lang="scss">
-.echarts-hint {
+.echarts-hints-container {
   position: absolute;
   top: 80px;
   left: 20px;
-  background: linear-gradient(45deg, rgba(11, 47, 66, 0.6), rgba(3, 38, 56, 0.7), rgba(5, 17, 73, 0.7));
-  padding: 12px 5px;
-  border-radius: 8px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(252, 232, 164, 0.2);
-  //pointer-events: none;
-  transition: opacity 0.3s ease;
-  width: 100px;
-  height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 1000;
+}
+
+.echarts-hint {
+  position: relative;
+  background: linear-gradient(135deg, rgba(11, 47, 66, 0.85), rgba(3, 38, 56, 0.9), rgba(5, 17, 73, 0.85));
+  padding: 16px 12px;
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(252, 232, 164, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 120px;
+  height: auto;
+  min-height: 120px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   box-sizing: border-box;
-  opacity: 0.8;
+  opacity: 0.9;
   cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 
   .echarts-hint-abc{
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 2px;
+    margin-bottom: 8px;
+    white-space: nowrap;
+  }
+
+  .echarts-hint-icon {
+    font-size: 20px;
+    opacity: 0.7;
+    transition: all 0.3s ease;
   }
 
   &:hover {
-    box-sizing: border-box;
+    transform: translateY(-4px) scale(1.05);
     border: 2px solid #eacf1e;
     opacity: 1;
+    box-shadow: 0 8px 30px rgba(234, 207, 30, 0.3), 0 0 20px rgba(234, 207, 30, 0.2);
+    background: linear-gradient(135deg, rgba(11, 47, 66, 0.95), rgba(3, 38, 56, 0.98), rgba(5, 17, 73, 0.95));
+
+    .echarts-hint-icon {
+      opacity: 1;
+      transform: scale(1.2);
+    }
   }
-  
+
+  &:active {
+    transform: translateY(-2px) scale(1.02);
+  }
+
   // 焦点状态适配键盘导航
   &:focus {
     outline: 2px solid #eacf1e;
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 }
 
 .echarts-3d {
   font-size: 16px;
   font-weight: bold;
-  background: linear-gradient(45deg, 
-    #ffffff 0%, 
-    #ffd700 25%, 
-    #ffa500 50%, 
-    #ff8c00 75%, 
+  background: linear-gradient(45deg,
+    #ffffff 0%,
+    #ffd700 25%,
+    #ffa500 50%,
+    #ff8c00 75%,
     #ffffff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   background-size: 400% 400%;
+  display: inline-block;
+  white-space: nowrap;
   
   // 提高清晰度的 3D 文字效果
   text-shadow: 
@@ -129,10 +181,13 @@ let goTo = () => {
 }
 
 .echarts-hint-title{
-  font-size: 14px;
+  font-size: 12px;
   color: #fff;
-  padding: 10px 0;
+  padding: 6px 0 8px 0;
   text-wrap: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-align: center;
 }
 // 字母独立动画类
 .letter-animate {
@@ -218,15 +273,15 @@ let goTo = () => {
 @keyframes bounceIn {
   0% {
     transform: translateY(0) scale(1);
-    opacity: 0.7;
+    opacity: 0.8;
   }
   50% {
-    transform: translateY(-8px) scale(1.1);
+    transform: translateY(-6px) scale(1.15);
     opacity: 1;
   }
   100% {
-    transform: translateY(-4px) scale(1.05);
-    opacity: 0.9;
+    transform: translateY(-3px) scale(1.08);
+    opacity: 0.95;
   }
 }
 
@@ -255,41 +310,54 @@ let goTo = () => {
 
 // 移动端适配
 @media (max-width: 768px) {
-  .echarts-hint {
+  .echarts-hints-container {
     top: 60px;
     left: 15px;
-    width: 80px;
-    height: 80px;
-    padding: 8px 12px;
-    background: rgba(0, 0, 0, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    
+    gap: 12px;
+  }
+
+  .echarts-hint {
+    width: 90px;
+    min-height: 100px;
+    padding: 12px 8px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+
+    .echarts-hint-icon {
+      font-size: 16px;
+    }
+
     &:hover {
-      border: 1px solid #eacf1e;
+      border: 2px solid #eacf1e;
+      transform: translateY(-3px) scale(1.03);
+    }
+
+    &:active {
+      transform: translateY(-1px) scale(1.01);
     }
   }
-  
+
   .echarts-3d {
-    font-size: 14px;
-    letter-spacing: 0.5px;
+    font-size: 11px;
+    letter-spacing: 0.2px;
     transform: perspective(300px) rotateX(8deg);
-    
-    // 简化移动端阴影效果以提升性能
-    text-shadow: 
+
+    text-shadow:
       0 1px 0 #555,
       0 2px 0 #444,
       0 3px 0 #333,
       0 4px 1px rgba(0,0,0,.2);
-    
+
     animation: gradientShift 4s ease-in-out infinite alternate;
   }
   .echarts-hint-title{
-    font-size: 12px;
+    font-size: 10px;
+    padding: 4px 0 6px 0;
   }
-  
+
   .letter-animate {
     animation: bounceIn 2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
-    
+
     .echarts-hint:hover & {
       animation: bounceIn 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
     }
@@ -298,30 +366,34 @@ let goTo = () => {
 
 // 小屏幕设备适配
 @media (max-width: 480px) {
-  .echarts-hint {
+  .echarts-hints-container {
     top: 50px;
     left: 10px;
-    width: 70px;
-    height: 70px;
-    padding: 6px 10px;
+    gap: 10px;
   }
-  
+
+  .echarts-hint {
+    width: 75px;
+    min-height: 85px;
+    padding: 10px 6px;
+  }
+
   .echarts-3d {
-    font-size: 12px;
+    font-size: 9px;
     letter-spacing: 0px;
     transform: perspective(200px) rotateX(6deg);
-    
-    // 进一步简化阴影
-    text-shadow: 
+
+    text-shadow:
       0 1px 0 #444,
       0 2px 0 #333;
   }
   .echarts-hint-title{
-    font-size: 9px;
+    font-size: 8px;
+    padding: 3px 0 5px 0;
   }
   .letter-animate {
     animation: bounceIn 2.5s ease-in-out infinite alternate;
-    
+
     .echarts-hint:hover & {
       animation: bounceIn 1.5s ease-in-out infinite alternate;
     }
@@ -331,17 +403,15 @@ let goTo = () => {
 // 触摸设备优化
 @media (hover: none) and (pointer: coarse) {
   .echarts-hint {
-    // 移除悬停效果，在触摸设备上始终显示
-    opacity: 0.9;
-    
+    opacity: 0.95;
+
     &:active {
-      transform: scale(0.95);
+      transform: translateY(-2px) scale(0.98);
       border: 2px solid #eacf1e;
     }
   }
-  
+
   .echarts-3d {
-    // 触摸设备上减少动画复杂度
     animation: gradientShift 6s ease-in-out infinite alternate;
   }
   .echarts-hint-title{
